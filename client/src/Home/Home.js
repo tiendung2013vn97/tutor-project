@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {Redirect} from 'react-router-dom';
 import Register from "../Account/Register/container-register";
 import Login from "../Account/Login/container-login";
 import "./Home.scss";
@@ -168,57 +169,17 @@ class Home extends Component {
     );
     return (
       <div>
-        <Row id="head_bar">
-          <Col span={2}></Col>
-          <Col span={19} style={{ float: "left" }}>
-            <img src={Logo} id="logo" />
-            <div id="slogan">
-              Nơi kết nối người dạy và người học, dù bạn ở bất cứ đâu
-            </div>
-          </Col>
-          {user && (
-            <Col span={3} className="account-icon-area">
-              <img id="acount_icon" src={LoggedIcon} />
-              {this.props.account.fullname}
-              <div className="dropdown-account">
-                <ul>
-                  <li>
-                    {" "}
-                    <Button id="btn_logout" onClick={this.props.logout}>
-                      Log out
-                    </Button>
-                  </li>
-                </ul>
-              </div>
-            </Col>
-          )}
-        </Row>
-        <br />
         <br />
         {!user && pageNotLogin}
-   
         <div className='middle-layout'>
-
-        <Layout>
-        <Content>
-        {user && user.type === "student" && <Student account={this.props.account}/>}
-        {user && user.type === "teacher" && <Teacher account={this.props.account}/>}
-        {user && user.type === "admin" && <Admin account={this.props.account}/>}
-        </Content>
-        </Layout>
-       
+          <Layout>
+            <Content>
+              {user && user.type === "student" && <Student account={this.props.account} />}
+              {user && user.type === "teacher" && <Teacher account={this.props.account} />}
+              {user && user.type === "admin" && <Redirect to="/manage/users"/>}
+            </Content>
+          </Layout>
         </div>
-        <Row id="footer">
-          <Col span={2}></Col>
-          <Col span={18} style={{ paddingTop: "20px" }}>
-            <img src={Logo} />
-
-            <Icon type="facebook" className="icon" />
-            <Icon type="instagram" className="icon" />
-            <Icon type="twitter" className="icon" />
-            <div className="text">Điều khoản và chính sách</div>
-          </Col>
-        </Row>
       </div>
     );
   }
