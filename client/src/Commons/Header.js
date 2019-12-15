@@ -8,7 +8,9 @@ import { logout } from '../Account/action-account';
 import './Commons.scss'
 
 class Header extends React.Component {
-
+    toHome = () => {
+        console.log(this.props)
+    }
     render() {
         let user = localStorage.getItem("user");
         if (user) {
@@ -18,36 +20,13 @@ class Header extends React.Component {
 
         const headerMenu = (
             <Menu>
-                {
-                    user && user.type === 'admin' &&
-
-                    <Menu.Item>
-                        <Link to="/">
-                            Dashboard
-                        </Link>
-                    </Menu.Item>
-                }
-                {
-                    user && user.type === 'admin' &&
-                    <Menu.Item>
-                        <Link to="/manage/users">
-                            Users management
-                        </Link>
-                    </Menu.Item>
-                }
-                {
-                    user && user.type === 'admin' &&
-                    <Menu.Item>
-                        <Link to="/manage/skills">
-                            Skills management
-                        </Link>
-                    </Menu.Item>
-                }
-
                 <Menu.Item>
-                    <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-                        Profile
-                     </a>
+                    <Link to="/">
+                        Dashboard
+                        </Link>
+                </Menu.Item>
+                <Menu.Item>
+                    <Link to="/info">Profile</Link>
                 </Menu.Item>
                 <Menu.Item>
                     <Link onClick={this.props.logout} to="/">
@@ -62,7 +41,7 @@ class Header extends React.Component {
                 <Row id="head_bar">
                     <Col span={2}></Col>
                     <Col span={19} style={{ float: "left" }}>
-                        <img src={Logo} id="logo" />
+                        <img src={Logo} id="logo" onClick={this.toHome} />
                         <div id="slogan">
                             Nơi kết nối người dạy và người học, dù bạn ở bất cứ đâu
             </div>

@@ -6,6 +6,8 @@ import Home from './Home/container-home'
 import Header from './Commons/Header';
 import Footer from './Commons/Footer';
 import Admin from './Admin/Admin';
+import UserInfo from './Commons/UserInfo/UserInfoContainer';
+
 class App extends React.Component {
   render() {
     return (
@@ -16,7 +18,10 @@ class App extends React.Component {
 
             <Route path="/manage">
               <Admin />
-              {/* <Redirect to="/manage/users"/> */}
+            </Route>
+
+            <Route path="/info">
+              <UserInfo />
             </Route>
 
             <Route path="/">
