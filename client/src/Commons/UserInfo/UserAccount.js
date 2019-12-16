@@ -19,10 +19,11 @@ class UserAccount extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.changePassword({
-                    newPassword: values.password,
-                    oldPassword: values.oldpassword
-                })
+                console.log("Change password")
+                // this.props.changePassword({
+                //     newPassword: values.password,
+                //     oldPassword: values.oldpassword
+                // })
             }
         });
     }

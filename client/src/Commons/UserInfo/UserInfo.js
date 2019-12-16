@@ -3,6 +3,8 @@ import React from "react";
 import { Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input } from "antd";
 import { URL } from "../../config.js";
 import UserAccount from "./UserAccount.js";
+import UserProfile from "./UserProfile.js";
+
 const TabPane = Tabs.TabPane;
 class UserInfo extends React.Component {
     constructor(props) {
@@ -43,31 +45,7 @@ class UserInfo extends React.Component {
             </Upload>
         );
     }
-    renderProfile = () => {
-        return (
-            <div className="box-register-container">
-                <Card className="box-register" hoverable>
-                    <Form>
-                        <Form.Item label="Username" hasFeedback>
-                            <Input
-                                onChange={this.props.handleUsernameChange}
-                                value={this.props.username} />
-                        </Form.Item>
-                        <Form.Item label="E-mail">
-                            <Input
-                                onChange={this.props.handleEmailChange}
-                                value={this.props.email} />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button loading={this.props.isLoadingUpdateProfile} onClick={() => this.props.handleUpdateProfile()} type="primary" htmlType="submit">
-                                Save
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Card>
-            </div>
-        );
-    };
+
 
     render() {
         // const { profile } = this.props
@@ -77,10 +55,10 @@ class UserInfo extends React.Component {
                     <Row className="profile" >
                         <Col offset={1} span={2}>
                             <img style={{
-                                height:"200px",
+                                height: "200px",
                                 width: "200px"
-                            }} 
-                            src={require("./a.jpg")} alt="defaultavatar"/>
+                            }}
+                                src={require("../../assets/imgs/defaultAvatar.jpg")} alt="defaultavatar" />
                             {this.renderUpload()}
                         </Col>
 
@@ -95,8 +73,7 @@ class UserInfo extends React.Component {
                                     }
                                     key="1"
                                 >
-                                    {/* {profile && this.renderProfile()} */}
-                                    {this.renderProfile()}
+                                    <UserProfile {...this.props} />
                                 </TabPane>
                                 <TabPane
                                     tab={
@@ -118,6 +95,5 @@ class UserInfo extends React.Component {
     }
 }
 
-UserInfo = Form.create({})(UserInfo);
 
 export default UserInfo;

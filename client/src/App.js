@@ -7,7 +7,7 @@ import Header from './Commons/Header';
 import Footer from './Commons/Footer';
 import Admin from './Admin/Admin';
 import UserInfo from './Commons/UserInfo/UserInfoContainer';
-
+import UserDetail from './Commons/UserDetail/UserDetailContainer';
 class App extends React.Component {
   render() {
     return (
@@ -22,6 +22,10 @@ class App extends React.Component {
 
             <Route path="/info">
               <UserInfo />
+            </Route>
+
+            <Route path="/user/id">
+              <UserDetail />
             </Route>
 
             <Route path="/">
