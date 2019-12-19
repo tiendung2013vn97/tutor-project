@@ -1,11 +1,11 @@
 ﻿account:fullname,username,password,email,age,gender,location,image,intro(bai gioi thieu),rate, type,money,isActived
 skill:id,teacherId,costPerHour,skillTagId,note
 skillTag:id,name,numUsed(khi có 1 contract sử dụng thì numUsed+1),isActived
-studyRequest: studentId,teacherId,skillId,note,status(waiting,accepted-accepted khi có contract),
+studyRequest: studentId,teacherId,skillId,note,createDt,status(waiting,accepted-accepted khi có contract),
 					isActived (isActive=true khi dc khoi tao, =false khi contract contract's paid=true hoac contract's isActived=false,
 						nếu studyRequest's isActive=true thì ko show len UI)
-contract: studentId,teacherId,skillId,totalHours,createDt,toDate,detail(nhu thoi gian day,..),status(inProgress,finish,complain),rate(1-5),studentComment,isActived
+contract: studentId,teacherId,studyRequest,totalHours,createDt,toDate,detail(nhu thoi gian day,..),status(inProgress,finish,complain),rate(1-5),studentComment,isActived
 session:accountId(la username),token(khi login se luu token),loginDt
-comment: teacherId,studentId,contractId,comment
-
+comment: teacherId,studentId,contractId, comment
+location: id, city, district
 
