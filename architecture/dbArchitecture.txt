@@ -1,4 +1,4 @@
-account:fullname,username,password,email,age,gender,location,image,intro(bai gioi thieu),rate, type,money,isActived
+﻿account:fullname,username,password,email,age,gender,location,image,intro(bai gioi thieu),rate, type,money,isActived
 skill:id,teacherId,costPerHour,skillTagId,note
 skillTag:id,name,numUsed(khi có 1 contract sử dụng thì numUsed+1),isActived
 studyRequest: studentId,teacherId,skillId,note,status(waiting,accepted-accepted khi có contract),
