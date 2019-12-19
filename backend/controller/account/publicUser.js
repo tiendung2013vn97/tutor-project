@@ -1,11 +1,11 @@
 var express = require("express");
 var router = express.Router();
-const accountRepo = require("../repo/account-repo");
+const accountRepo = require("../../repo/account-repo");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
 router.post("/register", function(req, res, next) {
-  console.log('register user',req.body)
+  console.log("register user", req.body);
   let user = req.body;
   if (
     !user.username ||
@@ -17,13 +17,13 @@ router.post("/register", function(req, res, next) {
   ) {
     return res.json({
       statusCode: 400,
-      msg:
-        "Vui lòng điền đủ thông tin các trường trước khi gửi."
+      msg: "Vui lòng điền đủ thông tin các trường trước khi gửi."
     });
   }
   const registerService = async () => {
     try {
-      let accounts = accountRepo.getAccountByUsername(user.username);
+      let accounts = await accountRepo.getAccountByUsername(user.username);
+      accounts = accounts.map(account => account.get({ plain: true }));
       if (accounts.length > 0) {
         return res.json({
           statusCode: 400,
@@ -31,7 +31,7 @@ router.post("/register", function(req, res, next) {
         });
       }
 
-      let resultAddAccount = accountRepo.addAccount(user);
+      let resultAddAccount = await accountRepo.addAccount(user);
       if (resultAddAccount) {
         return res.json({
           statusCode: 200,
@@ -55,10 +55,10 @@ router.post("/register", function(req, res, next) {
 
 router.post("/login", function(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
-    console.log('authenticating ',err,user)
+    console.log("authenticating ", err, user);
     if (err || !user) {
       return res.status(200).json({
-        statusCode:400,
+        statusCode: 400,
         message: info ? info.message : "Đăng nhập thất bại.",
         user: user
       });
@@ -77,4 +77,7 @@ router.post("/login", function(req, res, next) {
   })(req, res);
 });
 
+router.get("/", (req, res) => {
+  res.send("haha");
+});
 module.exports = router;
