@@ -3,6 +3,7 @@ var router = express.Router();
 const accountRepo = require("../../repo/account-repo");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const mailService=require('../../mail-service')
 
 router.post("/register", function(req, res, next) {
   console.log("register user", req.body);
@@ -16,7 +17,7 @@ router.post("/register", function(req, res, next) {
     !user.gender
   ) {
     return res.json({
-      statusCode: 400,
+      code: 'NOT_ENOUGH_INFO',
       msg: "Vui lòng điền đủ thông tin các trường trước khi gửi."
     });
   }
@@ -26,11 +27,21 @@ router.post("/register", function(req, res, next) {
       accounts = accounts.map(account => account.get({ plain: true }));
       if (accounts.length > 0) {
         return res.json({
-          statusCode: 400,
-          msg: "Username đã tồn tại! Vui lòng chọn tên khác."
+          code: 'USERNAME_EXISTED',
+          msg: "Username đã tồn tại! Vui lòng nhập username khác."
         });
       }
 
+      accounts = await accountRepo.getAccountByEmail(user.email);
+      accounts = accounts.map(account => account.get({ plain: true }));
+      if (accounts.length > 0) {
+        return res.json({
+          code: 'EMAIL_EXISTED',
+          msg: "Email đã tồn tại! Vui lòng nhập email khác."
+        });
+      }
+
+      await mailService.sendMailConfirm
       let resultAddAccount = await accountRepo.addAccount(user);
       if (resultAddAccount) {
         return res.json({

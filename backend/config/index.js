@@ -12,5 +12,7 @@ module.exports = {
       idle: 3000,
       acquire: 30000
     }
-  }
+  },
+
+  url: process.env.URL || "http://localhost:3000"
 };

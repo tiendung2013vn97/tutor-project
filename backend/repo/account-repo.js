@@ -1,4 +1,5 @@
 let userRepo = require("../db")["account"];
+var SHA256 = require("crypto-js/sha256");
 
 module.exports = {
   getAccountByUsername(username) {
@@ -14,15 +15,34 @@ module.exports = {
     });
   },
 
+  getAccountByEmail(email) {
+    return userRepo.findAll({
+      include: [
+        {
+          model: db.location
+        }
+      ],
+      where: {
+        email
+      }
+    });
+  },
+
   addAccount(user) {
-    let length = userRepo.length;
-    userRepo.push(user);
-    return userRepo.length - length;
+    return userRepo.create({ user });
   },
 
   getAccountByUsernameAndPassword(username, password) {
-    return userRepo.filter(
-      user => user.username === username && user.password === password
-    );
+    return userRepo.findAll({
+      include: [
+        {
+          model: db.location
+        }
+      ],
+      where: {
+        username,
+        password: SHA256(password)
+      }
+    });
   }
 };
