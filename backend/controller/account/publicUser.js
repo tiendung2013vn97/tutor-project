@@ -3,7 +3,8 @@ var router = express.Router();
 const accountRepo = require("../../repo/account-repo");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const mailService=require('../../mail-service')
+const mailService = require("../../mail-service");
+var SHA256 = require("crypto-js/sha256");
 
 router.post("/register", function(req, res, next) {
   console.log("register user", req.body);
@@ -17,7 +18,8 @@ router.post("/register", function(req, res, next) {
     !user.gender
   ) {
     return res.json({
-      code: 'NOT_ENOUGH_INFO',
+      status: "fail",
+      code: "NOT_ENOUGH_INFO",
       msg: "Vui lòng điền đủ thông tin các trường trước khi gửi."
     });
   }
@@ -27,7 +29,8 @@ router.post("/register", function(req, res, next) {
       accounts = accounts.map(account => account.get({ plain: true }));
       if (accounts.length > 0) {
         return res.json({
-          code: 'USERNAME_EXISTED',
+          status: "fail",
+          code: "USERNAME_EXISTED",
           msg: "Username đã tồn tại! Vui lòng nhập username khác."
         });
       }
@@ -36,27 +39,21 @@ router.post("/register", function(req, res, next) {
       accounts = accounts.map(account => account.get({ plain: true }));
       if (accounts.length > 0) {
         return res.json({
-          code: 'EMAIL_EXISTED',
+          status: "fail",
+          code: "EMAIL_EXISTED",
           msg: "Email đã tồn tại! Vui lòng nhập email khác."
         });
       }
 
-      await mailService.sendMailConfirm
-      let resultAddAccount = await accountRepo.addAccount(user);
-      if (resultAddAccount) {
-        return res.json({
-          statusCode: 200,
-          mgs: "Thêm account thành công!"
-        });
-      } else {
-        return res.json({
-          statusCode: 500,
-          mgs: "Thêm account thất bại!"
-        });
-      }
+      await mailService.sendMailConfirm;
+      return res.json({
+        status: "success",
+        msg:
+          "Đăng kí thành công,vui lòng đăng nhập email và kích hoạt tài khoản để có thể đăng nhập"
+      });
     } catch (error) {
       return res.json({
-        statusCode: 500,
+        status: "fail",
         msg: "" + error
       });
     }
@@ -86,6 +83,29 @@ router.post("/login", function(req, res, next) {
       return res.json({ user, token });
     });
   })(req, res);
+});
+
+router.get("/verify-email?", (req, res) => {
+  mailService
+    .verifyEmailToken(req.query.emailToken)
+    .then(user => {
+      user.password = SHA256(user.password);
+      console.log("user", user);
+      accountRepo.addAccount(this.user);
+    })
+    .then(val => {
+      return res.json({
+        status: "success",
+        data: val
+      });
+    })
+    .catch(err => {
+      return res.json({
+        status: "fail",
+        code: "VERIFY_EMAIL_FAIL",
+        msg: err
+      });
+    });
 });
 
 router.get("/", (req, res) => {
