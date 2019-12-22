@@ -8,6 +8,8 @@ const authenAdmin = require("./middle-ware/authen-admin");
 const authenLoginUser = require("./middle-ware/authen-login-user");
 const passport = require("passport");
 const cors = require("cors");
+const location = require("./repo/location");
+
 require("./passport");
 
 let app = express();
@@ -19,6 +21,7 @@ app.get("/", (req, res) => {
   return res.send("hello");
 });
 
+app.use("/location", location);
 app.use("/public-user", publicUser);
 app.use("/login-user", authenLoginUser, loginUser);
 app.use("/admin", authenAdmin, admin);
