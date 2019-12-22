@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import axios from 'axios';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import axios from "axios";
 import {
   showAlertNotify,
   showSuccessNotify,
   showFailNotify
-} from '../../Notify/action-notify';
-import Register from './Register';
-import config from '../../config';
+} from "../../Notify/action-notify";
+import Register from "./Register";
+import config from "../../config";
 
 class RegisterContainer extends Component {
   //constructor
@@ -18,30 +18,32 @@ class RegisterContainer extends Component {
 
   //render
   render() {
-    return <Register signUp={this.signUp} />;
+    return <Register signUp={this.signUp} location={this.props.location} />;
   }
   signUp(userInformation) {
     const api = axios.create({ baseURL: config.URL });
     api
-      .post('user/register', userInformation)
+      .post("user/register", userInformation)
       .then(res => {
         if (res.data.statusCode === 400) {
-            this.props.showFailNotify(res.data.msg);
-            return
+          this.props.showFailNotify(res.data.msg);
+          return;
         }
         this.props.showSuccessNotify(
-          'Sign up thành công! Bạn có thể đăng nhập!'
+          "Sign up thành công! Bạn có thể đăng nhập!"
         );
       })
       .catch(err => {
-        this.props.showAlertNotify('' + err);
+        this.props.showAlertNotify("" + err);
       });
   }
 }
 
 //map state to props
 function mapStateToProps(state) {
-  return {};
+  return {
+    location: state.location
+  };
 }
 
 //map dispatch to props
@@ -63,7 +65,4 @@ function mapDispatchToProps(dispatch) {
     }
   };
 }
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RegisterContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterContainer);

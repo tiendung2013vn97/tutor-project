@@ -10,11 +10,38 @@ class Register extends Component {
     this.handleSignUp = this.handleSignUp.bind(this);
     this.state = {
       gender: "male",
-      type: "teacher"
+      type: "teacher",
+      locationCity: "",
+      locationDistrict: ""
     };
   }
 
+  componentDidUpdate() {
+    if (this.props.location.length && this.state.locationCity === "") {
+      this.setState({
+        ...this.state,
+        locationCity: this.props.location[0].city,
+        locationDistrict: this.props.location[0].district
+      });
+    }
+  }
+
   render() {
+    let cityList = this.props.location.map(lo => lo.city);
+    let districtList = this.props.location
+      .filter(lo => lo.city === this.state.locationCity)
+      .map(lo => lo.district);
+
+    let cityComboBox = [];
+    cityList.forEach(city => {
+      cityComboBox.push(<Option value="city">{city}</Option>);
+    });
+
+    let districtComboBox = [];
+    districtList.forEach(district => {
+      districtComboBox.push(<Option value="district">{district}</Option>);
+    });
+
     return (
       <div className="sign-up-page">
         <div className="sign-up-page_main">
@@ -63,6 +90,46 @@ class Register extends Component {
             </Row>
             <Row>
               <div className="row-input required">
+                <div>
+                  <span className="label"> Nơi ở: </span>
+                </div>
+                <Row>
+                  <Col span={11}>
+                    <span>Tỉnh/Thành phố</span>
+                    <Select
+                      defaultValue={this.state.locationCity}
+                      onChange={this.handleCityChange.bind(this)}
+                      style={{
+                        width: "100%",
+                        fontSize: "1.2rem",
+                        height: "40px"
+                      }}
+                      size="large"
+                    >
+                      {cityComboBox}
+                    </Select>
+                  </Col>
+                  <Col span={11} style={{ marginLeft: 20 }}>
+                    <span>Quận/Huyện</span>
+                    <Select
+                      defaultValue={this.state.locationDistrict}
+                      onChange={this.handleDistrictChange.bind(this)}
+                      style={{
+                        width: "100%",
+                        fontSize: "1.2rem",
+                        height: "40px"
+                      }}
+                      size="large"
+                    >
+                      {districtComboBox}
+                    </Select>
+                  </Col>
+                </Row>
+              </div>
+            </Row>
+
+            <Row>
+              <div className="row-input required">
                 <span className="label"> Bạn đang có nhu cầu: </span>
                 <Select
                   defaultValue={this.state.type}
@@ -98,6 +165,17 @@ class Register extends Component {
     let gender = this.state.gender;
     let type = this.state.type;
 
+    let locationId = -1;
+    if (!this.props.location.length) {
+      return alert("Vui lòng đợi dữ liệu location được tải hoàn tất!");
+    } else {
+      locationId = this.props.location.filter(
+        lo =>
+          lo.city === this.state.locationCity &&
+          lo.district === this.state.locationDistrict
+      )[0].id;
+    }
+
     let userInformation = {
       username,
       password,
@@ -105,7 +183,8 @@ class Register extends Component {
       fullname,
       age,
       gender,
-      type
+      type,
+      locationId
     };
     console.log("user", userInformation);
     this.props.signUp(userInformation);
@@ -118,6 +197,14 @@ class Register extends Component {
 
   handleTypeChange(type) {
     this.setState({ ...this.state, type });
+  }
+
+  handleCityChange(locationCity) {
+    this.setState({ ...this.state, locationCity });
+  }
+
+  handleDistrictChange(locationDistrict) {
+    this.setState({ ...this.state.locationCity, locationDistrict });
   }
 }
 
