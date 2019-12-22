@@ -33,6 +33,7 @@ class MainMenu extends Component {
         onClick={this.handleClick.bind(this)}
         selectedKeys={[this.state.current]}
         mode="horizontal"
+        className="main-menu"
       >
         <Menu.Item key="app" disabled>
           <Icon type="appstore" />

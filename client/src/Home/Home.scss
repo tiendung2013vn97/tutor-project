@@ -14,11 +14,23 @@
 .ant-carousel .slick-slide h3 {
   color: #fff;
 }
-
+.main-title {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  color: white;
+  height: 250px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-top: 50px;
+}
 .bg_home {
   width: 100%;
 }
-
+.home-container {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
 #logo {
   display: inline-block;
   width: 150px;

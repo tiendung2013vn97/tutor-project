@@ -44,12 +44,60 @@ class Home extends Component {
       user = JSON.parse(user);
     }
 
+    let mainTitle = [];
+    mainTitle.push(
+      <div style={{ marginLeft: 50 }}>
+        <h3 style={{ color: "white", fontStyle: "italic" }}>
+          Bạn tự tin vào khả năng giảng dạy của mình trong 1 lĩnh vực, bạn muốn
+          kiếm thêm tiền nhờ việc giảng dạy ?<br />
+          <br />
+          Bạn đang có nhu cầu học hỏi ,muốn tìm kiếm giáo viên với giá cả hợp
+          lí, chất lượng đạt chuẩn ?<br />
+          <br />
+        </h3>
+        <h2 style={{ color: "white", fontStyle: "italic" }}>
+          ---ADDODA---
+          <br />
+          Nơi sẽ đáp ứng tất cả điều đó cho bạn, với cách thức dễ dàng, an toàn
+          hàng đầu.
+        </h2>
+      </div>
+    );
+
+    let introPage = [];
+    introPage.push();
+
+    let remarkPerson = [];
+    remarkPerson.push(
+      <Row gutter={8}>
+        <Col span={6}>
+          <Card title="Card title" bordered={false}>
+            Card content
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card title="Card title" bordered={false}>
+            Card content
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card title="Card title" bordered={false}>
+            Card content
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card title="Card title" bordered={false}>
+            Card content
+          </Card>
+        </Col>
+      </Row>
+    );
+
     let pageNotLogin = [];
     pageNotLogin.push(
       <Row>
         <Row>
-          <Col span={2}></Col>
-          <Col span={14}>
+          <Col span={17}>
             <Carousel autoplay id="slide_banner">
               <div>
                 <img src={Bg} className="bg_home" />
@@ -58,6 +106,8 @@ class Home extends Component {
                 <img src={Bg2} className="bg_home" />
               </div>
             </Carousel>
+
+            <div className="main-title">{mainTitle}</div>
           </Col>
           <Col span={1}></Col>
           <Col span={6}>
@@ -90,16 +140,12 @@ class Home extends Component {
         <br />
         <br />
         <Row>
-          <Col span={2}></Col>
-          <Col span={20}>
-            <Divider
-              style={{ fontSize: "1.5rem", fontStyle: "italic" }}
-              orientation="left"
-            >
-              Người dạy tiêu biểu của tháng 12
-            </Divider>
-          </Col>
-          <Col span={2}></Col>
+          <Divider
+            style={{ fontSize: "1.5rem", fontStyle: "italic" }}
+            orientation="left"
+          >
+            Người dạy tiêu biểu của tháng 12
+          </Divider>
         </Row>
         <Row className="list-profile">
           <Col span={2}></Col>
@@ -164,6 +210,7 @@ class Home extends Component {
             ></Card>
           </Col>
           <Col span={2}></Col>
+          <Row>{remarkPerson}</Row>
         </Row>
       </Row>
     );
