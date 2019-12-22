@@ -91,7 +91,7 @@ router.get("/verify-email?", (req, res) => {
     .then(user => {
       user.password = SHA256(user.password);
       console.log("user", user);
-      accountRepo.addAccount(this.user);
+      accountRepo.addAccount(user);
     })
     .then(val => {
       return res.json({
@@ -108,7 +108,47 @@ router.get("/verify-email?", (req, res) => {
     });
 });
 
-router.get("/", (req, res) => {
-  res.send("haha");
+router.get("/verify-changed-password?", (req, res) => {
+  mailService
+    .verifyEmailToken(req.query.emailToken)
+    .then(user => {
+      user.password = SHA256(user.password);
+      console.log("user", user);
+      accountRepo.updatePassword(user.username, user.password);
+    })
+    .then(val => {
+      return res.json({
+        status: "success",
+        data: val
+      });
+    })
+    .catch(err => {
+      return res.json({
+        status: "fail",
+        code: "VERIFY_EMAIL_FAIL",
+        msg: err
+      });
+    });
+});
+
+router.post("/change-password", (req, res) => {
+  try {
+    if (req.body.newPassword) throw "missing newPassword";
+    let users = accountRepo.getAccountByUsername(req.body.username);
+    users = users.map(account => account.get({ plain: true }));
+    if (users.length) {
+      let user = users[0];
+      user.password = req.body.newPassword;
+      mailService.sendMailConfirmChangePassword(user);
+    } else {
+      throw "username không tồn tại";
+    }
+  } catch (err) {
+    return res.json({
+      status: "fail",
+      code: "CHANGE_PASSWORD_FAIL",
+      msg: err
+    });
+  }
 });
 module.exports = router;

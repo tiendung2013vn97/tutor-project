@@ -32,6 +32,10 @@ module.exports = {
     return userRepo.create({ user });
   },
 
+  updatePassword(username, password) {
+    return userRepo.update({ password }, { where: { username } });
+  },
+
   getAccountByUsernameAndPassword(username, password) {
     return userRepo.findAll({
       include: [
