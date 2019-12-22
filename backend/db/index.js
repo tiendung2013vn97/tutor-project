@@ -8,6 +8,7 @@ let sequelize = new Sequelize(
   config.db.password,
   {
     host: config.db.host,
+    port: config.db.port,
     pool: config.db.pool,
     dialect: "mysql",
     logging: false

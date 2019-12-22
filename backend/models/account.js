@@ -41,17 +41,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       image: {
         type: DataTypes.STRING(45),
-        allowNull: false,
+        allowNull: true,
+        defaultValue: "defaultUser.png",
         field: "image"
       },
       intro: {
         type: DataTypes.TEXT,
+        defaultValue: "",
         allowNull: true,
         field: "intro"
       },
       rate: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        defaultValue: "0",
         field: "rate"
       },
       type: {

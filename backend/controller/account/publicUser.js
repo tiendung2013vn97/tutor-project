@@ -1,21 +1,23 @@
-var express = require("express");
-var router = express.Router();
+let express = require("express");
+let router = express.Router();
 const accountRepo = require("../../repo/account-repo");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const mailService = require("../../mail-service");
-var SHA256 = require("crypto-js/sha256");
+let SHA256 = require("crypto-js/sha256");
 
 router.post("/register", function(req, res, next) {
   console.log("register user", req.body);
   let user = req.body;
   if (
-    !user.username ||
-    !user.password ||
-    !user.email ||
-    !user.fullname ||
-    !user.age ||
-    !user.gender
+    (!user.username ||
+      !user.password ||
+      !user.email ||
+      !user.fullname ||
+      !user.age ||
+      !user.gender,
+    !user.locationId,
+    !user.type)
   ) {
     return res.json({
       status: "fail",
@@ -45,7 +47,7 @@ router.post("/register", function(req, res, next) {
         });
       }
 
-      await mailService.sendMailConfirm;
+      await mailService.sendMailConfirm(user);
       return res.json({
         status: "success",
         msg:
@@ -66,9 +68,17 @@ router.post("/login", function(req, res, next) {
     console.log("authenticating ", err, user);
     if (err || !user) {
       return res.status(200).json({
-        statusCode: 400,
-        message: info ? info.message : "Đăng nhập thất bại.",
-        user: user
+        status: "fail",
+        code: "WRONG_USERNAME_OR_PASSWORD",
+        msg: info ? info.message : "Đăng nhập thất bại."
+      });
+    }
+
+    if (user.isActived === false) {
+      return res.status(200).json({
+        status: "fail",
+        code: "ACCOUNT_IS_BLOCKED",
+        msg: "Tài khoản này hiện đang bị khóa"
       });
     }
 
@@ -79,7 +89,7 @@ router.post("/login", function(req, res, next) {
       }
 
       const token = jwt.sign(user, "your_jwt_secret");
-
+      delete user.password;
       return res.json({ user, token });
     });
   })(req, res);
@@ -89,21 +99,22 @@ router.get("/verify-email?", (req, res) => {
   mailService
     .verifyEmailToken(req.query.emailToken)
     .then(user => {
-      user.password = SHA256(user.password);
+      user.password = SHA256(user.password) + "";
       console.log("user", user);
       accountRepo.addAccount(user);
     })
     .then(val => {
       return res.json({
         status: "success",
-        data: val
+        data: val,
+        msg: "Kích hoạt tài khoản thành công. Bạn có thể đăng nhập "
       });
     })
     .catch(err => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-        msg: err
+        msg: err + ""
       });
     });
 });
@@ -112,43 +123,54 @@ router.get("/verify-changed-password?", (req, res) => {
   mailService
     .verifyEmailToken(req.query.emailToken)
     .then(user => {
-      user.password = SHA256(user.password);
+      console.log("pass", user.password);
+      user.password = SHA256(user.password) + "";
       console.log("user", user);
       accountRepo.updatePassword(user.username, user.password);
     })
     .then(val => {
       return res.json({
         status: "success",
-        data: val
+        data: val,
+        msg: "Thay đổi mật khẩu thành công "
       });
     })
     .catch(err => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-        msg: err
+        msg: err + ""
       });
     });
 });
 
 router.post("/change-password", (req, res) => {
-  try {
-    if (req.body.newPassword) throw "missing newPassword";
-    let users = accountRepo.getAccountByUsername(req.body.username);
-    users = users.map(account => account.get({ plain: true }));
-    if (users.length) {
-      let user = users[0];
-      user.password = req.body.newPassword;
-      mailService.sendMailConfirmChangePassword(user);
-    } else {
-      throw "username không tồn tại";
+  let changePassService = async () => {
+    try {
+      if (!req.body.newPassword) throw "missing newPassword";
+      let users = await accountRepo.getAccountByUsername(req.body.username);
+      users = users.map(account => account.get({ plain: true }));
+
+      if (users.length) {
+        let user = users[0];
+        user.password = req.body.newPassword;
+        await mailService.sendMailConfirmChangePassword(user);
+        return res.json({
+          status: "success",
+          msg: "Vui lòng đăng nhập email để kích hoạt password mới"
+        });
+      } else {
+        throw "username không tồn tại";
+      }
+    } catch (err) {
+      console.log(err);
+      return res.json({
+        status: "fail",
+        code: "CHANGE_PASSWORD_FAIL",
+        msg: err + ""
+      });
     }
-  } catch (err) {
-    return res.json({
-      status: "fail",
-      code: "CHANGE_PASSWORD_FAIL",
-      msg: err
-    });
-  }
+  };
+  changePassService();
 });
 module.exports = router;

@@ -1,5 +1,6 @@
 let userRepo = require("../db")["account"];
-var SHA256 = require("crypto-js/sha256");
+let SHA256 = require("crypto-js/sha256");
+let db = require("../db");
 
 module.exports = {
   getAccountByUsername(username) {
@@ -29,7 +30,7 @@ module.exports = {
   },
 
   addAccount(user) {
-    return userRepo.create({ user });
+    return userRepo.create(user);
   },
 
   updatePassword(username, password) {
@@ -45,7 +46,7 @@ module.exports = {
       ],
       where: {
         username,
-        password: SHA256(password)
+        password: SHA256(password) + ""
       }
     });
   }

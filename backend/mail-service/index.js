@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const mailConfig = require("../config/mail/mail-config");
 const jwt = require("jsonwebtoken");
+const config = require("../config");
 
 const FROM_EMAIL = mailConfig.FROM_EMAIL;
 const EMAIL_SECRET = mailConfig.EMAIL_SECRET;
@@ -17,7 +18,8 @@ const createEmailToken = (user, emailSecret = EMAIL_SECRET) => {
 exports.sendMailConfirm = (user, fromEmail = FROM_EMAIL) => {
   let expired = TOKEN_LIFETIME / 3600;
   let emailToken = createEmailToken(user);
-  let confirmUrl = url + "/public-user/verify-email?emailToken=" + emailToken;
+  let confirmUrl =
+    config.url + "/public-user/verify-email?emailToken=" + emailToken;
 
   const msg = {
     to: user.email,
@@ -55,7 +57,9 @@ exports.sendMailConfirmChangePassword = (user, fromEmail = FROM_EMAIL) => {
   let expired = TOKEN_LIFETIME / 3600;
   let emailToken = createEmailToken(user);
   let confirmUrl =
-    url + "/public-user/verify-changed-password?emailToken=" + emailToken;
+    config.url +
+    "/public-user/verify-changed-password?emailToken=" +
+    emailToken;
 
   const msg = {
     to: user.email,
