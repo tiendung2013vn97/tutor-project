@@ -168,7 +168,7 @@ class Home extends Component {
       </Row>
     );
     return (
-      <div>
+      <div className="home-container">
         <br />
         {!user && pageNotLogin}
         <div className="middle-layout">

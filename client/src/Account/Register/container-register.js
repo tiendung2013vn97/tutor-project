@@ -29,9 +29,7 @@ class RegisterContainer extends Component {
           this.props.showFailNotify(res.data.msg);
           return;
         }
-        this.props.showSuccessNotify(
-          "Sign up thành công! Bạn có thể đăng nhập!"
-        );
+        this.props.showSuccessNotify(res.data.msg);
       })
       .catch(err => {
         this.props.showAlertNotify("" + err);
