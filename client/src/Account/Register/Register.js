@@ -10,7 +10,7 @@ class Register extends Component {
     this.handleSignUp = this.handleSignUp.bind(this);
     this.state = {
       gender: "male",
-      type:"teacher"
+      type: "teacher"
     };
   }
 
@@ -19,24 +19,24 @@ class Register extends Component {
       <div className="sign-up-page">
         <div className="sign-up-page_main">
           <div className="form">
-            <Row>
+            <Row className="row-input">
               <Col span={11}>
                 <div className="row-input required">
-                  <span className='label'> Họ và tên: </span>
+                  <span className="label"> Họ và tên: </span>
                   <input id="fullname_val" placeholder="Nguyễn Tiến Dũng" />
                 </div>
                 <div className="row-input required">
-                  <span className='label'> Username:</span>
+                  <span className="label"> Username:</span>
                   <input id="username2_val" placeholder="dung123" />
                 </div>
                 <div className="row-input required">
-                  <span className='label'> Password: </span>
+                  <span className="label"> Password: </span>
                   <input type="password" id="password2_val" />
                 </div>
               </Col>
               <Col span={11} style={{ marginLeft: 20 }}>
                 <div className="row-input required">
-                  <span className='label'> Email: </span>
+                  <span className="label"> Email: </span>
                   <input
                     type="email"
                     id="email_val"
@@ -44,39 +44,38 @@ class Register extends Component {
                   />
                 </div>
                 <div className="row-input required">
-                  <span className='label'> Tuổi: </span>
+                  <span className="label"> Tuổi: </span>
                   <input type="number" id="age_val" placeholder="22" />
                 </div>
                 <div className="row-input required">
-                  <span className='label'> Giới tính: </span>
+                  <span className="label"> Giới tính: </span>
                   <Select
                     defaultValue={this.state.gender}
                     onChange={this.handleGenderChange.bind(this)}
-                    style={{width:"100%",fontSize:"1.2rem"}}
+                    style={{ width: "100%", fontSize: "1.2rem" }}
                     size="large"
                   >
                     <Option value="male">Nam</Option>
                     <Option value="female">Nữ</Option>
                   </Select>
                 </div>
-               
               </Col>
             </Row>
             <Row>
-            <div className="row-input required">
-                  <span className='label'> Bạn đang có nhu cầu: </span>
-                  <Select
-                    defaultValue={this.state.type}
-                    onChange={this.handleTypeChange.bind(this)}
-                    style={{width:"100%",fontSize:"1.2rem",height:"40px"}}
-                    size="large"
-                  >
-                    <Option value="teacher">Tìm người học</Option>
-                    <Option value="student">Tìm người dạy</Option>
-                  </Select>
-                </div>
+              <div className="row-input required">
+                <span className="label"> Bạn đang có nhu cầu: </span>
+                <Select
+                  defaultValue={this.state.type}
+                  onChange={this.handleTypeChange.bind(this)}
+                  style={{ width: "100%", fontSize: "1.2rem", height: "40px" }}
+                  size="large"
+                >
+                  <Option value="teacher">Tìm người học</Option>
+                  <Option value="student">Tìm người dạy</Option>
+                </Select>
+              </div>
             </Row>
-            <br/>
+            <br />
           </div>
 
           <div className="btn-signup" onClick={this.handleSignUp}>
@@ -97,7 +96,7 @@ class Register extends Component {
     let fullname = document.getElementById("fullname_val").value;
     let age = document.getElementById("age_val").value;
     let gender = this.state.gender;
-    let type=this.state.type
+    let type = this.state.type;
 
     let userInformation = {
       username,

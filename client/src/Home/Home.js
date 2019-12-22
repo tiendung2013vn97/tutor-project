@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Redirect} from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 import Register from "../Account/Register/container-register";
 import Login from "../Account/Login/container-login";
 import "./Home.scss";
@@ -171,12 +171,16 @@ class Home extends Component {
       <div>
         <br />
         {!user && pageNotLogin}
-        <div className='middle-layout'>
+        <div className="middle-layout">
           <Layout>
             <Content>
-              {user && user.type === "student" && <Student account={this.props.account} />}
-              {user && user.type === "teacher" && <Teacher account={this.props.account} />}
-              {user && user.type === "admin" && <Redirect to="/manage/users"/>}
+              {user && user.type === "student" && (
+                <Student account={this.props.account} />
+              )}
+              {user && user.type === "teacher" && (
+                <Teacher account={this.props.account} />
+              )}
+              {user && user.type === "admin" && <Redirect to="/manage/users" />}
             </Content>
           </Layout>
         </div>
