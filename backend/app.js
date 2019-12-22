@@ -8,7 +8,7 @@ const authenAdmin = require("./middle-ware/authen-admin");
 const authenLoginUser = require("./middle-ware/authen-login-user");
 const passport = require("passport");
 const cors = require("cors");
-const location = require("./repo/location");
+const location = require("./controller/location/location");
 
 require("./passport");
 

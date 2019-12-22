@@ -1,8 +1,8 @@
-let userRepo = require("../db")["account"];
+let location = require("../db")["location"];
 let db = require("../db");
 
 module.exports = {
   getLocation() {
-    return db.findAll({ raw: true });
+    return location.findAll({ raw: true });
   }
 };
