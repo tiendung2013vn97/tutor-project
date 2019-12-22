@@ -45,7 +45,7 @@ exports.sendMailConfirm = (user, fromEmail = FROM_EMAIL) => {
 
     transporter.sendMail(msg, (err, info) => {
       if (err) {
-        return reject(error.MAILER(err));
+        return reject(err);
       } else {
         return resolve(info);
       }
@@ -85,7 +85,7 @@ exports.sendMailConfirmChangePassword = (user, fromEmail = FROM_EMAIL) => {
 
     transporter.sendMail(msg, (err, info) => {
       if (err) {
-        return reject(error.MAILER(err));
+        return reject(err);
       } else {
         return resolve(info);
       }

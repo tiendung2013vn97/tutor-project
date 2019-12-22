@@ -5,9 +5,10 @@ const init = {
 const locationReducer = (state = init, action) => {
   switch (action.type) {
     case "UPDATE_LOCATION": {
+      console.log("aa", action.location);
       return {
         ...state,
-        ...action.location
+        location: action.location
       };
     }
     default: {

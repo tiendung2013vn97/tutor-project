@@ -16,30 +16,34 @@ class Register extends Component {
     };
   }
 
-  componentDidUpdate() {
-    if (this.props.location.length && this.state.locationCity === "") {
-      this.setState({
-        ...this.state,
-        locationCity: this.props.location[0].city,
-        locationDistrict: this.props.location[0].district
-      });
-    }
-  }
-
   render() {
     let cityList = this.props.location.map(lo => lo.city);
+    cityList = cityList.filter((city, index) => {
+      return !cityList.slice(0, index).includes(city);
+    });
+
+    if (this.state.locationCity === "") {
+      this.setState({
+        ...this.state,
+        locationCity: cityList[0],
+        locationDistrict: this.props.location
+          .filter(lo => lo.city === cityList[0])
+          .map(lo => lo.district)[0]
+      });
+    }
+
     let districtList = this.props.location
       .filter(lo => lo.city === this.state.locationCity)
       .map(lo => lo.district);
 
     let cityComboBox = [];
     cityList.forEach(city => {
-      cityComboBox.push(<Option value="city">{city}</Option>);
+      cityComboBox.push(<Option value={city}>{city}</Option>);
     });
 
     let districtComboBox = [];
     districtList.forEach(district => {
-      districtComboBox.push(<Option value="district">{district}</Option>);
+      districtComboBox.push(<Option value={district}>{district}</Option>);
     });
 
     return (
@@ -98,6 +102,7 @@ class Register extends Component {
                     <span>Tỉnh/Thành phố</span>
                     <Select
                       defaultValue={this.state.locationCity}
+                      value={this.state.locationCity}
                       onChange={this.handleCityChange.bind(this)}
                       style={{
                         width: "100%",
@@ -112,7 +117,7 @@ class Register extends Component {
                   <Col span={11} style={{ marginLeft: 20 }}>
                     <span>Quận/Huyện</span>
                     <Select
-                      defaultValue={this.state.locationDistrict}
+                      value={this.state.locationDistrict}
                       onChange={this.handleDistrictChange.bind(this)}
                       style={{
                         width: "100%",
@@ -166,7 +171,7 @@ class Register extends Component {
     let type = this.state.type;
 
     let locationId = -1;
-    if (!this.props.location.length) {
+    if (!this.state.locationCity || !this.state.locationDistrict) {
       return alert("Vui lòng đợi dữ liệu location được tải hoàn tất!");
     } else {
       locationId = this.props.location.filter(
@@ -186,7 +191,6 @@ class Register extends Component {
       type,
       locationId
     };
-    console.log("user", userInformation);
     this.props.signUp(userInformation);
     //let btnSignUp=document.getElementsByClassName('btn-signup')[0];
   }
@@ -200,7 +204,15 @@ class Register extends Component {
   }
 
   handleCityChange(locationCity) {
-    this.setState({ ...this.state, locationCity });
+    let locationDistrict = this.props.location.filter(
+      lo => lo.city === locationCity
+    )[0].district;
+
+    this.setState({
+      ...this.state,
+      locationCity,
+      locationDistrict
+    });
   }
 
   handleDistrictChange(locationDistrict) {

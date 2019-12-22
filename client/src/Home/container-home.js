@@ -71,7 +71,7 @@ function mapDispatchToProps(dispatch) {
           return dispatch(updateLocation(res.data.data));
         })
         .catch(err => {
-          this.props.showAlertNotify("" + err);
+          return dispatch(showAlertNotify("" + err));
         });
     }
   };

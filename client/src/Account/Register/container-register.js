@@ -23,9 +23,9 @@ class RegisterContainer extends Component {
   signUp(userInformation) {
     const api = axios.create({ baseURL: config.URL });
     api
-      .post("user/register", userInformation)
+      .post("/public-user/register", userInformation)
       .then(res => {
-        if (res.data.statusCode === 400) {
+        if (res.data.status === "fail") {
           this.props.showFailNotify(res.data.msg);
           return;
         }
@@ -42,7 +42,7 @@ class RegisterContainer extends Component {
 //map state to props
 function mapStateToProps(state) {
   return {
-    location: state.location
+    location: state.location.location
   };
 }
 

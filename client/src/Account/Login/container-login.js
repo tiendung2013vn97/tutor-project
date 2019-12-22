@@ -23,10 +23,9 @@ class SignInContainer extends Component {
   }
 
   login(userInformation) {
-    console.log("user", userInformation);
     const api = axios.create({ baseURL: config.URL });
     api
-      .post("user/login", userInformation)
+      .post("/public-user/login", userInformation)
       .then(res => {
         if (res.data.statusCode === 400) {
           this.props.showFailNotify(

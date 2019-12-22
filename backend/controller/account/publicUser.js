@@ -10,14 +10,14 @@ router.post("/register", function(req, res, next) {
   console.log("register user", req.body);
   let user = req.body;
   if (
-    (!user.username ||
-      !user.password ||
-      !user.email ||
-      !user.fullname ||
-      !user.age ||
-      !user.gender,
-    !user.locationId,
-    !user.type)
+    !user.username ||
+    !user.password ||
+    !user.email ||
+    !user.fullname ||
+    !user.age ||
+    !user.gender ||
+    !user.locationId ||
+    !user.type
   ) {
     return res.json({
       status: "fail",
@@ -25,6 +25,7 @@ router.post("/register", function(req, res, next) {
       msg: "Vui lòng điền đủ thông tin các trường trước khi gửi."
     });
   }
+
   const registerService = async () => {
     try {
       let accounts = await accountRepo.getAccountByUsername(user.username);
@@ -100,14 +101,30 @@ router.get("/verify-email?", (req, res) => {
     .verifyEmailToken(req.query.emailToken)
     .then(user => {
       user.password = SHA256(user.password) + "";
-      console.log("user", user);
-      accountRepo.addAccount(user);
-    })
-    .then(val => {
-      return res.json({
-        status: "success",
-        data: val,
-        msg: "Kích hoạt tài khoản thành công. Bạn có thể đăng nhập "
+      accountRepo.getAccountByUsername(user.username).then(accounts => {
+        accounts = accounts.map(account => account.get({ plain: true }));
+        if (accounts.length) {
+          return res.json({
+            status: "fail",
+            code: "USERNAME_EXISTED"
+          });
+        } else {
+          accountRepo
+            .addAccount(user)
+            .then(val => {
+              return res.json({
+                status: "success",
+                msg: "Kích hoạt tài khoản thành công. Bạn có thể đăng nhập "
+              });
+            })
+            .catch(err => {
+              return res.json({
+                status: "fail",
+                code: "VERIFY_EMAIL_FAIL",
+                msg: err + ""
+              });
+            });
+        }
       });
     })
     .catch(err => {
@@ -131,7 +148,6 @@ router.get("/verify-changed-password?", (req, res) => {
     .then(val => {
       return res.json({
         status: "success",
-        data: val,
         msg: "Thay đổi mật khẩu thành công "
       });
     })
