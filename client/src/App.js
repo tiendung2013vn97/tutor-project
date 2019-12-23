@@ -8,13 +8,16 @@ import Footer from "./Commons/Footer";
 import Admin from "./Admin/Admin";
 import UserInfo from "./Commons/UserInfo/UserInfoContainer";
 import UserDetail from "./Commons/UserDetail/UserDetailContainer";
-import MainMenu from "./Menu/Menu";
+import MainMenu from "./Menu/container-menu";
+import LoadingScreen from './Loading/container-loading'
+import BackgroundProcess from './BackgroundProcess'
 
 class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
         <div className="App">
+          <BackgroundProcess/>
           <Header />
           <MainMenu />
           <Switch>
@@ -33,6 +36,7 @@ class App extends React.Component {
             <Route path="/">
               <div className="App">
                 <Notify />
+                <LoadingScreen/>
                 <Home />
               </div>
             </Route>
