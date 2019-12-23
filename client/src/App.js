@@ -11,6 +11,7 @@ import UserDetail from "./Commons/UserDetail/UserDetailContainer";
 import MainMenu from "./Menu/container-menu";
 import LoadingScreen from './Loading/container-loading'
 import BackgroundProcess from './BackgroundProcess'
+import './App.css'
 
 class App extends React.Component {
   render() {
