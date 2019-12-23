@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       rate: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        defaultValue: "0",
+        defaultValue: -1,
         field: "rate"
       },
       type: {

@@ -21,6 +21,27 @@ db[account.name] = account;
 let location = sequelize.import("location", require("../models/location"));
 db[location.name] = location;
 
+let skillTag = sequelize.import("skill_tag", require("../models/skillTag"));
+db[skillTag.name] = skillTag;
+
+let comment = sequelize.import("comment", require("../models/comment"));
+db[comment.name] = comment;
+
+let contract = sequelize.import("contract", require("../models/contract"));
+db[contract.name] = contract;
+
+let session = sequelize.import("session", require("../models/session"));
+db[session.name] = session;
+
+let skill = sequelize.import("skill", require("../models/skill"));
+db[skill.name] = skill;
+
+let studyRequest = sequelize.import(
+  "studyRequest",
+  require("../models/studyRequest")
+);
+db[studyRequest.name] = studyRequest;
+
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

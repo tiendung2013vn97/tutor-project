@@ -9,6 +9,7 @@ const authenLoginUser = require("./middle-ware/authen-login-user");
 const passport = require("passport");
 const cors = require("cors");
 const location = require("./controller/location/location");
+const skillTag = require("./controller/skillTag/skillTag");
 
 require("./passport");
 
@@ -25,6 +26,7 @@ app.use("/location", location);
 app.use("/public-user", publicUser);
 app.use("/login-user", authenLoginUser, loginUser);
 app.use("/admin", authenAdmin, admin);
+app.use("/skill-tag", skillTag);
 
 let port = process.env.PORT || 3002;
 app.listen(port, () => {
