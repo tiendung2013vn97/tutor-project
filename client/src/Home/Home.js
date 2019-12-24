@@ -71,7 +71,7 @@ class Home extends Component {
     remarkPerson.push(
       <Row gutter={8}>
         <Col span={8}>
-          <Card title="Card title" className='remark-person-card' bordered={false}>
+          <Card title={ <Rate disabled defaultValue={4} />} className='remark-person-card' bordered={false}>
             Card content
           </Card>
         </Col>
