@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-const accountRepo = require("../../repo/account-repo");
+const accountRepo = require("../../repo/accountRepo");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const mailService = require("../../mail-service");
@@ -66,7 +66,6 @@ router.post("/register", function(req, res, next) {
 
 router.post("/login", function(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
-    console.log("authenticating ", err, user);
     if (err || !user) {
       return res.status(200).json({
         status: "fail",

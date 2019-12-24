@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Loading.css";
+import { Spin } from 'antd';
 
 class Loading extends Component {
   //constructor
@@ -14,7 +15,10 @@ class Loading extends Component {
         className="loading-screen"
         style={{ display: this.props.loading ? "block" : "none" }}
       >
-        <div className="loader"></div>
+        <div className='spin'>
+        <div className='spin-title'>Waiting ...</div>
+        <Spin  size="large"/>
+        </div>
       </div>
     );
   }

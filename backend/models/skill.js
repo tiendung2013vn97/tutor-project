@@ -37,15 +37,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  //   comment.associate = function(models) {
-  //     comment.belongsTo(models.comment_status, {
-  //       foreignKey: "statusId",
-  //       targetKey: "wsId"
-  //     });
-  //     comment.hasMany(models.tracking_event, {
-  //       foreignKey: "commentNo",
-  //       sourceKey: "commentNo"
-  //     });
-  //   };
+    skill.associate = function(models) {
+      skill.belongsTo(models.skill_tag, {
+        foreignKey: "skillTagId",
+        targetKey: "id"
+      });
+      
+      skill.belongsTo(models.account, {
+        foreignKey: "teacherId",
+        targetKey: "username"
+      });
+    };
   return skill;
 };

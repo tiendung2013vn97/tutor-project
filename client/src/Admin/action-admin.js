@@ -14,14 +14,21 @@ export const activeUser = () => {
 }
 
 // skill
+
+export const getSkill = (e) => {
+	return {
+		type: types.GET_SKILLTAG,
+		payload: e
+	}
+}
 export const addSkill = () => {
 	return {
-		type: types.ADD_SKILL
+		type: types.ADD_SKILLTAG
 	}
 }
 export const deleteSkill = () => {
 	return {
-		type: types.DELETE_SKILL
+		type: types.DELETE_SKILLTAG
 	}
 }
 
@@ -29,6 +36,11 @@ export const deleteSkill = () => {
 export const addContract = () => {
 	return {
 		type: types.ADD_CONTRACT
+	}
+}
+export const getContract = () => {
+	return {
+		type: types.GET_CONTRACT
 	}
 }
 export const deleteContract = () => {

@@ -1,8 +1,9 @@
 import * as types from '../Constants/actionType'
 
 const init = {
-    users: [],
-    contracts: [],
+    users: null,
+    skills: null,
+    contracts: null,
 };
 
 const accountReducer = (state = init, action) => {
@@ -10,12 +11,20 @@ const accountReducer = (state = init, action) => {
         case types.GET_USER_LIST: {
             return {
                 ...state,
-                users: [...action.payload]
+                users: action.payload
             };
         }
-        case 'LOG_OUT': {
-            localStorage.clear();
-            return init
+        case types.GET_SKILLTAG: {
+            return {
+                ...state,
+                skills: action.payload
+            };
+        }
+        case types.GET_CONTRACT: {
+            return {
+                ...state,
+                contracts: action.payload
+            };
         }
         default: {
             return state;

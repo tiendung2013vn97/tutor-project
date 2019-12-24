@@ -17,7 +17,7 @@ class UsersManagement extends React.Component {
                 "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
         }).then(res => {
-            console.log(res)
+            this.props.getUserList(res.data)
         })
     }
 
@@ -34,33 +34,46 @@ class UsersManagement extends React.Component {
     }
 
     renderTable(data) {
-
+        console.log("data", data)
+        if (!data)
+            return null
         const columns = [
             {
-                title: 'Name',
-                dataIndex: 'name',
+                title: 'Họ tên',
+                dataIndex: 'fullname',
                 render: (text, row, index) => {
                     return <Link to="/manage/users/id">{text}</Link>
                 }
             },
             {
-                title: 'Age',
+                title: 'Username',
+                dataIndex: 'username',
+                key: 'username',
+            },
+
+            {
+                title: 'Email',
+                dataIndex: 'email',
+                key: 'email',
+            },
+            {
+                title: 'Tuổi',
                 dataIndex: 'age',
                 key: 'age',
             },
             {
-                title: 'Address',
-                dataIndex: 'address',
-                key: 'address',
+                title: 'Giới tính',
+                dataIndex: 'gender',
+                key: 'gender',
             },
             {
-                title: 'Enable',
-                dataIndex: 'enable',
-                render: () => {
+                title: 'Active',
+                dataIndex: 'isActived',
+                render: (text) => {
                     return <Switch
                         unCheckedChildren="disabled"
                         checkedChildren="anabled"
-                        checked={true}
+                        checked={text}
                         onChange={this.handleDisable}
                         style={{marginTop: 16}}
                     />
@@ -69,7 +82,7 @@ class UsersManagement extends React.Component {
         ];
 
         return <div>
-            <Table dataSource={data} columns={columns}/>
+            <Table dataSource={data.rows} columns={columns}/>
             <br/>
             <Pagination current={this.state.current} onChange={this.onChange} total={50}/>
         </div>
