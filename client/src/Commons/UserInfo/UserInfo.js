@@ -49,6 +49,7 @@ class UserInfo extends React.Component {
 
     render() {
         // const { profile } = this.props
+        console.log(this.props)
         return (
             <div className="page-container">
                 <div className="container">

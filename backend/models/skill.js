@@ -1,0 +1,51 @@
+"use strict";
+module.exports = (sequelize, DataTypes) => {
+  const skill = sequelize.define(
+    "skill",
+    {
+      id: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        field: "id"
+      },
+      teacherId: {
+        type: DataTypes.STRING(45),
+        allowNull: false,
+        field: "teacherId"
+      },
+      costPerHour: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        field: "costPerHour"
+      },
+      skillTagId: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        field: "skillTagId"
+      },
+      note: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        field: "note"
+      }
+    },
+    {
+      freezeTableName: true,
+      timestamps: false
+    }
+  );
+
+  //   comment.associate = function(models) {
+  //     comment.belongsTo(models.comment_status, {
+  //       foreignKey: "statusId",
+  //       targetKey: "wsId"
+  //     });
+  //     comment.hasMany(models.tracking_event, {
+  //       foreignKey: "commentNo",
+  //       sourceKey: "commentNo"
+  //     });
+  //   };
+  return skill;
+};

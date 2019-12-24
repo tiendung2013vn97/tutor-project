@@ -12,15 +12,26 @@ passport.use(
     },
     function(username, password, cb) {
       //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
-      let users = accountRepo.getAccountByUsernameAndPassword(
-        username,
-        password
-      );
+      let users = null;
 
-      if (users.length === 0) {
-        return cb(null, false, { message: "Username hoặc password không hợp lệ." });
-      }
-      return cb(null, users[0], { message: "Đăng nhập thành công "});
+      accountRepo
+        .getAccountByUsernameAndPassword(username, password)
+        .then(accounts => {
+          users = accounts.map(account => account.get({ plain: true }));
+
+          if (users.length === 0) {
+            return cb(null, false, {
+              message: "Username hoặc password không hợp lệ."
+            });
+          }
+          return cb(null, users[0], { message: "Đăng nhập thành công " });
+        })
+        .catch(err => {
+          console.log(err, username, password);
+          return cb(null, false, {
+            message: err
+          });
+        });
     }
   )
 );

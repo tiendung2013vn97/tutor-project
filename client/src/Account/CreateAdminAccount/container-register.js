@@ -25,14 +25,14 @@ class RegisterContainer extends Component {
     api
       .post('user/register', userInformation)
       .then(res => {
-        if (res.data.statusCode === 400) {
-            this.props.showFailNotify(res.data.msg);
-            return
-        }
-        this.props.showSuccessNotify(
+      if (res.data.statusCode === 400) {
+        this.props.showFailNotify(res.data.msg);
+        return
+      }
+      this.props.showSuccessNotify(
           'Tạo tài khoản thành công! Bạn có dùng tài khoản mới tạo để đăng nhập!'
-        );
-      })
+      );
+    })
       .catch(err => {
         this.props.showAlertNotify('' + err);
       });

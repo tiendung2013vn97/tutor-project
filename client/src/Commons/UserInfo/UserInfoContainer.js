@@ -81,7 +81,8 @@ class UserInfoContainer extends React.Component {
 
 const mapStatetoProps = state => {
     return {
-        ...state.UserReducers
+        user: state.account,
+        location: state.location.location
     }
 }
 

@@ -1,17 +1,53 @@
-let userRepo=require('../account/user')
+let userRepo = require("../db")["account"];
+let SHA256 = require("crypto-js/sha256");
+let db = require("../db");
 
-module.exports={
-  getAccountByUsername(username){
-    return userRepo.filter( user=>user.username===username)
+module.exports = {
+  getAccountByUsername(username) {
+    return userRepo.findAll({
+      include: [
+        {
+          model: db.location
+        }
+      ],
+      where: {
+        username
+      }
+    });
   },
 
-  addAccount(user){
-    let length=userRepo.length
-    userRepo.push(user)
-    return userRepo.length-length
+  getAccountByEmail(email) {
+    return userRepo.findAll({
+      include: [
+        {
+          model: db.location
+        }
+      ],
+      where: {
+        email
+      }
+    });
   },
 
-  getAccountByUsernameAndPassword(username,password){
-    return userRepo.filter( user=>user.username===username&&user.password===password)
+  addAccount(user) {
+    return userRepo.create(user);
+  },
+
+  updatePassword(username, password) {
+    return userRepo.update({ password }, { where: { username } });
+  },
+
+  getAccountByUsernameAndPassword(username, password) {
+    return userRepo.findAll({
+      include: [
+        {
+          model: db.location
+        }
+      ],
+      where: {
+        username,
+        password: SHA256(password) + ""
+      }
+    });
   }
-}
+};

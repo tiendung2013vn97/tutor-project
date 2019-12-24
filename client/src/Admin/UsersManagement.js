@@ -1,22 +1,23 @@
 import React from 'react'
 import {connect} from 'react-redux';
 import axios from 'axios'
-import {Table, Switch, Button} from 'antd';
+import {Table, Switch, Button, Pagination} from 'antd';
 import {Link} from 'react-router-dom'
-import {URL} from '../config'
+import {URL} from "../config"
 import {getUserList} from "./action-admin";
 
 class UsersManagement extends React.Component {
-
-    getUsers = () => {
-        return axios.request({
-            method: 'GET',
-            url: URL + "admin/users"
-        }).then(res=>{
-            console.log("res", res)
-            this.props.getUserList(res.data)
-        }).catch(err=>{
-            console.log(err)
+    state = {
+        current: 1
+    }
+    getUsers = (pageNo, pageSize) => {
+        const api = axios.create({baseURL: URL});
+        return api.get("admin/users", {
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then(res => {
+            console.log(res)
         })
     }
 
@@ -24,7 +25,15 @@ class UsersManagement extends React.Component {
         this.getUsers()
     }
 
-    renderTable(data){
+    onChange = (e) => {
+        console.log(e)
+        this.setState({
+            current: e
+        })
+        this.getUsers(e, 10)
+    }
+
+    renderTable(data) {
 
         const columns = [
             {
@@ -59,7 +68,11 @@ class UsersManagement extends React.Component {
             },
         ];
 
-        return <Table dataSource={data} columns={columns}/>
+        return <div>
+            <Table dataSource={data} columns={columns}/>
+            <br/>
+            <Pagination current={this.state.current} onChange={this.onChange} total={50}/>
+        </div>
 
     }
 
@@ -102,14 +115,18 @@ class UsersManagement extends React.Component {
 }
 
 //map state to props
-function mapStateToProps(state) {
+function
+
+mapStateToProps(state) {
     return {
-        users: state.adminReducer.users
+        users: state.admin.users
     };
 }
 
 //map dispatch to props
-function mapDispatchToProps(dispatch) {
+function
+
+mapDispatchToProps(dispatch) {
     return {
         //     //show alert dialog
         // showAlertNotify(msg) {
@@ -131,4 +148,10 @@ function mapDispatchToProps(dispatch) {
         }
     };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(UsersManagement);
+
+export default connect(mapStateToProps, mapDispatchToProps)
+
+(
+    UsersManagement
+)
+;

@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import axios from 'axios';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import axios from "axios";
+import { changeStatus } from "../../Loading/action-loading";
 import {
   showAlertNotify,
   showSuccessNotify,
   showFailNotify
-} from '../../Notify/action-notify';
-import Register from './Register';
-import config from '../../config';
+} from "../../Notify/action-notify";
+import Register from "./Register";
+import config from "../../config";
 
 class RegisterContainer extends Component {
   //constructor
@@ -18,30 +19,46 @@ class RegisterContainer extends Component {
 
   //render
   render() {
-    return <Register signUp={this.signUp} />;
+    return <Register signUp={this.signUp} location={this.props.location} />;
   }
   signUp(userInformation) {
+    this.props.changeLoadingStatus(true);
     const api = axios.create({ baseURL: config.URL });
     api
-      .post('user/register', userInformation)
+      .post("/public-user/register", userInformation)
       .then(res => {
-        if (res.data.statusCode === 400) {
-            this.props.showFailNotify(res.data.msg);
-            return
+        if (res.data.status === "fail") {
+          switch (res.data.code) {
+            case "USERNAME_EXISTED": {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+            case "EMAIL_EXISTED": {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+            default: {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+          }
+          return this.props.changeLoadingStatus(false);
         }
-        this.props.showSuccessNotify(
-          'Sign up thành công! Bạn có thể đăng nhập!'
-        );
+        this.props.showSuccessNotify(res.data.msg);
+        this.props.changeLoadingStatus(false);
       })
       .catch(err => {
-        this.props.showAlertNotify('' + err);
+        this.props.showAlertNotify("" + err);
+        this.props.changeLoadingStatus(false);
       });
   }
 }
 
 //map state to props
 function mapStateToProps(state) {
-  return {};
+  return {
+    location: state.location.location
+  };
 }
 
 //map dispatch to props
@@ -60,10 +77,11 @@ function mapDispatchToProps(dispatch) {
     //show alert dialog
     showSuccessNotify(msg) {
       return dispatch(showSuccessNotify(msg));
+    },
+
+    changeLoadingStatus(status) {
+      return dispatch(changeStatus(status));
     }
   };
 }
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RegisterContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterContainer);

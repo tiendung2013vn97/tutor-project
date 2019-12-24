@@ -14,11 +14,23 @@
 .ant-carousel .slick-slide h3 {
   color: #fff;
 }
-
+.main-title {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  color: white;
+  height: 250px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-top: 50px;
+}
 .bg_home {
   width: 100%;
 }
-
+.home-container {
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
 #logo {
   display: inline-block;
   width: 150px;
@@ -26,7 +38,7 @@
 #slogan {
   display: inline-block;
   position: absolute;
-  font-family: "Garamond";
+  font-family: "Times New Roman", Times, serif;
   font-size: 2rem;
   height: 80px;
   top: 13px;
@@ -79,52 +91,49 @@
 
 .icon {
   color: white;
-  float:right;
+  float: right;
   font-size: 3rem;
   margin-left: 20px;
   padding: 3px;
-  &:hover{
-      background-color:rgb(72, 102, 158) ;
-      cursor: pointer;
-     
+  &:hover {
+    background-color: rgb(72, 102, 158);
+    cursor: pointer;
   }
 }
 
-.list-profile img{
-    width: 95%;
+.list-profile img {
+  width: 95%;
 }
-.panel-item{
-    width: 300px;
-    height: 400px;
+.panel-item {
+  width: 300px;
+  height: 400px;
 }
-#acount_icon{
-    width: 75px;
-    height: 75px;
-    border-radius: 256px;
-    &:hover{
-        cursor: pointer;
-    }
-   
+#acount_icon {
+  width: 75px;
+  height: 75px;
+  border-radius: 256px;
+  &:hover {
+    cursor: pointer;
+  }
 }
-#btn_logout{
-    display: none;
-    position: absolute;
-}
-
-.account-icon-area:hover #btn_logout{
-    display: block !important;
-}
-#btn_logout:hover{
-    color: white;
-    background-color: black;
+#btn_logout {
+  display: none;
+  position: absolute;
 }
 
-#btn_logout:active{
-    color: white;
-    background-color: rgb(185, 79, 79);
+.account-icon-area:hover #btn_logout {
+  display: block !important;
 }
-.middle-layout{
-    width: 100%;
-    min-height: 75vh;
-    
+#btn_logout:hover {
+  color: white;
+  background-color: black;
+}
+
+#btn_logout:active {
+  color: white;
+  background-color: rgb(185, 79, 79);
+}
+.middle-layout {
+  width: 100%;
+  min-height: 75vh;
 }
