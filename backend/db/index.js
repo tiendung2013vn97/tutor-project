@@ -36,12 +36,6 @@ db[session.name] = session;
 let skill = sequelize.import("skill", require("../models/skill"));
 db[skill.name] = skill;
 
-let studyRequest = sequelize.import(
-  "studyRequest",
-  require("../models/studyRequest")
-);
-db[studyRequest.name] = studyRequest;
-
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
     db[modelName].associate(db);

@@ -85,6 +85,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "locationId",
       targetKey: "id"
     });
+
+    
     //   account.hasMany(models.tracking_event, {
     //     foreignKey: "accountNo",
     //     sourceKey: "accountNo"

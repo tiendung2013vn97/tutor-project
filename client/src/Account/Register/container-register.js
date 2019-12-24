@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
+import { changeStatus } from "../../Loading/action-loading";
 import {
   showAlertNotify,
   showSuccessNotify,
@@ -21,18 +22,34 @@ class RegisterContainer extends Component {
     return <Register signUp={this.signUp} location={this.props.location} />;
   }
   signUp(userInformation) {
+    this.props.changeLoadingStatus(true);
     const api = axios.create({ baseURL: config.URL });
     api
       .post("/public-user/register", userInformation)
       .then(res => {
         if (res.data.status === "fail") {
-          this.props.showFailNotify(res.data.msg);
-          return;
+          switch (res.data.code) {
+            case "USERNAME_EXISTED": {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+            case "EMAIL_EXISTED": {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+            default: {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+          }
+          return this.props.changeLoadingStatus(false);
         }
         this.props.showSuccessNotify(res.data.msg);
+        this.props.changeLoadingStatus(false);
       })
       .catch(err => {
         this.props.showAlertNotify("" + err);
+        this.props.changeLoadingStatus(false);
       });
   }
 }
@@ -60,6 +77,10 @@ function mapDispatchToProps(dispatch) {
     //show alert dialog
     showSuccessNotify(msg) {
       return dispatch(showSuccessNotify(msg));
+    },
+
+    changeLoadingStatus(status) {
+      return dispatch(changeStatus(status));
     }
   };
 }

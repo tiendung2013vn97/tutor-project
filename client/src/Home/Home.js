@@ -70,26 +70,22 @@ class Home extends Component {
     let remarkPerson = [];
     remarkPerson.push(
       <Row gutter={8}>
-        <Col span={6}>
-          <Card title="Card title" bordered={false}>
+        <Col span={8}>
+          <Card title={ <Rate disabled defaultValue={4} />} className='remark-person-card' bordered={false}>
             Card content
           </Card>
         </Col>
-        <Col span={6}>
-          <Card title="Card title" bordered={false}>
+        <Col span={8}>
+          <Card title="Card title"className='remark-person-card' bordered={false}>
             Card content
           </Card>
         </Col>
-        <Col span={6}>
-          <Card title="Card title" bordered={false}>
+        <Col span={8}>
+          <Card title="Card title"className='remark-person-card' bordered={false}>
             Card content
           </Card>
         </Col>
-        <Col span={6}>
-          <Card title="Card title" bordered={false}>
-            Card content
-          </Card>
-        </Col>
+
       </Row>
     );
 

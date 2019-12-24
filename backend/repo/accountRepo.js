@@ -49,5 +49,17 @@ module.exports = {
         password: SHA256(password) + ""
       }
     });
+  },
+
+  getUser(offset, limit) {
+    return userRepo.findAndCountAll({
+      include: [
+        {
+          model: db.location
+        }
+      ],
+      offset,
+      limit
+    });
   }
 };

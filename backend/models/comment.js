@@ -10,16 +10,6 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         field: "id"
       },
-      studentId: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        field: "studentId"
-      },
-      teacherId: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        field: "teacherId"
-      },
       contractId: {
         type: DataTypes.BIGINT,
         allowNull: false,
@@ -29,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.JSON,
         allowNull: false,
         field: "comment"
+      },
+      createDt: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        field: "createDt"
       }
     },
     {

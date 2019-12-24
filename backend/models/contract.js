@@ -10,25 +10,15 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         field: "id"
       },
-      studentId: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        field: "studentId"
-      },
-      teacherId: {
-        type: DataTypes.STRING(45),
-        allowNull: false,
-        field: "teacherId"
-      },
-      studyRequestId: {
-        type: DataTypes.BIGINT,
-        allowNull: false,
-        field: "studyRequestId"
-      },
       skillId: {
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING(45),
         allowNull: false,
         field: "skillId"
+      },
+      studentId: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        field: "studentId"
       },
       totalHours: {
         type: DataTypes.INTEGER,
@@ -64,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       studentComment: {
         type: DataTypes.TEXT,
         allowNull: true,
+        defaultValue: "",
         field: "studentComment"
       },
       isActived: {
@@ -79,15 +70,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  //   contract.associate = function(models) {
-  //     contract.belongsTo(models.comment_status, {
-  //       foreignKey: "statusId",
-  //       targetKey: "wsId"
-  //     });
-  //     contract.hasMany(models.tracking_event, {
-  //       foreignKey: "commentNo",
-  //       sourceKey: "commentNo"
-  //     });
-  //   };
+  contract.associate = function(models) {
+    // contract.hasMany(models.comment, {
+    //   foreignKey: "statusId",
+    //   sourceKey: "wsId"
+    // });
+    // contract.hasMany(models.tracking_event, {
+    //   foreignKey: "commentNo",
+    //   sourceKey: "commentNo"
+    // });
+  };
   return contract;
 };

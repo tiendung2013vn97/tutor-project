@@ -1,4 +1,4 @@
-const accountRepo = require("./repo/account-repo");
+const accountRepo = require("./repo/accountRepo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const passportJWT = require("passport-jwt");
@@ -44,8 +44,16 @@ passport.use(
     },
     function(jwtPayload, cb) {
       //find the user in db if needed
-      let users = accountRepo.getAccountByUsername(jwtPayload.username);
-      return cb(null, users[0]);
+
+      let users = accountRepo
+        .getAccountByUsername(jwtPayload.username)
+        .then(users => {
+          users = users.map(item => item.get({ plain: true }));
+          return cb(null, users[0]);
+        })
+        .catch(err => {
+          return res.status(400).send(err + "");
+        });
     }
   )
 );
