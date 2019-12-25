@@ -14,6 +14,7 @@ import Profile5 from "../assets/imgs/profile5.jpg";
 import Student from "../Student/Student";
 import Teacher from "../Teacher/Teacher";
 import Admin from "../Admin/Admin";
+import RemarkPerson from './RemarkPerson/RemarkPerson'
 import LoggedIcon from "../assets/imgs/loggedIcon.png";
 import {
   Row,
@@ -71,21 +72,32 @@ class Home extends Component {
     remarkPerson.push(
       <Row gutter={8}>
         <Col span={8}>
-          <Card title={ <Rate disabled defaultValue={4} />} className='remark-person-card' bordered={false}>
+          <Card
+            title={<Rate disabled defaultValue={4} />}
+            className="remark-person-card"
+            bordered={false}
+          >
             Card content
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="Card title"className='remark-person-card' bordered={false}>
+          <Card
+            title="Card title"
+            className="remark-person-card"
+            bordered={false}
+          >
             Card content
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="Card title"className='remark-person-card' bordered={false}>
+          <Card
+            title="Card title"
+            className="remark-person-card"
+            bordered={false}
+          >
             Card content
           </Card>
         </Col>
-
       </Row>
     );
 
@@ -107,12 +119,12 @@ class Home extends Component {
           </Col>
           <Col span={1}></Col>
           <Col span={6}>
-            <Tabs defaultActiveKey="2" className="tab-view">
+            <Tabs defaultActiveKey="2" className="tab-view" className="account-panel">
               <TabPane
                 tab={
-                  <span style={{ fontSize: "1.2rem" }}>
+                  <span style={{ fontSize: "1.2rem"}} className="font-1">
                     <Icon type="user" />
-                    Sign In
+                    Đăng nhập
                   </span>
                 }
                 key="login"
@@ -121,9 +133,9 @@ class Home extends Component {
               </TabPane>
               <TabPane
                 tab={
-                  <span style={{ fontSize: "1.2rem" }}>
+                  <span style={{ fontSize: "1.2rem" }}  className="font-1">
                     <Icon type="user-add" />
-                    Sign up
+                    Đăng kí
                   </span>
                 }
                 key="register"
@@ -135,79 +147,8 @@ class Home extends Component {
         </Row>
         <br />
         <br />
-        <Row>
-          <Divider
-            style={{ fontSize: "1.5rem", fontStyle: "italic" }}
-            orientation="left"
-          >
-            Người dạy tiêu biểu của tháng 12
-          </Divider>
-        </Row>
-        <Row className="list-profile">
-          <Col span={2}></Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={4} />
-                  <img src={Profile1} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={4} />
-                  <img src={Profile2} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={5} />
-                  <img src={Profile3} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={4} />
-                  <img src={Profile4} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={5} />
-                  <img src={Profile5} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={2}></Col>
-          <Row>{remarkPerson}</Row>
-        </Row>
+        <RemarkPerson/>
+         
       </Row>
     );
     return (

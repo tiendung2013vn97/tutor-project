@@ -9,18 +9,23 @@ import Admin from "./Admin/Admin";
 import UserInfo from "./Commons/UserInfo/UserInfoContainer";
 import UserDetail from "./Commons/UserDetail/UserDetailContainer";
 import MainMenu from "./Menu/container-menu";
-import LoadingScreen from './Loading/container-loading'
-import BackgroundProcess from './BackgroundProcess'
-import './App.css'
+import LoadingScreen from "./Loading/container-loading";
+import BackgroundProcess from "./BackgroundProcess";
+import RegisterResult from "./Account/Register/RegisterResult/container-registerResult";
+import PageNotFound from './PageNotFound/PageNotFound'
+import "./App.css";
 
 class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-          <BackgroundProcess/>
+          <BackgroundProcess />
           <Header />
           <MainMenu />
+          <Notify />
+          <LoadingScreen />
+
           <Switch>
             <Route path="/manage">
               <Admin />
@@ -30,17 +35,13 @@ class App extends React.Component {
               <UserInfo />
             </Route>
 
-            <Route path="/user/id">
+            <Route path="/user/id" >
               <UserDetail />
             </Route>
 
-            <Route path="/">
-              <div className="App">
-                <Notify />
-                <LoadingScreen/>
-                <Home />
-              </div>
-            </Route>
+            <Route path="/user/register/result" component={RegisterResult}/>
+            <Route exact path="/" component={Home}/>
+            <Route path='*' component={PageNotFound}/> 
           </Switch>
 
           <Footer />

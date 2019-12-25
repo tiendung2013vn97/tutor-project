@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import "./Menu.scss";
+import ComplainIcon from '../assets/imgs/complain.png'
 
 import {
   Row,
@@ -30,11 +31,12 @@ class MainMenu extends Component {
   //render
   render() {
     return (
-      <div style={{ width: 256,position:"fixed",top:0,zIndex:"9999" }}>
+      <div  className='main-menu'>
         <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
           <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
         </Button>
         <Menu
+        className="menu"
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
           mode="inline"
@@ -45,52 +47,26 @@ class MainMenu extends Component {
             <Icon type="home" />
             <span>Trang chủ</span>
           </Menu.Item>
-          <Menu.Item key="user">
+          <Menu.Item key="mange-user">
             <Icon type="user" />
-            <span>Quản lí người dùng</span>
+            <span>Người dùng</span>
           </Menu.Item>
-          <Menu.Item key="skillTag">
+          <Menu.Item key="mange-skill-tag">
             <Icon type="tag" />
-            <span>Quản lí kĩ năng</span>
+            <span>Kĩ năng</span>
           </Menu.Item>
-          <Menu.Item key="studyRequest">
+          <Menu.Item key="mange-contract">
             <Icon type="audit" />
-            <span>Quản lí đơn xin học</span>
+            <span>Hợp đồng</span>
           </Menu.Item>
-          <Menu.Item key="contract">
-            <Icon type="audit" />
-            <span>Quản lí hợp đồng</span>
+          <Menu.Item key="mange-complain">
+            <Icon type="frown" />
+            <span>Khiếu nại</span>
           </Menu.Item>
-          <SubMenu
-            key="sub1"
-            title={
-              <span>
-                <Icon type="mail" />
-                <span>Navigation One</span>
-              </span>
-            }
-          >
-            <Menu.Item key="5">Option 5</Menu.Item>
-            <Menu.Item key="6">Option 6</Menu.Item>
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-          <SubMenu
-            key="sub2"
-            title={
-              <span>
-                <Icon type="appstore" />
-                <span>Navigation Two</span>
-              </span>
-            }
-          >
-            <Menu.Item key="9">Option 9</Menu.Item>
-            <Menu.Item key="10">Option 10</Menu.Item>
-            <SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="11">Option 11</Menu.Item>
-              <Menu.Item key="12">Option 12</Menu.Item>
-            </SubMenu>
-          </SubMenu>
+          <Menu.Item key="mange-statistic">
+            <Icon type="bar-chart" />
+            <span>Thống kê</span>
+          </Menu.Item>
         </Menu>
       </div>
     );

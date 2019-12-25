@@ -6,7 +6,6 @@ import contractReducer from "./Contract/reducer-contract";
 import commentReducer from "./Comment/reducer-comment";
 import skillReducer from "./Skill/reducer-skill";
 import skillTagReducer from "./SkillTag/reducer-skillTag";
-import studyRequestReducer from "./StudyRequest/reducer-studyRequest";
 import loadingReducer from "./Loading/reducer-loading";
 
 const reducers = combineReducers({
@@ -16,7 +15,6 @@ const reducers = combineReducers({
   contract: contractReducer,
   skill: skillReducer,
   skillTag: skillTagReducer,
-  studyRequest: studyRequestReducer,
   comment: commentReducer,
   loading:loadingReducer
 });

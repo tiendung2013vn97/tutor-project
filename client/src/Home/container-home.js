@@ -18,7 +18,7 @@ class SignInContainer extends Component {
     super(props);
   }
 
-  componentDidMount() {
+  componentDidMount() {console.log("home",this.props)
     let user = localStorage.getItem("user");
     if (user) {
       this.props.storeAccountInfo(JSON.parse(user));

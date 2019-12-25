@@ -1,6 +1,27 @@
 .main-menu {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  width: 80%;
-  margin-left: 10%;
+ position: fixed;
+  width: 170px;
+  z-index: 10;
+  top:200 ;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+.menu{
+  background-color: rgba(0, 0, 0,0.8);
+  border-top-right-radius:  5px;
+  border-bottom-right-radius:  5px;
+  border-right:0px;
+  
+   color:white;
+  .ant-menu-item{
+    font-size: 1rem;
+    
+  }
+  .anticon{
+    font-size: 1.4rem !important;
+  }
+  .icon-complain{
+    width: 25px;
+    margin-right: 6px;
+  }
 }

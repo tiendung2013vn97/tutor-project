@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import config from "../config";
 import axios from "axios";
 import {updateSkillTag} from '../SkillTag/action-skillTag'
+import { withRouter } from "react-router";
 
 class MenuContainer extends Component {
   //constructor
@@ -12,6 +13,7 @@ class MenuContainer extends Component {
   }
 
   componentDidMount(){
+    console.log(this.props)
     const api = axios.create({ baseURL: config.URL });
     api
       .get("/skill-tag/top")
@@ -44,4 +46,4 @@ function mapDispatchToProps(dispatch) {
     }
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MenuContainer));

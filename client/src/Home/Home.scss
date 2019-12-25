@@ -39,46 +39,49 @@
   display: inline-block;
   position: absolute;
   font-family: "Times New Roman", Times, serif;
-  font-size: 2rem;
+  font-size: 1.5rem;
   height: 80px;
   top: 13px;
   margin-left: 80px;
-  font-weight: 600;
-  color: black;
-
+  color: white;
+  font-style: italic;
   white-space: nowrap;
 }
 
-#head_bar {
-  //background-color: rgba(76,175,80,0.2);
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(9, 121, 75, 1) 35%,
-    rgba(0, 212, 255, 1) 100%
-  );
-  height: 78px;
-  overflow: visible;
+#font-1{
+  font-family: "Times New Roman", Times, serif;
 }
 
-#footer {
-  margin-top: 50px;
-  background-color: #364d79;
-  height: 80px;
-  img {
-    display: block;
-    float: left;
-    width: 80px;
-    height: 50px;
-  }
-  .text {
-    display: block;
-    float: right;
-    color: white;
-    font-size: 1.2rem;
-  }
-}
+// #head_bar {
+//   //background-color: rgba(76,175,80,0.2);
+//   background: rgb(2, 0, 36);
+//   background: linear-gradient(
+//     90deg,
+//     rgba(2, 0, 36, 1) 0%,
+//     rgba(9, 121, 75, 1) 35%,
+//     rgba(0, 212, 255, 1) 100%
+//   );
+//   height: 78px;
+//   overflow: visible;
+// }
+
+// #footer {
+//   margin-top: 50px;
+//   background-color: #364d79;
+//   height: 80px;
+//   img {
+//     display: block;
+//     float: left;
+//     width: 80px;
+//     height: 50px;
+//   }
+//   .text {
+//     display: block;
+//     float: right;
+//     color: white;
+//     font-size: 1.2rem;
+//   }
+// }
 
 #slide_banner img {
   width: 100%;
@@ -140,4 +143,8 @@
 
 .remark-person-card{
   background-color: white;
+}
+
+.account-panel{
+  // background-color: white;
 }
