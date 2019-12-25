@@ -11,7 +11,7 @@ let sequelize = new Sequelize(
     port: config.db.port,
     pool: config.db.pool,
     dialect: "mysql",
-    logging: false
+    logging: true
   }
 );
 

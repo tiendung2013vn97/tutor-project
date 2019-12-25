@@ -20,6 +20,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "comment"
       },
+      teacherSaw: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        field: "teacherSaw"
+      },
+      studentSaw: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        field: "studentSaw"
+      },
       createDt: {
         type: DataTypes.BIGINT,
         allowNull: false,

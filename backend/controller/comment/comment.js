@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-let commentRepo = require("../../repo/comment");
+let commentRepo = require("../../repo/commentRepo");
 
 router.get("/", (req, res) => {
   let get = async () => {

@@ -71,10 +71,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   contract.associate = function(models) {
-    // contract.hasMany(models.comment, {
-    //   foreignKey: "statusId",
-    //   sourceKey: "wsId"
-    // });
+    contract.belongsTo(models.skill, {
+      foreignKey: "skillId",
+      targetKey: "id"
+    });
     // contract.hasMany(models.tracking_event, {
     //   foreignKey: "commentNo",
     //   sourceKey: "commentNo"
