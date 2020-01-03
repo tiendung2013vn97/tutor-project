@@ -1,55 +1,145 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Table } from 'antd';
+import {connect} from 'react-redux'
+import {Table, Button, message, Switch, Pagination, Spin} from 'antd';
 import {Link} from 'react-router-dom'
+import axios from "axios";
+import {URL} from "../config";
+import {getStudentReport} from "./action-admin";
 
 
 class StudentReport extends React.Component {
 
-    render() {
-        const dataSource = [
-            {
-                key: '1',
-                name: 'Mike',
-                age: 32,
-                address: '10 Downing Street',
-            },
-            {
-                key: '2',
-                name: 'John',
-                age: 42,
-                address: '10 Downing Street',
-            },
-        ];
+    state = {
+        current: 1
+    }
 
+    getStudentReports = (pageNo, pageSize) => {
+        const api = axios.create({baseURL: URL});
+        return api.get("admin/student-report", {
+            params: {
+                offset: (pageNo - 1) * 10,
+                limit: pageSize
+            },
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then(res => {
+            console.log("res", res)
+            this.props.getStudentReport(res.data)
+        })
+    }
+
+    componentWillMount() {
+        this.getStudentReports(1, 10)
+    }
+
+    onChange = (e) => {
+        console.log(e)
+        this.setState({
+            current: e
+        })
+        this.getStudentReports(e, 10)
+    }
+
+    renderTable(data) {
+        console.log("data", data)
+        if (!data)
+            return null
         const columns = [
             {
-                title: 'Name',
+                title: 'Id',
+                dataIndex: 'id',
+                key: 'id'
+            },
+            {
+                title: 'Tên',
                 dataIndex: 'name',
-                render: (text, row, index) => {
-                    return <Link to="/asd">{text}</Link>
-                }
+                key: 'name',
             },
             {
-                title: 'Age',
-                dataIndex: 'age',
-                key: 'age',
+                title: 'Number used',
+                dataIndex: 'numUsed',
+                key: 'numUsed',
             },
-            {
-                title: 'Address',
-                dataIndex: 'address',
-                key: 'address',
-            },
+            // {
+            //     title: 'Active',
+            //     dataIndex: 'isActived',
+            //     render: (text, row, index) => {
+            //         return <Switch
+            //             unCheckedChildren="disabled"
+            //             checkedChildren="anabled"
+            //             checked={text}
+            //             onChange={() => this.handleChangeStatus(row)}
+            //             style={{marginTop: 16}}
+            //         />
+            //     }
+            // },
         ];
-        return (
-            <div style={{
-                padding: '5px 16px'
-            }}>
-                <h1>Student's Report</h1>
-                <Table dataSource={dataSource} columns={columns} />
-            </div>
-        )
+
+        return <div>
+            <Table
+                dataSource={data.rows}
+                columns={columns}
+                pagination={false}
+            />
+            <br/>
+            <Pagination current={this.state.current} onChange={this.onChange} total={data.count}/>
+        </div>
+
+    }
+
+    render() {
+        if (this.props.studentReports)
+            return (
+                <div style={{
+                    padding: '5px 16px'
+                }}>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                    }}>
+                        <h1>Student Reports</h1>
+                    </div>
+                    {this.renderTable(this.props.studentReports)}
+                </div>
+            )
+        return <Spin size="large" style={{display: 'flex', justifyContent: 'center'}}/>
     }
 }
 
-export default StudentReport
+//map state to props
+function
+
+mapStateToProps(state) {
+    return {
+        studentReports: state.admin.studentReports
+    };
+}
+
+//map dispatch to props
+function
+
+mapDispatchToProps(dispatch) {
+    return {
+        //     //show alert dialog
+        // showAlertNotify(msg) {
+        //     return dispatch(showAlertNotify(msg));
+        // },
+        //
+        // //show fail dialog
+        // showFailNotify(msg) {
+        //     return dispatch(showFailNotify(msg));
+        // },
+        //
+        // //show alert dialog
+        // showSuccessNotify(msg) {
+        //     return dispatch(showSuccessNotify(msg));
+        // },
+
+        getStudentReport(e) {
+            return dispatch(getStudentReport(e));
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps())(StudentReport)

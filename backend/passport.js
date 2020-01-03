@@ -47,7 +47,6 @@ passport.use(
             let user = accountRepo
                 .getAccountByUsername(jwtPayload.username)
                 .then(users => {
-                    console.log("users")
                     users = users.map(item => item.get({plain: true}));
                     return cb(null, users[0]);
                 })

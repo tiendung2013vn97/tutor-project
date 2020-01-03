@@ -223,7 +223,9 @@ class Home extends Component {
               {user && user.type === "teacher" && (
                 <Teacher account={this.props.account} />
               )}
-              {user && user.type === "admin" && <Redirect to="/manage/users" />}
+              {user && user.type === "admin" && (
+                  <Admin />
+              )}
             </Content>
           </Layout>
         </div>

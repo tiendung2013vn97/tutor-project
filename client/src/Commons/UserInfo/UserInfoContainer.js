@@ -1,7 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { Spin } from 'antd'
+import {connect} from 'react-redux'
+import {Spin} from 'antd'
 import UserInfo from './UserInfo'
+import axios from "axios";
+import {URL} from "../../config";
+
 // import { getUserProfile, updateUserProfile, updateUserAccount } from '../actions/UserAction'
 class UserInfoContainer extends React.Component {
     constructor(props) {
@@ -11,16 +14,37 @@ class UserInfoContainer extends React.Component {
             imagePreviewUrl: "",
             previewVisible: false,
             username: null,
-            email: null
+            email: null,
+            userDetail: null
         };
     }
-    // componentWillMount() {
-    //     if (localStorage.getItem('username') === null) {
-    //         this.props.history.push("/login")
-    //     }
-    //     else
-    //         this.props.getUserProfile();
-    // }
+
+    componentDidMount() {
+        console.log(this.props)
+        const {username} = this.props.match.params;
+        this.getUserByUsername(username)
+    }
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log(nextProps.account)
+    }
+
+    getUserByUsername(username) {
+        if (!username)
+            return null;
+        const api = axios.create({baseURL: URL});
+        return api.get("public-user/user/" + username, {
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then(res => {
+            this.setState({
+                userDetail: res.data
+            })
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     // componentWillReceiveProps(nextProps) {
     //     const { profile } = nextProps
     //     if (profile) {
@@ -59,30 +83,30 @@ class UserInfoContainer extends React.Component {
     //     this.props.updateUserAccount(e)
     // }
     render() {
-        if (this.props.isLoadingGetProfile && !this.props.profile) {
-            return <Spin size="large" style={{ display: 'flex', justifyContent: 'center' }} />
+        if (this.state.userDetail) {
+            return (
+                <UserInfo
+                    changePassword={(e) => this.changePassword(e)}
+                    handleUsernameChange={(e) => this.handleUsernameChange(e)}
+                    handleEmailChange={(e) => this.handleEmailChange(e)}
+                    handleUpdateProfile={(e) => this.handleUpdateProfile(e)}
+                    showModalPreview={() => this.showModalPreview()}
+                    handleBack={() => this.handleBack()}
+                    handleHideModal={() => this.handleHideModal()}
+                    {...this.props}
+                    {...this.state}
+                />
+            )
         }
-        return (
-            <UserInfo
-                changePassword={(e) => this.changePassword(e)}
-                handleUsernameChange={(e) => this.handleUsernameChange(e)}
-                handleEmailChange={(e) => this.handleEmailChange(e)}
-                handleUpdateProfile={(e) => this.handleUpdateProfile(e)}
-                showModalPreview={() => this.showModalPreview()}
-                handleBack={() => this.handleBack()}
-                handleHideModal={() => this.handleHideModal()}
-                {...this.props}
-                {...this.state}
-            />
-        )
+        return <Spin size="large" style={{display: 'flex', justifyContent: 'center'}}/>
+
     }
 }
 
 
 const mapStatetoProps = state => {
     return {
-        user: state.account,
-        location: state.location.location
+        locationState: state.location.location
     }
 }
 

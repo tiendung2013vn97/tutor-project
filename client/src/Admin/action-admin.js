@@ -54,3 +54,9 @@ export const updateContract = () => {
 	}
 }
 
+// Student Report
+export const getStudentReport = () => {
+	return {
+		type: types.GET_STUDENT_REPORT
+	}
+}

@@ -15,10 +15,10 @@ const accountReducer = (state = init, action) => {
   switch (action.type) {
     case "UPDATE_ACCOUNT_INFO": {
       return {
-        ...state,
-        ...action.accountInfo
-      };
-    }
+      ...state,
+      ...action.accountInfo
+    };
+  }
     case "LOG_OUT": {
       localStorage.clear();
       return init;

@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux';
 import axios from 'axios'
-import {Table, Switch, Button, Pagination} from 'antd';
+import {Table, Switch, Button, Pagination, Spin} from 'antd';
 import {Link} from 'react-router-dom'
 import {URL} from "../config"
 import {getUserList} from "./action-admin";
@@ -13,6 +13,10 @@ class UsersManagement extends React.Component {
     getUsers = (pageNo, pageSize) => {
         const api = axios.create({baseURL: URL});
         return api.get("admin/users", {
+            params: {
+                offset: (pageNo - 1) * 10,
+                limit: pageSize
+            },
             headers: {
                 "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
@@ -22,11 +26,10 @@ class UsersManagement extends React.Component {
     }
 
     componentWillMount() {
-        this.getUsers()
+        this.getUsers(1, 10);
     }
 
     onChange = (e) => {
-        console.log(e)
         this.setState({
             current: e
         })
@@ -34,7 +37,6 @@ class UsersManagement extends React.Component {
     }
 
     renderTable(data) {
-        console.log("data", data)
         if (!data)
             return null
         const columns = [
@@ -42,7 +44,7 @@ class UsersManagement extends React.Component {
                 title: 'Họ tên',
                 dataIndex: 'fullname',
                 render: (text, row, index) => {
-                    return <Link to="/manage/users/id">{text}</Link>
+                    return <Link to={`/manage/users/${row.username}`}>{text}</Link>
                 }
             },
             {
@@ -69,77 +71,85 @@ class UsersManagement extends React.Component {
             {
                 title: 'Active',
                 dataIndex: 'isActived',
-                render: (text) => {
+                render: (text, row, index) => {
                     return <Switch
                         unCheckedChildren="disabled"
                         checkedChildren="anabled"
                         checked={text}
-                        onChange={this.handleDisable}
+                        onChange={() => this.handleChangeStatus(row)}
                         style={{marginTop: 16}}
                     />
                 }
             },
         ];
-
         return <div>
-            <Table dataSource={data.rows} columns={columns}/>
+            <Table
+                dataSource={data.rows}
+                columns={columns}
+                pagination={false}
+            />
             <br/>
-            <Pagination current={this.state.current} onChange={this.onChange} total={50}/>
+            <Pagination current={this.state.current} onChange={this.onChange} total={data.count}/>
         </div>
 
     }
 
+    handleChangeStatus(row) {
+        if (!row)
+            return null;
+
+        const api = axios.create({baseURL: URL});
+        return api.post("admin/users/change-status", {
+            params: {
+                username: row.username
+            },
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then(res => {
+            this.getUsers(this.state.current, 10);
+        })
+    }
+
+    handleCreateUser() {
+        this.props.history.push("/manage/create-user");
+    }
+
     render() {
         console.log(this.props)
-        const dataSource = [
-            {
-                key: '1',
-                name: 'Mike',
-                age: 32,
-                address: '10 Downing Street',
-            },
-            {
-                key: '2',
-                name: 'John',
-                age: 42,
-                address: '10 Downing Street',
-            },
-        ];
-
-        return (
-            <div style={{
-                padding: '5px 16px'
-            }}>
+        if (this.props.users)
+            return (
                 <div style={{
-                    display: 'flex',
-                    justifyContent: 'flex-start',
+                    padding: '5px 16px'
                 }}>
-                    <h1>Users management</h1>
-                    <Button style={{
-                        marginLeft: '5px',
-                        marginTop: '5px'
-                    }} type="primary" onClick={() => this.handleDelete()}>New</Button>
-                </div>
-                {this.renderTable(this.props.users)}
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                    }}>
+                        <h1>Users management</h1>
+                        <Button style={{
+                            marginLeft: '5px',
+                            marginTop: '5px'
+                        }} type="primary" onClick={() => this.handleCreateUser()}>New</Button>
+                    </div>
+                    {this.renderTable(this.props.users)}
 
-            </div>
-        )
+                </div>
+            )
+        return <Spin size="large" style={{display: 'flex', justifyContent: 'center'}}/>
     }
 }
 
 //map state to props
-function
-
-mapStateToProps(state) {
+function mapStateToProps(state) {
     return {
-        users: state.admin.users
+        users: state.admin.users,
+        account: state.account
     };
 }
 
 //map dispatch to props
-function
-
-mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch) {
     return {
         //     //show alert dialog
         // showAlertNotify(msg) {
@@ -162,9 +172,4 @@ mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)
-
-(
-    UsersManagement
-)
-;
+export default connect(mapStateToProps, mapDispatchToProps)(UsersManagement);

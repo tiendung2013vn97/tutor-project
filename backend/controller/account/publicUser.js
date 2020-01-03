@@ -188,4 +188,17 @@ router.post("/change-password", (req, res) => {
   };
   changePassService();
 });
+
+router.get("/user/:username", (req, res) => {
+  let get = async () => {
+    try {
+      let result = await accountRepo.getAccountByUsername(req.params.username);
+      return res.json(result[0]);
+    } catch (err) {
+      return res.status(400).send(err + "");
+    }
+  };
+  get();
+});
+
 module.exports = router;

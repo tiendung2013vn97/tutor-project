@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Table, Button, Icon, message, Switch, Pagination} from 'antd';
+import {Table, Button, Icon, message, Switch, Pagination, Spin} from 'antd';
 import {Link} from 'react-router-dom'
 import axios from "axios";
 import {URL} from "../config";
@@ -15,6 +15,10 @@ class SkillsManagement extends React.Component {
     getSkills = (pageNo, pageSize) => {
         const api = axios.create({baseURL: URL});
         return api.get("admin/skill-tags", {
+            params: {
+                offset: (pageNo - 1) * 10,
+                limit: pageSize
+            },
             headers: {
                 "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
@@ -25,7 +29,7 @@ class SkillsManagement extends React.Component {
     }
 
     componentWillMount() {
-        this.getSkills()
+        this.getSkills(1, 10)
     }
 
     onChange = (e) => {
@@ -33,11 +37,24 @@ class SkillsManagement extends React.Component {
         this.setState({
             current: e
         })
-        this.getUsers(e, 10)
+        this.getSkills(e, 10)
     }
 
-    handleDelete(index) {
-        message.success("Delete successfull" + index)
+    handleChangeStatus = (row) => {
+        if (!row)
+            return null;
+        const api = axios.create({baseURL: URL});
+        return api.post("admin/skill-tags/change-status", {
+            params: {
+                id: row.id
+            },
+            headers: {
+                "Authorization": 'Bearer ' + localStorage.getItem("token")
+            }
+        }).then(res => {
+            console.log("res", res)
+            this.props.getSkill(res.data)
+        })
     }
 
 
@@ -64,12 +81,12 @@ class SkillsManagement extends React.Component {
             {
                 title: 'Active',
                 dataIndex: 'isActived',
-                render: (text) => {
+                render: (text, row, index) => {
                     return <Switch
                         unCheckedChildren="disabled"
                         checkedChildren="anabled"
                         checked={text}
-                        onChange={this.handleDisable}
+                        onChange={() => this.handleChangeStatus(row)}
                         style={{marginTop: 16}}
                     />
                 }
@@ -77,32 +94,37 @@ class SkillsManagement extends React.Component {
         ];
 
         return <div>
-            <Table dataSource={data.rows} columns={columns}/>
+            <Table
+                dataSource={data.rows}
+                columns={columns}
+                pagination={false}
+            />
             <br/>
-            <Pagination current={this.state.current} onChange={this.onChange} total={50}/>
+            <Pagination current={this.state.current} onChange={this.onChange} total={data.count}/>
         </div>
 
     }
 
     render() {
-        console.log(this.props)
-        return (
-            <div style={{
-                padding: '5px 16px'
-            }}>
+        if (this.props.skillTag)
+            return (
                 <div style={{
-                    display: 'flex',
-                    justifyContent: 'flex-start',
+                    padding: '5px 16px'
                 }}>
-                    <h1>Skills management</h1>
-                    <Button style={{
-                        marginLeft: '5px',
-                        marginTop: '5px'
-                    }} type="primary" onClick={() => this.handleDelete()}>New</Button>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'flex-start',
+                    }}>
+                        <h1>Skills management</h1>
+                        <Button style={{
+                            marginLeft: '5px',
+                            marginTop: '5px'
+                        }} type="primary" onClick={() => this.handleDelete()}>New</Button>
+                    </div>
+                    {this.renderTable(this.props.skillTag)}
                 </div>
-                {this.renderTable(this.props.skillTag)}
-            </div>
-        )
+            )
+        return <Spin size="large" style={{display: 'flex', justifyContent: 'center'}}/>
     }
 }
 

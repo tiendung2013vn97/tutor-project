@@ -14,3 +14,6 @@ export const GET_CONTRACT = "GET_CONTRACT";
 export const ADD_CONTRACT = "ADD_CONTRACT";
 export const DELETE_CONTRACT = "DELETE_CONTRACT";
 export const UPDATE_CONTRACT = "UPDATE_CONTRACT";
+
+// student report
+export const GET_STUDENT_REPORT = "GET_STUDENT_REPORT";

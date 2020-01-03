@@ -11,31 +11,36 @@ class Header extends React.Component {
     toHome = () => {
         console.log(this.props)
     }
+
+     headerMenu = (user) => {
+        if(user){
+            return (
+                <Menu>
+                    <Menu.Item>
+                        <Link to="/">
+                            Dashboard
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link to={`/user/${user.username}`}>Profile</Link>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Link onClick={this.props.logout} to="/">
+                            Logout
+                        </Link>
+                    </Menu.Item>
+
+                </Menu>
+            )
+        }
+        return null;
+    }
     render() {
         let user = localStorage.getItem("user");
         if (user) {
             user = JSON.parse(user);
         }
 
-
-        const headerMenu = (
-            <Menu>
-                <Menu.Item>
-                    <Link to="/">
-                        Dashboard
-                        </Link>
-                </Menu.Item>
-                <Menu.Item>
-                    <Link to="/info">Profile</Link>
-                </Menu.Item>
-                <Menu.Item>
-                    <Link onClick={this.props.logout} to="/">
-                        Logout
-                    </Link>
-                </Menu.Item>
-
-            </Menu>
-        );
         return (
             <div>
                 <Row id="head_bar">
@@ -48,7 +53,7 @@ class Header extends React.Component {
                     </Col>
                     {user && (
                         <Col span={3} className="account-icon-area">
-                            <Dropdown className="dropdown-account" overlay={headerMenu}>
+                            <Dropdown className="dropdown-account" overlay={()=>this.headerMenu(user)}>
                                 <div>
                                     <img id="acount_icon" src={LoggedIcon} />
                                     {user.fullname}

@@ -1,11 +1,12 @@
 import React from "react";
 // import "../assets/stylesheet/_global.less"
-import { Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input } from "antd";
-import { URL } from "../../config.js";
+import {Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input} from "antd";
+import {URL} from "../../config.js";
 import UserAccount from "./UserAccount.js";
 import UserProfile from "./UserProfile.js";
 
 const TabPane = Tabs.TabPane;
+
 class UserInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -13,6 +14,10 @@ class UserInfo extends React.Component {
             previewImage: ""
         };
     }
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log(nextProps)
+    }
+
     renderUpload(updateProfile, profile) {
         return (
             <Upload
@@ -38,9 +43,9 @@ class UserInfo extends React.Component {
             >
                 <a className="change-profile-picture">
                     <p>
-                        <Icon type="camera" />
+                        <Icon type="camera"/>
                         Upload Avatar
-                     </p>
+                    </p>
                 </a>
             </Upload>
         );
@@ -48,19 +53,22 @@ class UserInfo extends React.Component {
 
 
     render() {
-        // const { profile } = this.props
-        console.log(this.props)
+        const {userDetail} = this.props;
+        let user = localStorage.getItem("user");
+        if(user){
+            user = JSON.parse(user);
+        }
         return (
             <div className="page-container">
                 <div className="container">
-                    <Row className="profile" >
+                    <Row className="profile">
                         <Col offset={1} span={2}>
                             <img style={{
                                 height: "200px",
                                 width: "200px"
                             }}
-                                src={require("../../assets/imgs/defaultAvatar.jpg")} alt="defaultavatar" />
-                            {this.renderUpload()}
+                                 src={require("../../assets/imgs/defaultAvatar.jpg")} alt="defaultavatar"/>
+                            { user && userDetail &&  user.username === userDetail.username && this.renderUpload()}
                         </Col>
 
                         <Col offset={3} span={8} md={18} sm={18} xs={24}>
@@ -68,7 +76,7 @@ class UserInfo extends React.Component {
                                 <TabPane
                                     tab={
                                         <span>
-                                            <Icon type="pie-chart" />
+                                            <Icon type="pie-chart"/>
                                             Profile
                                         </span>
                                     }
@@ -76,17 +84,21 @@ class UserInfo extends React.Component {
                                 >
                                     <UserProfile {...this.props} />
                                 </TabPane>
-                                <TabPane
-                                    tab={
-                                        <span>
-                                            <Icon type="desktop" />
+                                {
+                                    user && userDetail &&  user.username === userDetail.username &&
+                                    <TabPane
+                                        tab={
+                                            <span>
+                                            <Icon type="desktop"/>
                                             Account
                                         </span>
-                                    }
-                                    key="2"
-                                >
-                                    <UserAccount {...this.props} />
-                                </TabPane>
+                                        }
+                                        key="2"
+                                    >
+                                        <UserAccount {...this.props} />
+                                    </TabPane>
+                                }
+
                             </Tabs>
                         </Col>
                     </Row>

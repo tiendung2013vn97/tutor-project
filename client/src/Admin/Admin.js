@@ -2,11 +2,6 @@ import React, { Component } from "react";
 import { Link, Switch, Route } from "react-router-dom";
 import { Tabs, Row, Col, Card, Button, Menu, Icon } from "antd";
 
-import UsersManagement from "./UsersManagement";
-import SkillsManagement from "./SkillsManagement";
-import ContractManagement from "./ContractManagement";
-import StudentReport from "./StudentReport";
-import UserDetail from "./UserDetail";
 import "./Admin.scss";
 
 const { SubMenu } = Menu;
@@ -31,7 +26,7 @@ class Student extends Component {
         </Menu.Item>
 
         <Menu.Item key="2">
-          <Link to="/manage/skills">Skills</Link>
+          <Link to="/manage/skill-tags">Skills</Link>
         </Menu.Item>
 
         <Menu.Item key="3">
@@ -50,26 +45,7 @@ class Student extends Component {
         <Col span={4}>{this.menuBar()}</Col>
         <Col span={1} />
         <Col span={19}>
-          <Switch>
-            <Route path="/manage/users/id">
-              <UserDetail />
-            </Route>
-            <Route path="/manage/users">
-              <UsersManagement />
-            </Route>
-
-            <Route path="/manage/skills">
-              <SkillsManagement />
-            </Route>
-
-            <Route path="/manage/contracts">
-              <ContractManagement />
-            </Route>
-
-            <Route path="/manage/student-report">
-              <StudentReport />
-            </Route>
-          </Switch>
+          {this.props.children}
         </Col>
       </Row>
     );

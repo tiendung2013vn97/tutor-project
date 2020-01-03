@@ -4,6 +4,7 @@ const init = {
     users: null,
     skills: null,
     contracts: null,
+    studentReports: null
 };
 
 const accountReducer = (state = init, action) => {
@@ -24,6 +25,12 @@ const accountReducer = (state = init, action) => {
             return {
                 ...state,
                 contracts: action.payload
+            };
+        }
+        case types.GET_STUDENT_REPORT: {
+            return {
+                ...state,
+                studentReports: action.payload
             };
         }
         default: {

@@ -1,33 +1,44 @@
 import React from "react";
 import {Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input, Select} from "antd";
+import {getLocations} from "../../Location/api-location";
 
 const {Option} = Select;
+const {TextArea} = Input;
 
 class UserProfile extends React.Component {
     state = {
-        userState: {
-            username: null,
-            fullname: null,
-            email: null,
-            age: null,
-            gender: null,
-            intro: null,
-            money: null,
-            // location: null,
-            image: null
-        },
+        userState: null,
+        // userState: {
+        //     username: null,
+        //     fullname: null,
+        //     email: null,
+        //     age: null,
+        //     gender: null,
+        //     intro: null,
+        //     money: null,
+        //     // location: null,
+        //     image: null
+        // },
         locationCity: "",
-        locationDistrict: ""
+        locationDistrict: "",
+        locations: []
     }
 
-    componentWillMount() {
-        let user = localStorage.getItem("user");
-        if (user) {
-            user = JSON.parse(user);
+    componentDidMount() {
+        console.log("this.props", this.props)
+        this.setState({
+            userState: this.props.userDetail
+        })
+        this.getLocation();
+    }
+
+    getLocation() {
+        getLocations().then(res => {
+            console.log(res)
             this.setState({
-                userState: user
+                locations: res.data.data,
             })
-        }
+        })
     }
 
     handleChangeUsername = (e) => {
@@ -80,6 +91,16 @@ class UserProfile extends React.Component {
         })
     }
 
+    handleChangeIntro = (e) => {
+        const {userState} = this.state
+        this.setState({
+            userState: {
+                ...userState,
+                intro: e.target.value
+            }
+        })
+    }
+
     handleUpdateProfile = () => {
         console.log("Update Profile")
         // this.props.updateUserProfile({
@@ -90,38 +111,46 @@ class UserProfile extends React.Component {
 
 
     handleCityChange(locationCity) {
-        let locationDistrict = this.props.location.filter(
+        const {userState} = this.state;
+        let locationDistrict = this.state.locations.filter(
             lo => lo.city === locationCity
         )[0].district;
-
         this.setState({
-            ...this.state,
-            locationCity,
-            locationDistrict
-        });
+            userState: {
+                ...userState,
+                location: {
+                    ...userState.location,
+                    city: locationCity,
+                    district: locationDistrict
+                }
+            }
+        })
     }
 
     handleDistrictChange(locationDistrict) {
-        this.setState({...this.state.locationCity, locationDistrict});
+        const {userState} = this.state;
+        this.setState({
+            userState: {
+                ...userState,
+                location: {
+                    ...userState.location,
+                    district: locationDistrict
+                }
+            }
+        })
     }
+
     renderProfile = (user) => {
-        let cityList = this.props.location.map(lo => lo.city);
+        let userState = JSON.parse(localStorage.getItem("user"));
+        const readOnly = user.username !== userState.username;
+
+        let cityList = this.state.locations.map(lo => lo.city);
         cityList = cityList.filter((city, index) => {
             return !cityList.slice(0, index).includes(city);
         });
 
-        if (this.state.locationCity === "") {
-            this.setState({
-                ...this.state,
-                locationCity: cityList[0],
-                locationDistrict: this.props.location
-                    .filter(lo => lo.city === cityList[0])
-                    .map(lo => lo.district)[0]
-            });
-        }
-
-        let districtList = this.props.location
-            .filter(lo => lo.city === this.state.locationCity)
+        let districtList = this.state.locations
+            .filter(lo => lo.city === this.state.userState.location.city)
             .map(lo => lo.district);
 
         let cityComboBox = [];
@@ -130,6 +159,7 @@ class UserProfile extends React.Component {
         });
 
         let districtComboBox = [];
+        console.log("list", districtList)
         districtList.forEach(district => {
             districtComboBox.push(<Option value={district}>{district}</Option>);
         });
@@ -142,14 +172,16 @@ class UserProfile extends React.Component {
                                 <Col span={11}>
                                     <Form.Item label="Username" hasFeedback>
                                         <Input
+                                            disabled={readOnly}
                                             onChange={this.handleChangeUsername}
                                             value={user.username}/>
                                     </Form.Item>
                                 </Col>
-                                <Col span={1}/>
+                                <Col span={2}/>
                                 <Col span={11}>
                                     <Form.Item label="Họ tên" hasFeedback>
                                         <Input
+                                            disabled={readOnly}
                                             onChange={this.handleChangeFullName}
                                             value={user.fullname}/>
                                     </Form.Item>
@@ -159,14 +191,15 @@ class UserProfile extends React.Component {
                                 <Col span={11}>
                                     <Form.Item label="E-mail">
                                         <Input
+                                            disabled={readOnly}
                                             onChange={this.handleChangeEmail}
                                             value={user.email}/>
                                     </Form.Item>
                                 </Col>
-                                <Col span={1}/>
+                                <Col span={2}/>
                                 <Col span={3}>
                                     <Form.Item label="Giới tính" hasFeedback>
-                                        <Select defaultValue="male" style={{width: 120}}
+                                        <Select disabled={readOnly} defaultValue="male" style={{width: 120}}
                                                 onChange={this.handleChangeGender}>
                                             <Option value="male">Male</Option>
                                             <Option value="female">Female</Option>
@@ -178,6 +211,7 @@ class UserProfile extends React.Component {
                                 <Col span={2}>
                                     <Form.Item label="Tuổi" hasFeedback>
                                         <Input
+                                            disabled={readOnly}
                                             type="number"
                                             onChange={this.handleChangeAge}
                                             value={user.age}/>
@@ -185,35 +219,52 @@ class UserProfile extends React.Component {
                                 </Col>
 
                             </Row>
-                            <div>
-                                <span className="label"> Nơi ở: </span>
-                            </div>
                             <Row>
                                 <Col span={11}>
-                                    <span>Tỉnh/Thành phố</span>
-                                    <Select
-                                        defaultValue={this.state.locationCity}
-                                        value={this.state.locationCity}
-                                        onChange={this.handleCityChange.bind(this)}
-                                    >
-                                        {cityComboBox}
-                                    </Select>
+                                    <Form.Item label="Tỉnh/Thành phố" hasFeedback>
+                                        <Select
+                                            disabled={readOnly}
+                                            value={user.location.city}
+                                            onChange={this.handleCityChange.bind(this)}
+                                        >
+                                            {cityComboBox}
+                                        </Select>
+                                    </Form.Item>
                                 </Col>
-                                <Col span={11} style={{marginLeft: 20}}>
-                                    <span>Quận/Huyện</span>
-                                    <Select
-                                        value={this.state.locationDistrict}
-                                        onChange={this.handleDistrictChange.bind(this)}
-                                    >
-                                        {districtComboBox}
-                                    </Select>
+                                <Col span={2}/>
+                                <Col span={11}>
+                                    <Form.Item label="Quận/Huyện" hasFeedback>
+                                        <Select
+                                            disabled={readOnly}
+                                            value={user.location.district}
+                                            onChange={this.handleDistrictChange.bind(this)}
+                                        >
+                                            {districtComboBox}
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <Form.Item label="Giới thiệu" hasFeedback>
+                                        <TextArea
+                                            disabled={readOnly}
+                                            value={user.intro}
+                                            onChange={this.handleChangeIntro}
+                                            placeholder="Giới thiệu"
+                                            autoSize={{minRows: 3, maxRows: 5}}
+                                        />
+                                    </Form.Item>
                                 </Col>
                             </Row>
                             <Form.Item>
-                                <Button loading={this.props.isLoadingUpdateProfile}
-                                        onClick={() => this.handleUpdateProfile()} type="primary" htmlType="submit">
-                                    Save
-                                </Button>
+                                {
+                                    !readOnly &&
+                                    <Button loading={this.props.isLoadingUpdateProfile}
+                                            onClick={() => this.handleUpdateProfile()} type="primary" htmlType="submit">
+                                        Lưu
+                                    </Button>
+                                }
                             </Form.Item>
                         </Form>
                     </Card>
@@ -223,12 +274,13 @@ class UserProfile extends React.Component {
     };
 
     render() {
-
-        return (
-            <div>
-                {this.renderProfile(this.state.userState)}
-            </div>
-        )
+        if (this.state.userState)
+            return (
+                <div>
+                    {this.renderProfile(this.state.userState)}
+                </div>
+            )
+        return null
     }
 }
 
