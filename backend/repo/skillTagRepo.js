@@ -26,5 +26,11 @@ module.exports = {
             raw: true,
             order: [["numUsed", "desc"]]
         });
+    },
+
+    updateStatus(id) {
+        return skillTag.findOne({where: {id}}).then(tag => {
+            skillTag.update({isActived: !tag.isActived}, {where: {id}})
+        })
     }
 };

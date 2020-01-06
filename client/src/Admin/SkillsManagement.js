@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom'
 import axios from "axios";
 import {URL} from "../config";
 import {getSkill} from "./action-admin";
-
+import Axios from "../Api";
 class SkillsManagement extends React.Component {
 
     state = {
@@ -43,17 +43,13 @@ class SkillsManagement extends React.Component {
     handleChangeStatus = (row) => {
         if (!row)
             return null;
-        const api = axios.create({baseURL: URL});
-        return api.post("admin/skill-tags/change-status", {
+        return Axios.get("admin/skill-tags/change-status", {
             params: {
                 id: row.id
-            },
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
         }).then(res => {
             console.log("res", res)
-            this.props.getSkill(res.data)
+            this.getSkills(this.state.current, 10)
         })
     }
 

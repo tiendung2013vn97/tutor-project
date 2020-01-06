@@ -5,6 +5,7 @@ import {Table, Switch, Button, Pagination, Spin} from 'antd';
 import {Link} from 'react-router-dom'
 import {URL} from "../config"
 import {getUserList} from "./action-admin";
+import Axios from '../Api/index'
 
 class UsersManagement extends React.Component {
     state = {
@@ -98,15 +99,13 @@ class UsersManagement extends React.Component {
         if (!row)
             return null;
 
-        const api = axios.create({baseURL: URL});
-        return api.post("admin/users/change-status", {
-            params: {
-                username: row.username
-            },
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem("token")
-            }
-        }).then(res => {
+        // const api = axios.create({baseURL: URL});
+        return Axios.get("admin/users/change-status",
+            {
+                params: {
+                    username: row.username
+                }
+            }).then(res => {
             this.getUsers(this.state.current, 10);
         })
     }

@@ -39,4 +39,29 @@ router.get("/skill-tags", (req, res) => {
   };
   get();
 });
+
+router.get("/users/change-status", (req, res)=>{
+  let get = async ()=>{
+    try{
+      let result = await accountRepo.updateStatus(req.query.username)
+      return res.json(result);
+    } catch (e) {
+      return res.status(400).send(e + "");
+    }
+  }
+  get();
+})
+
+
+router.get("/skill-tags/change-status", (req, res)=>{
+  let get = async ()=>{
+    try{
+      let result = await skillTagRepo.updateStatus(req.query.id)
+      return res.json(result);
+    } catch (e) {
+      return res.status(400).send(e + "");
+    }
+  }
+  get();
+})
 module.exports = router;

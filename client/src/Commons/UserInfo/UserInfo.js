@@ -4,6 +4,7 @@ import {Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input} from "
 import {URL} from "../../config.js";
 import UserAccount from "./UserAccount.js";
 import UserProfile from "./UserProfile.js";
+import UserDetail from "./UserDetail";
 
 const TabPane = Tabs.TabPane;
 
@@ -14,6 +15,7 @@ class UserInfo extends React.Component {
             previewImage: ""
         };
     }
+
     componentWillReceiveProps(nextProps, nextContext) {
         console.log(nextProps)
     }
@@ -55,7 +57,7 @@ class UserInfo extends React.Component {
     render() {
         const {userDetail} = this.props;
         let user = localStorage.getItem("user");
-        if(user){
+        if (user) {
             user = JSON.parse(user);
         }
         return (
@@ -68,24 +70,43 @@ class UserInfo extends React.Component {
                                 width: "200px"
                             }}
                                  src={require("../../assets/imgs/defaultAvatar.jpg")} alt="defaultavatar"/>
-                            { user && userDetail &&  user.username === userDetail.username && this.renderUpload()}
+                            {user && userDetail && user.username === userDetail.username && this.renderUpload()}
                         </Col>
 
                         <Col offset={3} span={8} md={18} sm={18} xs={24}>
-                            <Tabs defaultActiveKey="1" onChange={this.callback}>
-                                <TabPane
-                                    tab={
-                                        <span>
+                            <Tabs defaultActiveKey="1" onChange={this.callback} style={{
+                                padding: '8px'
+                            }}>
+                                {
+                                    user && userDetail && user.username !== userDetail.username &&
+                                    <TabPane
+                                        tab={
+                                            <span>
+                                            <Icon type="pie-chart"/>
+                                            Information
+                                        </span>
+                                        }
+                                        key="1"
+                                    >
+                                        <UserDetail {...this.props} />
+                                    </TabPane>
+                                }
+                                {
+                                    user && userDetail && user.username === userDetail.username &&
+                                    <TabPane
+                                        tab={
+                                            <span>
                                             <Icon type="pie-chart"/>
                                             Profile
                                         </span>
-                                    }
-                                    key="1"
-                                >
-                                    <UserProfile {...this.props} />
-                                </TabPane>
+                                        }
+                                        key="1"
+                                    >
+                                        <UserProfile {...this.props} />
+                                    </TabPane>
+                                }
                                 {
-                                    user && userDetail &&  user.username === userDetail.username &&
+                                    user && userDetail && user.username === userDetail.username &&
                                     <TabPane
                                         tab={
                                             <span>
