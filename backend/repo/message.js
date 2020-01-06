@@ -1,9 +1,9 @@
-let comment = require("../db")["comment"];
+let message = require("../db")["message"];
 let db = require("../db");
 
 module.exports = {
   get(contractId, offset, limit) {
-    return comment.findAll({
+    return message.findAll({
       include: [
         {
           model: db.contract,

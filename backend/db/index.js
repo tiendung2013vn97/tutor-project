@@ -24,8 +24,8 @@ db[location.name] = location;
 let skillTag = sequelize.import("skill_tag", require("../models/skillTag"));
 db[skillTag.name] = skillTag;
 
-let comment = sequelize.import("comment", require("../models/comment"));
-db[comment.name] = comment;
+let message = sequelize.import("message", require("../models/message"));
+db[message.name] = message;
 
 let contract = sequelize.import("contract", require("../models/contract"));
 db[contract.name] = contract;

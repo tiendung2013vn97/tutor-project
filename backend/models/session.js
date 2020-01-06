@@ -26,12 +26,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  //   comment.associate = function(models) {
-  //     comment.belongsTo(models.comment_status, {
+  //   message.associate = function(models) {
+  //     message.belongsTo(models.comment_status, {
   //       foreignKey: "statusId",
   //       targetKey: "wsId"
   //     });
-  //     comment.hasMany(models.tracking_event, {
+  //     message.hasMany(models.tracking_event, {
   //       foreignKey: "commentNo",
   //       sourceKey: "commentNo"
   //     });

@@ -26,5 +26,13 @@ module.exports = {
       raw: true,
       order: [["numUsed", "desc"]]
     });
+  },
+
+  update(id, skillTagInfo) {
+    return skillTag.update(skillTagInfo, { where: { id } });
+  },
+
+  add(skillTagInfo) {
+    return skillTag.create(skillTagInfo);
   }
 };

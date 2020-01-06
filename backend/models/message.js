@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const comment = sequelize.define(
-    "comment",
+  const message = sequelize.define(
+    "message",
     {
       id: {
         type: DataTypes.BIGINT,
@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "contractId"
       },
-      comment: {
+      message: {
         type: DataTypes.JSON,
         allowNull: false,
-        field: "comment"
+        field: "message"
       },
       createDt: {
         type: DataTypes.BIGINT,
@@ -32,16 +32,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  comment.associate = function(models) {
-    comment.belongsTo(models.contract, {
+  message.associate = function(models) {
+    message.belongsTo(models.contract, {
       foreignKey: "contractId",
       targetKey: "id"
     });
 
-    //   comment.hasMany(models.tracking_event, {
+    //   message.hasMany(models.tracking_event, {
     //     foreignKey: "commentNo",
     //     sourceKey: "commentNo"
     //   });
   };
-  return comment;
+  return message;
 };
