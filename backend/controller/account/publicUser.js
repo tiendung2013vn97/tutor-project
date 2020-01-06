@@ -231,7 +231,6 @@ router.get("/teacher", (req, res) => {
 
       return res.json(teachers);
     } catch (err) {
-      console.log("err", err);
       return res.json({
         status: "fail",
         msg: err + ""

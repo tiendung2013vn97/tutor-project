@@ -68,6 +68,17 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "",
         field: "complainDetail"
       },
+      costPerHour: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        field: "costPerHour"
+      },
+      resolveDetail: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: "",
+        field: "resolveDetail"
+      },
       isActived: {
         type: DataTypes.BOOLEAN,
         allowNull: true,

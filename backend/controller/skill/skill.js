@@ -19,4 +19,21 @@ router.get("/", (req, res) => {
   get();
 });
 
+router.get("/by-teacher/:id", (req, res) => {
+  let get = async () => {
+    try {
+      let result = await skillRepo.getByTeacher(
+        req.params.id,
+        +req.query.offset || 0,
+        +req.query.limit || config.maxCount
+      );
+      result.rows = result.rows.map(item => item.get({ plain: true }));
+      return res.json(result);
+    } catch (err) {
+      return res.status(400).send(err + "");
+    }
+  };
+  get();
+});
+
 module.exports = router;
