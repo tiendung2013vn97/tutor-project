@@ -82,4 +82,19 @@ router.post("/", (req, res) => {
   get();
 });
 
+
+router.get("/top", (req, res) => {
+  let get = async () => {
+    try {
+      let result = await skillTagRepo.getTop(
+        +req.query.limit || 10
+      );
+      return res.json(result);
+    } catch (err) {
+      return res.status(400).send(err + "");
+    }
+  };
+  get();
+});
+
 module.exports = router;
