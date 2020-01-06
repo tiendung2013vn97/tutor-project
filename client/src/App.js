@@ -16,6 +16,7 @@ import UsersManagement from "./Admin/UsersManagement";
 import SkillsManagement from "./Admin/SkillsManagement";
 import ContractManagement from "./Admin/ContractManagement";
 import StudentReport from "./Admin/StudentReport";
+import ContractDetailContainer from "./Contract/ContractDetail/ContractDetailContainer";
 import {Col} from "antd";
 
 class App extends React.Component {
@@ -25,7 +26,7 @@ class App extends React.Component {
                 <div className="App">
                     <BackgroundProcess/>
                     <Header/>
-                    {/*<MainMenu/>*/}
+                    <MainMenu/>
                     <Switch>
                         <Route path="/manage" component={() => {
                             return (
@@ -34,9 +35,12 @@ class App extends React.Component {
                                         <Route path="/manage/users/:username" component={UserInfo}/>
                                         <Route path="/manage/users" component={UsersManagement}/>
                                         <Route path="/manage/skill-tags" component={SkillsManagement}/>
+                                        <Route path="/manage/contracts/:id" component={ContractDetailContainer}/>
                                         <Route path="/manage/contracts" component={ContractManagement}/>
                                         <Route path="/manage/student-report" component={StudentReport}/>
                                         <Route path="/manage/create-user" component={AdminCreateUser}/>
+
+
                                     </Switch>
                                 </Admin>
                             )

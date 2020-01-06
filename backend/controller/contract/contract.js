@@ -27,7 +27,7 @@ router.get("/by-id/:id", (req, res) => {
         +req.query.limit || 1000000000
       );
       // result.rows = result.rows.map(item => item.get({ plain: true }));
-      return res.json(result);
+      return res.json(result[0]);
     } catch (err) {
       return res.status(400).send(err + "");
     }

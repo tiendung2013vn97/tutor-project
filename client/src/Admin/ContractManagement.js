@@ -2,10 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Table, Button, message, Switch, Pagination, Spin} from 'antd';
 import {Link} from 'react-router-dom'
-import axios from "axios";
 import {URL} from "../config";
 import {getContract} from "./action-admin";
-
+import Axios from "../Api";
+import * as contractStatus from '../Constants/contractStatus'
+import {milisecondToDateString, translateContractStatus} from "../Commons/commonFunction";
 
 class ContractManagement extends React.Component {
 
@@ -14,27 +15,21 @@ class ContractManagement extends React.Component {
     }
 
     getContracts = (pageNo, pageSize) => {
-        const api = axios.create({baseURL: URL});
-        return api.get("admin/contracts", {
+        return Axios.get("contract", {
             params: {
                 offset: (pageNo - 1) * 10,
                 limit: pageSize
             },
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem("token")
-            }
         }).then(res => {
-            console.log("res", res)
             this.props.getContract(res.data)
         })
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getContracts(1, 10)
     }
 
     onChange = (e) => {
-        console.log(e)
         this.setState({
             current: e
         })
@@ -44,23 +39,20 @@ class ContractManagement extends React.Component {
     handleChangeStatus = (row) => {
         if (!row)
             return null;
-        const api = axios.create({baseURL: URL});
-        return api.post("admin/skill-tags/change-status", {
+        return Axios.post("/change-status", {
             params: {
                 id: row.id
-            },
-            headers: {
-                "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
         }).then(res => {
-            console.log("res", res)
             this.props.getSkill(res.data)
         })
     }
 
+    renderStatus(e) {
+        return translateContractStatus(e)
+    }
 
     renderTable(data) {
-        console.log("data", data)
         if (!data)
             return null
         const columns = [
@@ -70,28 +62,73 @@ class ContractManagement extends React.Component {
                 key: 'id'
             },
             {
-                title: 'Tên',
-                dataIndex: 'name',
-                key: 'name',
+                title: 'Tổng số giờ',
+                dataIndex: 'totalHours',
+                key: 'totalHours',
             },
             {
-                title: 'Number used',
-                dataIndex: 'numUsed',
-                key: 'numUsed',
+                title: 'Ngày tạo',
+                dataIndex: 'createDt',
+                key: 'createDt',
+                render: (text) => {
+                    return milisecondToDateString(text)
+                }
             },
-            // {
-            //     title: 'Active',
-            //     dataIndex: 'isActived',
-            //     render: (text, row, index) => {
-            //         return <Switch
-            //             unCheckedChildren="disabled"
-            //             checkedChildren="anabled"
-            //             checked={text}
-            //             onChange={() => this.handleChangeStatus(row)}
-            //             style={{marginTop: 16}}
-            //         />
-            //     }
-            // },
+            {
+                title: 'Ngày bắt đầu',
+                dataIndex: 'startDt',
+                key: 'startDt',
+                render: (text) => {
+                    return milisecondToDateString(text)
+                }
+            },
+            {
+                title: 'Ngày kết thúc',
+                dataIndex: 'toDt',
+                key: 'toDt',
+                render: (text) => {
+                    return milisecondToDateString(text)
+                }
+            },
+            {
+                title: 'Trạng thái',
+                dataIndex: 'status',
+                render: (text) => {
+                    return this.renderStatus(text)
+                }
+            },
+            {
+                title: 'Đánh giá',
+                dataIndex: 'rate',
+                render: (text) => {
+                    if (text < 0)
+                        return "Chưa đánh giá"
+                    return text
+                }
+            },
+
+            {
+                title: 'Active',
+                dataIndex: 'isActived',
+                render: (text, row, index) => {
+                    return <Switch
+                        unCheckedChildren="Deactived"
+                        checkedChildren="Actived"
+                        checked={text}
+                        onChange={() => this.handleChangeStatus(row)}
+                        style={{marginTop: 16}}
+                    />
+                }
+            },
+            {
+                title: 'Tác vụ',
+                render: (text, row, index) => {
+                    return (
+                        <Button onClick={() => this.showContractDetail(row)} size={"small"} type="danger" ghost>Chi
+                            tiết</Button>
+                    )
+                }
+            },
         ];
 
         return <div>
@@ -104,6 +141,10 @@ class ContractManagement extends React.Component {
             <Pagination current={this.state.current} onChange={this.onChange} total={data.count}/>
         </div>
 
+    }
+
+    showContractDetail(row) {
+        this.props.history.push(`/manage/contracts/${row.id}`);
     }
 
     render() {
@@ -160,4 +201,4 @@ mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps())(ContractManagement)
+export default connect(mapStateToProps, mapDispatchToProps)(ContractManagement)

@@ -97,4 +97,21 @@ router.get("/top", (req, res) => {
   get();
 });
 
+router.get("/by-id/:id", (req, res) => {
+  let get = async () => {
+    try {
+      let result = await skillTagRepo.getById(
+          req.params.id,
+          +req.query.offset || 0,
+          +req.query.limit || 1000000000
+      );
+      // result.rows = result.rows.map(item => item.get({ plain: true }));
+      return res.json(result[0]);
+    } catch (err) {
+      return res.status(400).send(err + "");
+    }
+  };
+  get();
+});
+
 module.exports = router;

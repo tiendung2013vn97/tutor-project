@@ -25,7 +25,6 @@ class UserProfile extends React.Component {
     }
 
     componentDidMount() {
-        console.log("this.props", this.props)
         this.setState({
             userState: this.props.userDetail
         })
@@ -34,7 +33,6 @@ class UserProfile extends React.Component {
 
     getLocation() {
         getLocations().then(res => {
-            console.log(res)
             this.setState({
                 locations: res.data.data,
             })

@@ -14,7 +14,6 @@ class UserDetail extends React.Component {
     }
 
     componentDidMount() {
-        console.log("this.props", this.props)
         this.setState({
             userState: this.props.userDetail
         })

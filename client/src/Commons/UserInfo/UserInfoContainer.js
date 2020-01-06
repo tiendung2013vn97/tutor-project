@@ -20,12 +20,8 @@ class UserInfoContainer extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
         const {username} = this.props.match.params;
         this.getUserByUsername(username)
-    }
-    componentWillReceiveProps(nextProps, nextContext) {
-        console.log(nextProps.account)
     }
 
     getUserByUsername(username) {

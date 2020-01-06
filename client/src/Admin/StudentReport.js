@@ -24,7 +24,6 @@ class StudentReport extends React.Component {
                 "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
         }).then(res => {
-            console.log("res", res)
             this.props.getStudentReport(res.data)
         })
     }
@@ -34,7 +33,6 @@ class StudentReport extends React.Component {
     }
 
     onChange = (e) => {
-        console.log(e)
         this.setState({
             current: e
         })
@@ -42,7 +40,6 @@ class StudentReport extends React.Component {
     }
 
     renderTable(data) {
-        console.log("data", data)
         if (!data)
             return null
         const columns = [

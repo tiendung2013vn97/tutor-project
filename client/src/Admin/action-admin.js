@@ -38,9 +38,10 @@ export const addContract = () => {
 		type: types.ADD_CONTRACT
 	}
 }
-export const getContract = () => {
+export const getContract = (e) => {
 	return {
-		type: types.GET_CONTRACT
+		type: types.GET_CONTRACT,
+		payload: e
 	}
 }
 export const deleteContract = () => {

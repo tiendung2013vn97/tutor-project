@@ -2,9 +2,11 @@ import React from "react";
 // import "../assets/stylesheet/_global.less"
 import {Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input} from "antd";
 import {URL} from "../../config.js";
+import * as accountType from '../../Constants/accountType'
 import UserAccount from "./UserAccount.js";
 import UserProfile from "./UserProfile.js";
 import UserDetail from "./UserDetail";
+import UserSkillTag from "./UserSkillTag";
 
 const TabPane = Tabs.TabPane;
 
@@ -14,10 +16,6 @@ class UserInfo extends React.Component {
         this.state = {
             previewImage: ""
         };
-    }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        console.log(nextProps)
     }
 
     renderUpload(updateProfile, profile) {
@@ -100,7 +98,7 @@ class UserInfo extends React.Component {
                                             Profile
                                         </span>
                                         }
-                                        key="1"
+                                        key="2"
                                     >
                                         <UserProfile {...this.props} />
                                     </TabPane>
@@ -114,12 +112,25 @@ class UserInfo extends React.Component {
                                             Account
                                         </span>
                                         }
-                                        key="2"
+                                        key="3"
                                     >
                                         <UserAccount {...this.props} />
                                     </TabPane>
                                 }
-
+                                {
+                                    user && userDetail && user.username === userDetail.username && userDetail.type === accountType.TEACHER &&
+                                    <TabPane
+                                        tab={
+                                            <span>
+                                            <Icon type="audit"/>
+                                            Skill Tag
+                                        </span>
+                                        }
+                                        key="4"
+                                    >
+                                        <UserSkillTag {...this.props} />
+                                    </TabPane>
+                                }
                             </Tabs>
                         </Col>
                     </Row>

@@ -23,7 +23,6 @@ class SkillsManagement extends React.Component {
                 "Authorization": 'Bearer ' + localStorage.getItem("token")
             }
         }).then(res => {
-            console.log("res", res)
             this.props.getSkill(res.data)
         })
     }
@@ -33,7 +32,6 @@ class SkillsManagement extends React.Component {
     }
 
     onChange = (e) => {
-        console.log(e)
         this.setState({
             current: e
         })
@@ -48,14 +46,12 @@ class SkillsManagement extends React.Component {
                 id: row.id
             }
         }).then(res => {
-            console.log("res", res)
             this.getSkills(this.state.current, 10)
         })
     }
 
 
     renderTable(data) {
-        console.log("data", data)
         if (!data)
             return null
         const columns = [

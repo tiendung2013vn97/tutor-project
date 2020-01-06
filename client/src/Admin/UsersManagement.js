@@ -115,7 +115,6 @@ class UsersManagement extends React.Component {
     }
 
     render() {
-        console.log(this.props)
         if (this.props.users)
             return (
                 <div style={{

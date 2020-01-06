@@ -23,7 +23,7 @@ module.exports = {
   },
 
   get(offset, limit) {
-    return contract.findAll({
+    return contract.findAndCountAll({
       offset,
       limit
     });

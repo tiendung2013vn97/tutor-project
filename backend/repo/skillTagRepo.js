@@ -34,5 +34,15 @@ module.exports = {
 
   add(skillTagInfo) {
     return skillTag.create(skillTagInfo);
-  }
+  },
+
+  getById(id, offset, limit) {
+    return skillTag.findAll({
+      where: {
+        id
+      },
+      offset,
+      limit
+    });
+  },
 };
