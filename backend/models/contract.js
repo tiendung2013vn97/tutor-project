@@ -30,6 +30,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "createDt"
       },
+      startDt: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        field: "startDt"
+      },
       toDt: {
         type: DataTypes.BIGINT,
         allowNull: true,
@@ -57,6 +62,23 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "",
         field: "studentComment"
       },
+      complainDetail: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: "",
+        field: "complainDetail"
+      },
+      costPerHour: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        field: "costPerHour"
+      },
+      resolveDetail: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: "",
+        field: "resolveDetail"
+      },
       isActived: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
@@ -71,9 +93,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   contract.associate = function(models) {
-    contract.hasMany(models.message, {
-      foreignKey: "contractId",
-      sourceKey: "id"
+    contract.hasOne(models.skill, {
+      as: "skill",
+      foreignKey: "id",
+      sourceKey: "skillId"
     });
     // contract.hasMany(models.tracking_event, {
     //   foreignKey: "commentNo",

@@ -20,7 +20,10 @@ let app = express();
 app.use(bodyParser());
 app.use(cors());
 
+app.use(require("./middle-ware/authen-login-user"));
+
 app.get("/", (req, res) => {
+  console.log(req.user);
   return res.send("hello");
 });
 

@@ -86,11 +86,10 @@ module.exports = (sequelize, DataTypes) => {
       targetKey: "id"
     });
 
-    
-    //   account.hasMany(models.tracking_event, {
-    //     foreignKey: "accountNo",
-    //     sourceKey: "accountNo"
-    //   });
+    account.hasMany(models.skill, {
+      foreignKey: "teacherId",
+      sourceKey: "username"
+    });
   };
   return account;
 };

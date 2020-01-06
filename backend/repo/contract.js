@@ -4,6 +4,14 @@ let db = require("../db");
 module.exports = {
   getById(id, offset, limit) {
     return contract.findAll({
+      include: [
+        {
+          model: db.skill,
+          as: "skill",
+          required: true,
+          include: [{ model: db.account, include: [{ model: db.location }] }]
+        }
+      ],
       where: {
         id
       },
@@ -14,6 +22,14 @@ module.exports = {
 
   getByStatus(status, offset, limit) {
     return contract.findAll({
+      include: [
+        {
+          model: db.skill,
+          as: "skill",
+          required: true,
+          include: [{ model: db.account, include: [{ model: db.location }] }]
+        }
+      ],
       where: {
         status
       },
@@ -24,6 +40,14 @@ module.exports = {
 
   get(offset, limit) {
     return contract.findAndCountAll({
+      include: [
+        {
+          model: db.skill,
+          as: "skill",
+          required: true,
+          include: [{ model: db.account, include: [{ model: db.location }] }]
+        }
+      ],
       offset,
       limit
     });
