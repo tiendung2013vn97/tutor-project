@@ -10,7 +10,8 @@ const cors = require("cors");
 const location = require("./controller/location/location");
 const skillTag = require("./controller/skillTag/skillTag");
 const skill = require("./controller/skill/skill");
-const comment = require("./controller/comment/comment");
+const message = require("./controller/message/message");
+const contract = require("./controller/contract/contract");
 
 require("./passport");
 
@@ -29,7 +30,8 @@ app.use("/login-user", authenLoginUser, loginUser);
 app.use("/admin", authenAdmin, admin);
 app.use("/skill-tag", skillTag);
 app.use("/skill", skill);
-app.use("/comment", comment);
+app.use("/message", message);
+app.use("/contract", contract);
 
 let port = process.env.PORT || 3003;
 app.listen(port, () => {

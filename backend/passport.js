@@ -48,7 +48,9 @@ passport.use(
                 .getAccountByUsername(jwtPayload.username)
                 .then(users => {
                     users = users.map(item => item.get({plain: true}));
-                    return cb(null, users[0]);
+                    if(users[0])
+                        return cb(null, users[0]);
+                    return cb({status: 400}, null);
                 })
                 .catch(err => {
                     return cb({status: 400}, null);

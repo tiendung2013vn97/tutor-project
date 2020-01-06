@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-let commentRepo = require("../../repo/comment");
+let messageRepo = require("../../repo/message");
 
 router.get("/", (req, res) => {
   let get = async () => {
@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
           msg: "Thiếu tham số contractId"
         });
       }
-      let result = await commentRepo.get(
+      let result = await messageRepo.get(
         req.query.contractId,
         +req.query.offset || 0,
         +req.query.limit || 1000000000
