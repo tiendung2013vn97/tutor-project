@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let messageRepo = require("../../repo/message");
+const config = require("../../config");
 
 router.get("/", (req, res) => {
   let get = async () => {
@@ -15,7 +16,7 @@ router.get("/", (req, res) => {
       let result = await messageRepo.get(
         req.query.contractId,
         +req.query.offset || 0,
-        +req.query.limit || 1000000000
+        +req.query.limit || config.maxCount
       );
       result = result.map(item => item.get({ plain: true }));
       return res.json(result);

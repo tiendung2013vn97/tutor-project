@@ -33,7 +33,7 @@ app.use("/skill", skill);
 app.use("/message", message);
 app.use("/contract", contract);
 
-let port = process.env.PORT || 3003;
+let port = process.env.PORT || 3002;
 app.listen(port, () => {
   console.log(`API is running on port ${port}`);
 });

@@ -30,6 +30,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: "createDt"
       },
+      startDt: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        field: "startDt"
+      },
       toDt: {
         type: DataTypes.BIGINT,
         allowNull: true,
@@ -71,9 +76,10 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   contract.associate = function(models) {
-    contract.hasMany(models.message, {
-      foreignKey: "contractId",
-      sourceKey: "id"
+    contract.hasOne(models.skill, {
+      as: "skill",
+      foreignKey: "id",
+      sourceKey: "skillId"
     });
     // contract.hasMany(models.tracking_event, {
     //   foreignKey: "commentNo",

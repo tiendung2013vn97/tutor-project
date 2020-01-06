@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const mailService = require("../../mail-service");
 let SHA256 = require("crypto-js/sha256");
+const config = require("../../config");
 
 router.post("/register", function(req, res, next) {
   console.log("register user", req.body);
@@ -178,7 +179,6 @@ router.post("/change-password", (req, res) => {
         throw "username không tồn tại";
       }
     } catch (err) {
-      console.log(err);
       return res.json({
         status: "fail",
         code: "CHANGE_PASSWORD_FAIL",
@@ -195,10 +195,48 @@ router.get("/user/:username", (req, res) => {
       let result = await accountRepo.getAccountByUsername(req.params.username);
       return res.json(result[0]);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
 });
 
+router.get("/teacher", (req, res) => {
+  if (
+    (!req.query.sortBy ||
+      !req.query.order ||
+      !["location,costPerHour,skillTag"].includes(req.query.sortBy) ||
+      !["asc,desc"].includes(req.query.order)) &&
+    (req.query.locationId || req.query.costPerHour || req.query.skillTagId)
+  ) {
+    return res.json({
+      status: "fail",
+      code: "WRONG_PARAMTER",
+      msg: "Tham số sai"
+    });
+  }
+
+  let get = async () => {
+    try {
+      let teachers = await accountRepo.filterTeacher(
+        req.query.locationId,
+        req.query.skillTagId,
+        req.query.costPerHour,
+        +req.query.offset || 0,
+        +req.query.limit || config.maxCount
+      );
+
+      return res.json(teachers);
+    } catch (err) {
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
+    }
+  };
+  get();
+});
 module.exports = router;
