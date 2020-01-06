@@ -62,6 +62,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "",
         field: "studentComment"
       },
+      complainDetail: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: "",
+        field: "complainDetail"
+      },
       isActived: {
         type: DataTypes.BOOLEAN,
         allowNull: true,

@@ -8,6 +8,7 @@ module.exports = {
         {
           model: db.skill,
           as: "skill",
+          required: true,
           include: [{ model: db.account, include: [{ model: db.location }] }]
         }
       ],
@@ -25,6 +26,7 @@ module.exports = {
         {
           model: db.skill,
           as: "skill",
+          required: true,
           include: [{ model: db.account, include: [{ model: db.location }] }]
         }
       ],
@@ -42,6 +44,7 @@ module.exports = {
         {
           model: db.skill,
           as: "skill",
+          required: true,
           include: [{ model: db.account, include: [{ model: db.location }] }]
         }
       ],

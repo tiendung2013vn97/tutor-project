@@ -29,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
         field: "note"
+      },
+      isActived: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true,
+        field: "isActived"
       }
     },
     {
@@ -37,16 +43,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-    skill.associate = function(models) {
-      skill.belongsTo(models.skill_tag, {
-        foreignKey: "skillTagId",
-        targetKey: "id"
-      });
-      
-      skill.belongsTo(models.account, {
-        foreignKey: "teacherId",
-        targetKey: "username"
-      });
-    };
+  skill.associate = function(models) {
+    skill.belongsTo(models.skill_tag, {
+      foreignKey: "skillTagId",
+      targetKey: "id"
+    });
+
+    skill.belongsTo(models.account, {
+      foreignKey: "teacherId",
+      targetKey: "username"
+    });
+  };
   return skill;
 };

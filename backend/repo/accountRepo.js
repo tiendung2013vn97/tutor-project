@@ -8,7 +8,8 @@ module.exports = {
     return userRepo.findAll({
       include: [
         {
-          model: db.location
+          model: db.location,
+          required: true
         }
       ],
       where: {
@@ -21,7 +22,8 @@ module.exports = {
     return userRepo.findAll({
       include: [
         {
-          model: db.location
+          model: db.location,
+          required: true
         }
       ],
       where: {
@@ -42,7 +44,8 @@ module.exports = {
     return userRepo.findAll({
       include: [
         {
-          model: db.location
+          model: db.location,
+          required: true
         }
       ],
       where: {
@@ -56,7 +59,8 @@ module.exports = {
     return userRepo.findAndCountAll({
       include: [
         {
-          model: db.location
+          model: db.location,
+          required: true
         }
       ],
       offset,
@@ -72,11 +76,12 @@ module.exports = {
   },
 
   filterTeacher(locationId, skillTagId, costPerHour, offset, limit) {
-    return userRepo.findAll({
-      attributes: { exclude: ["password"] },
+    return userRepo.findAndCountAll({
+      attributes: { exclude: ["password", "money"] },
       include: [
         {
           model: db.location,
+          required: true,
           where: {
             [Op.and]: [locationId ? { id: locationId } : {}]
           }
@@ -84,22 +89,30 @@ module.exports = {
         {
           model: db.skill,
           as: "skills",
-          //   include: [
-          //     {
-          //       model: db.skill_tag,
-          //       where: {
-          //         [Op.and]: [skillTagId ? { id: skillTagId } : {}]
-          //       }
-          //     }
-          //   ],
+          required: true,
+          include: [
+            {
+              model: db.skill_tag,
+              where: {
+                [Op.and]: [
+                  skillTagId ? { id: skillTagId } : {},
+                  { isActived: true }
+                ]
+              }
+            }
+          ],
           where: {
-            [Op.and]: [costPerHour ? { costPerHour } : {}]
+            [Op.and]: [costPerHour ? { costPerHour } : {}, { isActived: true }]
           }
         }
       ],
       where: { type: "teacher", isActived: true },
       offset,
-      limit
+      limit,
+      subQuery: false,
+      //   distinct: true,
+      raw: true
+      //   group: ["username"]
     });
   }
 };
