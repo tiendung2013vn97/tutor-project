@@ -2,6 +2,8 @@ import React from "react";
 import {Row, Col, Upload, message, Icon, Tabs, Card, Button, Form, Input, Select} from "antd";
 import {getLocations} from "../../Location/api-location";
 import {URL} from "../../config";
+import {addSkill} from "../../Skill/api-skill";
+import {editUserInfo} from "../../Account/api-account";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -29,11 +31,13 @@ class UserProfile extends React.Component {
     }
 
     componentDidMount() {
+        const {userDetail} = this.props;
         this.setState({
-            userState: this.props.userDetail
+            userState: userDetail
         })
         this.getLocation();
     }
+
 
     getLocation() {
         getLocations().then(res => {
@@ -103,14 +107,6 @@ class UserProfile extends React.Component {
         })
     }
 
-    handleUpdateProfile = () => {
-        console.log("Update Profile")
-        // this.props.updateUserProfile({
-        //     username: this.state.username,
-        //     email: this.state.email
-        // }, this.props)
-    }
-
 
     handleCityChange(locationCity) {
         const {userState} = this.state;
@@ -140,6 +136,21 @@ class UserProfile extends React.Component {
                 }
             }
         })
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                editUserInfo(values).then(res => {
+                    if (res && res.status === 200) {
+                        message.success("Chỉnh sửa thông tin thành công")
+                    }
+                }).catch(e => {
+                    message.error("Lỗi")
+                })
+            }
+        });
     }
 
     renderUpload(updateProfile, profile) {
@@ -176,6 +187,8 @@ class UserProfile extends React.Component {
     }
 
     renderProfile = (user) => {
+        const {getFieldDecorator} = this.props.form
+
         if (user) {
             const {locations} = this.state;
 
@@ -194,7 +207,6 @@ class UserProfile extends React.Component {
                     cityComboBox.push(<Option value={city}>{city}</Option>);
                 });
 
-                console.log("list", districtList)
                 districtList.forEach(district => {
                     districtComboBox.push(<Option value={district}>{district}</Option>);
                 });
@@ -217,47 +229,86 @@ class UserProfile extends React.Component {
                                 <Form>
                                     <Row>
                                         <Col span={11}>
-                                            <Form.Item label="Username" hasFeedback>
-                                                <Input
-                                                    onChange={this.handleChangeUsername}
-                                                    value={user.username}/>
+                                            <Form.Item label="Tên tài khoản" hasFeedback>
+                                                {getFieldDecorator('username', {
+                                                    initialValue: `${user.username}`,
+                                                    rules: [{
+                                                        required: true, message: 'Vui lòng nhập tên tài khoản',
+                                                    }],
+                                                })(
+                                                    <Input
+                                                        onChange={this.handleChangeUsername}
+                                                    />
+                                                )}
                                             </Form.Item>
                                         </Col>
                                         <Col span={2}/>
                                         <Col span={11}>
                                             <Form.Item label="Họ tên" hasFeedback>
-                                                <Input
-                                                    onChange={this.handleChangeFullName}
-                                                    value={user.fullname}/>
+                                                {getFieldDecorator('fullname', {
+                                                    initialValue: `${user.fullname}`,
+                                                    rules: [{
+                                                        required: true, message: 'Vui lòng nhập họ tên',
+                                                    }],
+                                                })(
+                                                    <Input
+                                                        onChange={this.handleChangeFullName}/>
+                                                )}
                                             </Form.Item>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col span={11}>
                                             <Form.Item label="E-mail">
-                                                <Input
-                                                    onChange={this.handleChangeEmail}
-                                                    value={user.email}/>
+                                                {getFieldDecorator('email', {
+                                                    initialValue: `${user.email}`,
+                                                    rules: [
+                                                        {
+                                                            type: 'email',
+                                                            message: 'Vui lòng nhập đúng định dạng email',
+                                                        },
+                                                        {
+                                                            required: true, message: 'Vui lòng nhập email',
+                                                        }
+                                                    ],
+                                                })(
+                                                    <Input
+                                                        type={"email"}
+                                                        onChange={this.handleChangeEmail}/>
+                                                )}
+
                                             </Form.Item>
                                         </Col>
                                         <Col span={2}/>
                                         <Col span={3}>
                                             <Form.Item label="Giới tính" hasFeedback>
-                                                <Select defaultValue="male" style={{width: 120}}
-                                                        onChange={this.handleChangeGender}>
-                                                    <Option value="male">Male</Option>
-                                                    <Option value="female">Female</Option>
-                                                    <Option value="other">Other</Option>
-                                                </Select>
+                                                {getFieldDecorator('gender', {
+                                                    initialValue: `${user.gender}`,
+                                                    rules: [{
+                                                        required: true, message: 'Vui lòng chọn giới tính',
+                                                    }],
+                                                })(
+                                                    <Select style={{width: 120}}
+                                                            onChange={this.handleChangeGender}>
+                                                        <Option value="male">Male</Option>
+                                                        <Option value="female">Female</Option>
+                                                    </Select>
+                                                )}
                                             </Form.Item>
                                         </Col>
-                                        <Col span={1}/>
-                                        <Col span={2}>
+                                        <Col span={2}/>
+                                        <Col span={3}>
                                             <Form.Item label="Tuổi" hasFeedback>
-                                                <Input
-                                                    type="number"
-                                                    onChange={this.handleChangeAge}
-                                                    value={user.age}/>
+                                                {getFieldDecorator('age', {
+                                                    initialValue: `${user.age}`,
+                                                    rules: [{
+                                                        required: true, message: 'Vui lòng nhập tuổi',
+                                                    }],
+                                                })(
+                                                    <Input
+                                                        type="number"
+                                                        onChange={this.handleChangeAge}/>
+                                                )}
                                             </Form.Item>
                                         </Col>
 
@@ -265,41 +316,56 @@ class UserProfile extends React.Component {
                                     <Row>
                                         <Col span={11}>
                                             <Form.Item label="Tỉnh/Thành phố" hasFeedback>
-                                                <Select
-                                                    value={user.location.city}
-                                                    onChange={this.handleCityChange.bind(this)}
-                                                >
-                                                    {cityComboBox}
-                                                </Select>
+                                                {getFieldDecorator('city', {
+                                                    initialValue: `${user.location.city}`,
+                                                    rules: [{
+                                                        required: true, message: 'Vui lòng chọn thành phố',
+                                                    }],
+                                                })(
+                                                    <Select
+                                                        onChange={this.handleCityChange.bind(this)}
+                                                    >
+                                                        {cityComboBox}
+                                                    </Select>
+                                                )}
                                             </Form.Item>
                                         </Col>
                                         <Col span={2}/>
                                         <Col span={11}>
                                             <Form.Item label="Quận/Huyện" hasFeedback>
-                                                <Select
-                                                    value={user.location.district}
-                                                    onChange={this.handleDistrictChange.bind(this)}
-                                                >
-                                                    {districtComboBox}
-                                                </Select>
+                                                {getFieldDecorator('district', {
+                                                    initialValue: `${user.location.district}`,
+                                                    rules: [{
+                                                        required: true, message: 'Vui lòng nhập quận/huyện',
+                                                    }],
+                                                })(
+                                                    <Select
+                                                        onChange={this.handleDistrictChange.bind(this)}
+                                                    >
+                                                        {districtComboBox}
+                                                    </Select>
+                                                )}
                                             </Form.Item>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col span={24}>
                                             <Form.Item label="Giới thiệu" hasFeedback>
-                                                <TextArea
-                                                    value={user.intro}
-                                                    onChange={this.handleChangeIntro}
-                                                    placeholder="Giới thiệu"
-                                                    autoSize={{minRows: 3, maxRows: 5}}
-                                                />
+                                                {getFieldDecorator('intro', {
+                                                    initialValue: `${user.intro}`
+                                                })(
+                                                    <TextArea
+                                                        onChange={this.handleChangeIntro}
+                                                        placeholder="Giới thiệu"
+                                                        autoSize={{minRows: 3, maxRows: 5}}
+                                                    />
+                                                )}
                                             </Form.Item>
                                         </Col>
                                     </Row>
                                     <Form.Item>
                                         <Button loading={this.props.isLoadingUpdateProfile}
-                                                onClick={() => this.handleUpdateProfile()} type="primary"
+                                                onClick={this.handleSubmit} type="primary"
                                                 htmlType="submit">
                                             Lưu
                                         </Button>
@@ -315,6 +381,7 @@ class UserProfile extends React.Component {
     };
 
     render() {
+
         if (this.state.userState)
             return (
                 <div>

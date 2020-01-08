@@ -1,12 +1,15 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {updateAccountInfo} from "../../Account/action-account";
-import {getUserInfo} from "../../Api/UserApi";
+import {getUserInfo} from "../../Account/api-account";
 import UserProfile from "./UserProfile";
 
 class UserProfileContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isLoadingUpdateProfile: false,
+        }
     }
 
     componentDidMount() {
@@ -22,9 +25,17 @@ class UserProfileContainer extends React.Component {
             })
     }
 
+    handleUpdateProfile = (e) => {
+        console.log(e)
+    }
+
     render() {
         if (this.props.account.username)
-            return <UserProfile userDetail={this.props.account}/>
+            return <UserProfile
+                handleUpdateProfile={this.handleUpdateProfile}
+                {...this.state}
+                userDetail={this.props.account}
+            />
         return null
     }
 }

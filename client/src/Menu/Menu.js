@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
+import React, {Component} from "react";
+import {Redirect, Link} from "react-router-dom";
 import "./Menu.scss";
 
 import {
@@ -16,7 +16,7 @@ import {
     Layout
 } from "antd";
 
-const { SubMenu } = Menu;
+const {SubMenu} = Menu;
 
 class MainMenu extends Component {
     //constructor
@@ -40,19 +40,19 @@ class MainMenu extends Component {
         >
             <Menu.Item key="home">
                 <Link to={"/"}>
-                    <Icon type="home" />
+                    <Icon type="home"/>
                     <span>Trang chủ</span>
                 </Link>
             </Menu.Item>
             <Menu.Item key="user">
                 <Link to={"/manage/users"}>
-                    <Icon type="user" />
+                    <Icon type="user"/>
                     <span>Quản lí người dùng</span>
                 </Link>
             </Menu.Item>
             <Menu.Item key="skillTag">
                 <Link to={"/manage/skill-tags"}>
-                    <Icon type="tag" />
+                    <Icon type="tag"/>
                     <span>Quản lí kĩ năng</span>
                 </Link>
             </Menu.Item>
@@ -62,7 +62,7 @@ class MainMenu extends Component {
             {/*</Menu.Item>*/}
             <Menu.Item key="contract">
                 <Link to={"/manage/contracts"}>
-                    <Icon type="appstore" />
+                    <Icon type="appstore"/>
                     <span>Quản lí hợp đồng</span>
                 </Link>
             </Menu.Item>
@@ -70,7 +70,7 @@ class MainMenu extends Component {
                 key="info"
                 title={
                     <span>
-                        <Icon type="user" />
+                        <Icon type="user"/>
                         <span>Thông tin người dùng</span>
                     </span>
                 }
@@ -96,23 +96,25 @@ class MainMenu extends Component {
         >
             <Menu.Item key="home">
                 <Link to={"/"}>
-                    <Icon type="home" />
+                    <Icon type="home"/>
                     <span>Trang chủ</span>
                 </Link>
             </Menu.Item>
             <Menu.Item key="skill">
-                <Link to={`/skill/${this.state.user.username}`}>
-                    <Icon type="tag" />
+                <Link to={`/skill`}>
+                    <Icon type="tag"/>
                     <span>Quản lí kĩ năng</span>
                 </Link>
             </Menu.Item>
             <Menu.Item key="studyRequest">
-                <Icon type="audit"/>
-                <span>Quản lí đơn xin học</span>
+                <Link to={`/study-request`}>
+                    <Icon type="audit"/>
+                    <span>Quản lí đơn xin học</span>
+                </Link>
             </Menu.Item>
             <Menu.Item key="contract">
                 <Link to={"/manage/contracts"}>
-                    <Icon type="appstore" />
+                    <Icon type="appstore"/>
                     <span>Quản lí hợp đồng</span>
                 </Link>
             </Menu.Item>
@@ -120,7 +122,7 @@ class MainMenu extends Component {
                 key="info"
                 title={
                     <span>
-                        <Icon type="user" />
+                        <Icon type="user"/>
                         <span>Thông tin người dùng</span>
                     </span>
                 }
@@ -136,29 +138,28 @@ class MainMenu extends Component {
     }
 
 
-
     render() {
-        const {account}=this.props;
-        if(account && account.username)
-        return (
-            <div style={{ width: 256 }}>
-                {/*<Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>*/}
-                {/*    <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />*/}
-                {/*</Button>*/}
-                {
-                    (account.type === "admin"|| account.type==="root") &&
-                    this.adminMenu()
-                }
-                {
-                    account.type === "teacher" &&
-                    this.teacherMenu()
-                }
-                {
-                    account.type === "student" &&
-                    this.teacherMenu()
-                }
-            </div>
-        );
+        const {account} = this.props;
+        if (account && account.username)
+            return (
+                <div style={{width: 256}}>
+                    {/*<Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>*/}
+                    {/*    <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />*/}
+                    {/*</Button>*/}
+                    {
+                        (account.type === "admin" || account.type === "root") &&
+                        this.adminMenu()
+                    }
+                    {
+                        account.type === "teacher" &&
+                        this.teacherMenu()
+                    }
+                    {
+                        account.type === "student" &&
+                        this.teacherMenu()
+                    }
+                </div>
+            );
         return null;
     }
 

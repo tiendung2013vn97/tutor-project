@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       totalHours: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: "totalHours"
       },
       createDt: {
@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: "startDt"
       },
+      etaDt: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        field: "etaDt"
+      },
       toDt: {
         type: DataTypes.BIGINT,
         allowNull: true,
@@ -42,10 +47,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       detail: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
         field: "detail"
       },
-
       status: {
         type: DataTypes.STRING(45),
         allowNull: false,
@@ -54,7 +58,8 @@ module.exports = (sequelize, DataTypes) => {
       rate: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        field: "rate"
+        field: "rate",
+        defaultValue: -1
       },
       studentComment: {
         type: DataTypes.TEXT,
@@ -70,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       costPerHour: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         field: "costPerHour"
       },
       resolveDetail: {

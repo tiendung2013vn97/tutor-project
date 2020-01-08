@@ -5,7 +5,7 @@ import config from "../config";
 import axios from "axios";
 import {updateSkillTag} from '../SkillTag/action-skillTag'
 import {updateAccountInfo} from "../Account/action-account";
-import {getUserInfo} from "../Api/UserApi";
+import {getUserInfo} from "../Account/api-account";
 
 class MenuContainer extends Component {
     //constructor

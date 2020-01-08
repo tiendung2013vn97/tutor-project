@@ -8,25 +8,40 @@ import {updateSkill} from "./action-skill";
 class SkillContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            current: 1
+        }
     }
 
     componentDidMount() {
-        let username = this.props.match.params.username;
-        if (username)
-            this.getSkills(username);
+        this.getSkills(1, 10);
     }
 
-    getSkills(username) {
-        return getSkills(username).then(res => {
+    getSkills(pNo, pSize) {
+        return getSkills(pNo, pSize).then(res => {
+            console.log(res)
             if (res && res.status === 200) {
                 this.props.updateSkill(res.data);
             }
         })
     }
 
+    handleChangePage = e => {
+        this.setState({
+            current: e
+        })
+        this.getSkills(e, 10)
+    }
+    handleCreate = () => {
+        this.props.history.push("/skill/create")
+    }
+
     render() {
-        console.log("prop", this.props.skill)
         return <Skill
+            handleChangePage={this.handleChangePage}
+            handleCreate={this.handleCreate}
+            getSkills={(pNo, pSize) => this.getSkills(pNo, pSize)}
+            {...this.state}
             {...this.props}
         />
     }
@@ -34,7 +49,7 @@ class SkillContainer extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        skill: state.skill,
+        skill: state.skill.skills,
         account: state.account
     }
 }

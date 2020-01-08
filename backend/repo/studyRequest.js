@@ -3,46 +3,6 @@ let db = require("../db");
 let Op = db.Sequelize.Op;
 
 module.exports = {
-  getById(id, permiss = false) {
-    return contract.findAll({
-      include: [
-        {
-          model: db.skill,
-          as: "skill",
-          required: true,
-          include: [{ model: db.account, include: [{ model: db.location }] }]
-        }
-      ],
-      where: {
-        id,
-        isActived: {
-          [Op.in]: permiss ? [true, false] : [true]
-        },
-        startDt: {
-          [Op.ne]: null
-        }
-      }
-    });
-  },
-
-  getByStatus(status, offset, limit) {
-    return contract.findAll({
-      include: [
-        {
-          model: db.skill,
-          as: "skill",
-          required: true,
-          include: [{ model: db.account, include: [{ model: db.location }] }]
-        }
-      ],
-      where: {
-        status
-      },
-      offset,
-      limit
-    });
-  },
-
   get(user, offset, limit) {
     let opt = {
       include: [
@@ -53,6 +13,9 @@ module.exports = {
           include: [{ model: db.account, include: [{ model: db.location }] }]
         }
       ],
+      where: {
+        startDt: null
+      },
       offset,
       limit
     };
@@ -67,6 +30,7 @@ module.exports = {
           }
         ],
         where: {
+          startDt: null,
           studentId: user.username,
           isActived: true
         },
@@ -84,7 +48,8 @@ module.exports = {
             required: true,
             include: [{ model: db.account, include: [{ model: db.location }] }],
             where: {
-              teacherId: user.username
+              teacherId: user.username,
+              startDt: null
             }
           }
         ],
@@ -98,15 +63,6 @@ module.exports = {
     }
 
     return contract.findAndCountAll(opt);
-  },
-
-  update(id, contractInfo, preStatus = null, permiss = false) {
-    let whereClause = { id };
-    if (preStatus) whereClause.status = preStatus;
-    if (!permiss) whereClause.isActived = true;
-    return contract.update(contractInfo, {
-      where: whereClause
-    });
   },
 
   getByTeacherId(teacherId, id, permiss = false) {
@@ -123,9 +79,7 @@ module.exports = {
         }
       ],
       where: {
-        startDt: {
-          [Op.ne]: null
-        },
+        startDt: null,
         id,
         isActived: {
           [Op.in]: permiss ? [true, false] : [true]
@@ -141,21 +95,52 @@ module.exports = {
           model: db.skill,
           as: "skill",
           required: true,
-          include: [{ model: db.account, include: [{ model: db.location }] }],
-          where: {
-            studentId
-          }
+          include: [{ model: db.account, include: [{ model: db.location }] }]
         }
       ],
       where: {
-        startDt: {
-          [Op.ne]: null
-        },
+        startDt: null,
+        studentId,
         id,
         isActived: {
           [Op.in]: permiss ? [true, false] : [true]
         }
       }
     });
+  },
+
+  create(contractInfo) {
+    contractInfo.createDt = new Date().getTime();
+    contractInfo.status = "waitingTeacher";
+    return contract.create(contractInfo);
+  },
+
+  update(id, contractInfo, preStatus) {
+    if (preStatus) {
+      let whereClause = { id, status: preStatus, isActived: true };
+    } else {
+      let whereClause = { id, isActived: true };
+    }
+    return contract.update(contractInfo, {
+      where: whereClause
+    });
+  },
+
+  deactive(id) {
+    return contract.update(
+      { isActived: false },
+      {
+        where: { id }
+      }
+    );
+  },
+
+  active(id) {
+    return contract.update(
+      { isActived: true },
+      {
+        where: { id }
+      }
+    );
   }
 };

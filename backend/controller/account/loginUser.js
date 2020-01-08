@@ -1,4 +1,4 @@
-let accountRepo = require("../../repo/accountRepo");
+let accountRepo = require("../../repo/account");
 
 
 let express = require("express");

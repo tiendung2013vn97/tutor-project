@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {Spin} from 'antd'
 import ContractDetail from './ContractDetail'
 import Axios from "../../Api";
-import {getSkillTagById} from "../../Api/SkillTag";
+import {getSkillTagById} from "../../SkillTag/api-skilltag";
 
 class ContractDetailContainer extends React.Component {
     constructor(props) {

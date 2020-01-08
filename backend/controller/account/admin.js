@@ -1,7 +1,7 @@
 let express = require("express");
 let router = express.Router();
-let accountRepo = require("../../repo/accountRepo");
-let skillTagRepo = require("../../repo/skillTagRepo");
+let accountRepo = require("../../repo/account");
+let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
 
 router.get("/users", (req, res) => {
@@ -19,7 +19,10 @@ router.get("/users", (req, res) => {
       });
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
@@ -35,7 +38,10 @@ router.get("/skill-tags", (req, res) => {
 
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
@@ -47,7 +53,10 @@ router.get("/users/change-status", (req, res) => {
       let result = await accountRepo.updateStatus(req.query.username);
       return res.json(result);
     } catch (e) {
-      return res.status(400).send(e + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
@@ -59,7 +68,10 @@ router.get("/skill-tags/change-status", (req, res) => {
       let result = await skillTagRepo.updateStatus(req.query.id);
       return res.json(result);
     } catch (e) {
-      return res.status(400).send(e + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();

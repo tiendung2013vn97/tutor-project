@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-const accountRepo = require("../../repo/accountRepo");
+const accountRepo = require("../../repo/account");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const mailService = require("../../mail-service");
@@ -8,7 +8,6 @@ let SHA256 = require("crypto-js/sha256");
 const config = require("../../config");
 
 router.post("/register", function(req, res, next) {
-  console.log("register user", req.body);
   let user = req.body;
   if (
     !user.username ||
@@ -68,7 +67,7 @@ router.post("/register", function(req, res, next) {
 router.post("/login", function(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
-      return res.status(200).json({
+      return res.json({
         status: "fail",
         code: "WRONG_USERNAME_OR_PASSWORD",
         msg: info ? info.message : "Đăng nhập thất bại."
@@ -76,7 +75,7 @@ router.post("/login", function(req, res, next) {
     }
 
     if (user.isActived === false) {
-      return res.status(200).json({
+      return res.json({
         status: "fail",
         code: "ACCOUNT_IS_BLOCKED",
         msg: "Tài khoản này hiện đang bị khóa"
@@ -121,7 +120,7 @@ router.get("/verify-email?", (req, res) => {
               return res.json({
                 status: "fail",
                 code: "VERIFY_EMAIL_FAIL",
-                msg: err + ""
+                msg: err.msg
               });
             });
         }
@@ -131,7 +130,7 @@ router.get("/verify-email?", (req, res) => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-        msg: err + ""
+        msg: err.msg
       });
     });
 });
@@ -140,9 +139,7 @@ router.get("/verify-changed-password?", (req, res) => {
   mailService
     .verifyEmailToken(req.query.emailToken)
     .then(user => {
-      console.log("pass", user.password);
       user.password = SHA256(user.password) + "";
-      console.log("user", user);
       accountRepo.updatePassword(user.username, user.password);
     })
     .then(val => {
@@ -155,7 +152,7 @@ router.get("/verify-changed-password?", (req, res) => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-        msg: err + ""
+        msg: err.msg
       });
     });
 });
@@ -182,7 +179,7 @@ router.post("/change-password", (req, res) => {
       return res.json({
         status: "fail",
         code: "CHANGE_PASSWORD_FAIL",
-        msg: err + ""
+        msg: err.msg
       });
     }
   };
@@ -197,7 +194,7 @@ router.get("/user/:username", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+        msg: err.msg
       });
     }
   };
@@ -233,7 +230,7 @@ router.get("/teacher", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+        msg: err.msg
       });
     }
   };

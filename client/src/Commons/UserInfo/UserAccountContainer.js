@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {updateAccountInfo} from "../../Account/action-account";
-import {getUserByUsername} from "../../Api/UserApi";
+import {getUserByUsername} from "../../Account/api-account";
 import UserProfile from "./UserProfile";
 import UserAccount from "./UserAccount";
 
