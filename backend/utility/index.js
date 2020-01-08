@@ -18,7 +18,7 @@ const Utility = {
       let schema;
       switch (args[param].dataType) {
         case "string": {
-          schema = joi.string().allow('');
+          schema = joi.string().allow("");
           break;
         }
         case "int": {
@@ -150,7 +150,7 @@ const Utility = {
       throw error.NOT_IN_EXPECTED_VALUES(invalidFields);
     }
   },
-  
+
   validateEmpty(args) {
     let invalidFields = [];
     Object.keys(args).forEach(param => {

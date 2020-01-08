@@ -2,7 +2,7 @@ let express = require("express");
 let router = express.Router();
 let studyRequestRepo = require("../../repo/studyRequest");
 const config = require("../../config");
-const utility=require('../../utility')
+const utility = require("../../utility");
 
 router.get("/", (req, res) => {
   let get = async () => {
@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -36,7 +36,7 @@ router.post("/:skillId", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -66,29 +66,82 @@ router.put("/teacher-confirm/:contractId", (req, res) => {
       require: true
     }
   };
-  
-  utility.validateRequireParam(args);
-  utility.validateEmpty(args);
-  utility.validateTypeAndRegex(args);
-  utility.validateMaxLength(args);
-
-  info = utility.convertToValueObject(args);
-  info.status='waitingStudent';
-  info.teacherId=req.user.username;
 
   let update = async () => {
     try {
-      let result = await studyRequestRepo.update(req.params.contractId,info)
+      utility.validateRequireParam(args);
+      utility.validateEmpty(args);
+      utility.validateTypeAndRegex(args);
+      utility.validateMaxLength(args);
+
+      let studyRequests = await studyRequestRepo.getByTeacherId(
+        req.user.username,
+        req.params.contractId
+      );
+      console.log(studyRequests);
+      studyRequests = studyRequests.map(item => item.get({ plain: true }));
+
+      if (!studyRequests.length) {
+        throw "techerId không hợp lệ";
+      }
+
+      info = utility.convertToValueObject(args);
+      info.status = "waitingStudent";
+      let result = await studyRequestRepo.update(
+        req.params.contractId,
+        info,
+        "waitingTeacher"
+      );
 
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-       msg: err.msg
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   update();
+});
+
+router.put("/student-confirm/:contractId", (req, res) => {
+  let update = async () => {
+    try {
+      let info = {
+        status: "inProgress"
+      };
+
+      let result = await studyRequestRepo.update(
+        req.params.contractId,
+        info,
+        "waitingStudent"
+      );
+
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+
+  update();
+});
+
+router.get("/test", (req, res) => {
+  studyRequestRepo
+    .getByTeacherId("teacher1")
+    .then(val => res.json(val))
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

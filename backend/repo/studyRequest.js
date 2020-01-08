@@ -14,13 +14,59 @@ module.exports = {
         }
       ],
       where: {
-        startDt:null,
+        startDt: null,
         isActived: {
           [Op.in]: permiss ? [true, false] : [true]
         }
       },
       offset,
       limit
+    });
+  },
+
+  getByTeacherId(teacherId, id, permiss = false) {
+    return contract.findAll({
+      include: [
+        {
+          model: db.skill,
+          as: "skill",
+          required: true,
+          include: [{ model: db.account, include: [{ model: db.location }] }],
+          where: {
+            teacherId
+          }
+        }
+      ],
+      where: {
+        startDt: null,
+        id,
+        isActived: {
+          [Op.in]: permiss ? [true, false] : [true]
+        }
+      }
+    });
+  },
+
+  getByStudentId(studentId, id, permiss = false) {
+    return contract.findAll({
+      include: [
+        {
+          model: db.skill,
+          as: "skill",
+          required: true,
+          include: [{ model: db.account, include: [{ model: db.location }] }],
+          where: {
+            studentId
+          }
+        }
+      ],
+      where: {
+        startDt: null,
+        id,
+        isActived: {
+          [Op.in]: permiss ? [true, false] : [true]
+        }
+      }
     });
   },
 
@@ -33,14 +79,9 @@ module.exports = {
     });
   },
 
-  update(id, contractInfo) {
+  update(id, contractInfo, preStatus) {
     return contract.update(contractInfo, {
-        include:[{
-            model:db.skill,
-            where:{teacherId:contractInfo.teacherId}
-        }],
-
-      where: { id }
+      where: { id, status: preStatus, isActived: true }
     });
   },
 

@@ -8,7 +8,6 @@ let SHA256 = require("crypto-js/sha256");
 const config = require("../../config");
 
 router.post("/register", function(req, res, next) {
-  console.log("register user", req.body);
   let user = req.body;
   if (
     !user.username ||
@@ -121,7 +120,7 @@ router.get("/verify-email?", (req, res) => {
               return res.json({
                 status: "fail",
                 code: "VERIFY_EMAIL_FAIL",
-               msg: err.msg
+                msg: err.msg
               });
             });
         }
@@ -131,7 +130,7 @@ router.get("/verify-email?", (req, res) => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-       msg: err.msg
+        msg: err.msg
       });
     });
 });
@@ -140,9 +139,7 @@ router.get("/verify-changed-password?", (req, res) => {
   mailService
     .verifyEmailToken(req.query.emailToken)
     .then(user => {
-      console.log("pass", user.password);
       user.password = SHA256(user.password) + "";
-      console.log("user", user);
       accountRepo.updatePassword(user.username, user.password);
     })
     .then(val => {
@@ -155,7 +152,7 @@ router.get("/verify-changed-password?", (req, res) => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-       msg: err.msg
+        msg: err.msg
       });
     });
 });
@@ -182,7 +179,7 @@ router.post("/change-password", (req, res) => {
       return res.json({
         status: "fail",
         code: "CHANGE_PASSWORD_FAIL",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -197,7 +194,7 @@ router.get("/user/:username", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -233,7 +230,7 @@ router.get("/teacher", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };

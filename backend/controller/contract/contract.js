@@ -54,4 +54,8 @@ router.get("/by-status/:status", (req, res) => {
   get();
 });
 
+router.put("/student-complain/:contractId", (req, res) => {
+  //let get
+});
+
 module.exports = router;
