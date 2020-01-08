@@ -4,7 +4,6 @@ let accountRepo = require("../../repo/account");
 let express = require("express");
 let router = express.Router();
 let multer = require("multer");
-const accountRepo = require("../../repo/account");
 
 let storage = multer.diskStorage({
   destination: function(req, file, cb) {
