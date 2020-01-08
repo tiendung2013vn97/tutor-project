@@ -3,7 +3,7 @@ let router = express.Router();
 let accountRepo = require("../../repo/account");
 let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
-
+const utility=require("../../utility")
 router.get("/users", (req, res) => {
   let get = async () => {
     try {
@@ -86,6 +86,7 @@ router.delete("/:username", (req, res) => {
   //for admin/root
   let update = async () => {
     try {
+      console.log(req.params.username)
       let accounts = await accountRepo.getAccountByUsername(
         req.params.username
       );
@@ -102,7 +103,7 @@ router.delete("/:username", (req, res) => {
         throw "Bạn không thể xóa tài khoản root";
       }
 
-      if (accounts[0].type === "admin" || accounts2[0].type === "admin") {
+      if (accounts[0].type === "admin" && accounts2[0].type === "admin") {
         throw "Bạn không có quyền xóa tài khoản này";
       }
 
@@ -138,7 +139,7 @@ router.put("/active/:username", (req, res) => {
         throw "Không tồn tại username cần kích hoạt.";
       }
 
-      if (accounts[0].type === "admin" || accounts2[0].type === "admin") {
+      if (accounts[0].type === "admin" && accounts2[0].type === "admin") {
         throw "Bạn không có quyền kích hoạt tài khoản này";
       }
 

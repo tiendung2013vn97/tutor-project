@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 app.use("/location", location);
 app.use("/public-user", publicUser);
 app.use("/login-user", loginUser);
-app.use("/admin", authenAdmin, admin);
+app.use("/admin", admin);
 app.use("/skill-tag", skillTag);
 app.use("/skill", skill);
 app.use("/message", message);

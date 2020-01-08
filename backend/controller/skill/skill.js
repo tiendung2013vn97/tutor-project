@@ -79,30 +79,30 @@ router.get("/teacher/skill", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  //for teacher
-  let args = {
-    skillTagId: {
-      val: req.body.skillTagId,
-      require: true,
-      dataType: "int"
-    },
-    note: {
-      val: req.body.note,
-      require: true
-    },
-    costPerHour: {
-      val: req.body.costPerHour,
-      dataType: "int",
-      require: true
-    }
-  };
+    //for teacher
+    let args = {
+        skillTagId: {
+            val: req.body.skillTagId,
+            require: true,
+            dataType: "int"
+        },
+        note: {
+            val: req.body.note,
+            require: true
+        },
+        costPerHour: {
+            val: req.body.costPerHour,
+            dataType: "int",
+            require: true
+        }
+    };
 
-  let create = async () => {
-    try {
-      utility.validateRequireParam(args);
-      utility.validateEmpty(args);
-      utility.validateTypeAndRegex(args);
-      utility.validateMaxLength(args);
+    let create = async () => {
+        try {
+            utility.validateRequireParam(args);
+            utility.validateEmpty(args);
+            utility.validateTypeAndRegex(args);
+            utility.validateMaxLength(args);
 
       let info = utility.convertToValueObject(args);
       info.teacherId = req.user.username;
@@ -123,31 +123,31 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:skillId", (req, res) => {
-  //for teacher
-  let args = {
-    note: {
-      val: req.body.note
-    },
-    costPerHour: {
-      val: req.body.costPerHour,
-      dataType: "int"
-    }
-  };
+    //for teacher
+    let args = {
+        note: {
+            val: req.body.note
+        },
+        costPerHour: {
+            val: req.body.costPerHour,
+            dataType: "int"
+        }
+    };
 
-  let update = async () => {
-    try {
-      utility.validateRequireParam(args);
-      utility.validateEmpty(args);
-      utility.validateTypeAndRegex(args);
-      utility.validateMaxLength(args);
+    let update = async () => {
+        try {
+            utility.validateRequireParam(args);
+            utility.validateEmpty(args);
+            utility.validateTypeAndRegex(args);
+            utility.validateMaxLength(args);
 
-      let skills = await skillRepo.getByTeacherWithSkillId(
-        req.params.skillId,
-        req.user.username
-      );
-      if (!skills.length) {
-        throw "teacherId không hợp lệ hoặc skill không tồn tại";
-      }
+            let skills = await skillRepo.getByTeacherWithSkillId(
+                req.params.skillId,
+                req.user.username
+            );
+            if (!skills.length) {
+                throw "teacherId không hợp lệ hoặc skill không tồn tại";
+            }
 
       let info = utility.convertToValueObject(args);
       info.teacherId = req.user.username;
@@ -168,18 +168,18 @@ router.put("/:skillId", (req, res) => {
 });
 
 router.delete("/:skillId", (req, res) => {
-  //for teacher
+    //for teacher
 
-  let update = async () => {
-    try {
-      let skills = await skillRepo.getByTeacherWithSkillId(
-        req.params.skillId,
-        req.user.username
-      );
+    let update = async () => {
+        try {
+            let skills = await skillRepo.getByTeacherWithSkillId(
+                req.params.skillId,
+                req.user.username
+            );
 
-      if (!skills.length) {
-        throw "teacherId không hợp lệ hoặc skill không tồn tại";
-      }
+            if (!skills.length) {
+                throw "teacherId không hợp lệ hoặc skill không tồn tại";
+            }
 
       let info = {
         isActived: false

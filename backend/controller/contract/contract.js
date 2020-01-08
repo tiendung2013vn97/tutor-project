@@ -58,7 +58,7 @@ router.get("/by-id/:id", (req, res) => {
       }
 
       let result = await contractRepo.getById(req.params.id, req.permiss);
-      result.rows = result.rows.map(item => item.get({ plain: true }));
+      result = result.map(item => item.get({ plain: true }));
 
       if (result.length) {
         return res.json(result[0]);

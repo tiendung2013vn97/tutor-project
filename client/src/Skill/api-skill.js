@@ -1,7 +1,7 @@
 import Axios from "../Api";
 
 export function getSkills(pageNo, pageSize){
-    return Axios.get("skill/me", {
+    return Axios.get("skill/teacher/skill", {
         params:{
             offset: (pageNo-1)*pageSize,
             limit: pageSize

@@ -89,9 +89,8 @@ class App extends React.Component {
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
                   <Route path="/forget-password" component={ForgetPassword} />
-
-                  {/*<Route path="/user/:username" component={UserInfo}/>*/}
-
+                  {/*<Route path="/contract/" component={EditSkill}/>*/}
+                  <Route path="/user/:username" component={UserInfo} />
                   <Route path="/">
                     <div className="App">
                       <Home />

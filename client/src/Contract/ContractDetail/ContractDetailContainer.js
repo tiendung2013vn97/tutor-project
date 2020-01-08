@@ -25,12 +25,12 @@ class ContractDetailContainer extends React.Component {
     getDetail(id) {
         return Axios.get(`contract/by-id/${id}`
         ).then(res => {
-            if (res && res.status === 200) {
-                console.log("contract", res)
+            console.log("contract", res)
+            if (res && res.data.status !=="fail") {
                 this.setState({
                     contract: res.data
                 })
-                this.getSkillTag(res.data.skillId)
+                // this.getSkillTag(res.data.skillId)
             }
         }).catch(err => {
             console.log(err)

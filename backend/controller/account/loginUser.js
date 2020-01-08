@@ -1,4 +1,5 @@
 let accountRepo = require("../../repo/account");
+const utility=require("../../utility")
 
 let express = require("express");
 let router = express.Router();
@@ -73,6 +74,7 @@ router.put("/", (req, res) => {
         dataType: "int"
       }
     };
+    console.log(req.body)
 
     try {
       utility.validateRequireParam(args);
@@ -119,7 +121,7 @@ router.put("/password", (req, res) => {
 
       let info = utility.convertToValueObject(args);
       let result = await accountRepo.updatePassword(
-        req.params.username,
+        req.user.username,
         info.password
       );
       return res.json(result);

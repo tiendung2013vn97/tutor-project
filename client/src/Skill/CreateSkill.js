@@ -57,11 +57,13 @@ class CreateSkill extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                addSkill(values).then(res=>{
-                    if(res&&res.status===200){
+                addSkill(values).then(res => {
+                    if (res && res.data.status !== "fail") {
                         message.success("Thêm kỹ năng thành công")
                     }
-                }).catch(e=>{
+                    else
+                        message.error("Lỗi")
+                }).catch(e => {
                     message.error("Lỗi")
                 })
             }
@@ -114,9 +116,10 @@ class CreateSkill extends React.Component {
                                     hasFeedback
                                 >
                                     {getFieldDecorator('costPerHour', {
-                                        rules: [{
-                                            required: true, message: 'Vui lòng nhập giá trên giờ',
-                                        }],
+                                        rules: [
+                                            {
+                                                required: true, message: 'Vui lòng nhập giá trên giờ',
+                                            }],
                                     })(
                                         <Input onChange={this.handleChangeCost} type={"number"}
                                                placeholder='Giá trên giờ'/>
@@ -128,7 +131,10 @@ class CreateSkill extends React.Component {
                                     style={{marginBottom: '24px'}}
                                     hasFeedback
                                 >
-                                    {getFieldDecorator('note')(
+                                    {getFieldDecorator('note', {
+                                        initialValue: "",
+
+                                    })(
                                         <TextArea onChange={this.handleChangeNote} row={3}
                                                   placeholder='Mô tả'/>
                                     )}

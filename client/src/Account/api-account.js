@@ -14,8 +14,8 @@ export function getUserInfo() {
     })
 }
 
-export function editUserInfo() {
-    return Axios.put("login-user")
+export function editUserInfo(e) {
+    return Axios.put("login-user", e)
 }
 
 export function editUserAccount(e) {
