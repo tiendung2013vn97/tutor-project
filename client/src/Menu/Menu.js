@@ -76,14 +76,15 @@ class MainMenu extends Component {
                 }
             >
                 <Menu.Item key="9">
-                    <Link to={`/profile/${this.state.user.username}`}>Hồ sơ</Link>
+                    <Link to={`/profile`}>Hồ sơ</Link>
                 </Menu.Item>
                 <Menu.Item key="10">
-                    <Link to={`/account/${this.state.user.username}`}>Tài khoản</Link>
+                    <Link to={`/account`}>Tài khoản</Link>
                 </Menu.Item>
             </SubMenu>
         </Menu>
     }
+
     teacherMenu = () => {
         return <Menu
             defaultSelectedKeys={['home']}
@@ -100,21 +101,15 @@ class MainMenu extends Component {
                 </Link>
             </Menu.Item>
             <Menu.Item key="skill">
-                <Link to={"/skill"}>
-                    <Icon type="audit" />
-                    <span>Quản lí người dùng</span>
-                </Link>
-            </Menu.Item>
-            <Menu.Item key="skillTag">
-                <Link to={"/manage/skill-tags"}>
+                <Link to={`/skill/${this.state.user.username}`}>
                     <Icon type="tag" />
                     <span>Quản lí kĩ năng</span>
                 </Link>
             </Menu.Item>
-            {/*<Menu.Item key="studyRequest">*/}
-            {/*    <Icon type="audit"/>*/}
-            {/*    <span>Quản lí đơn xin học</span>*/}
-            {/*</Menu.Item>*/}
+            <Menu.Item key="studyRequest">
+                <Icon type="audit"/>
+                <span>Quản lí đơn xin học</span>
+            </Menu.Item>
             <Menu.Item key="contract">
                 <Link to={"/manage/contracts"}>
                     <Icon type="appstore" />
@@ -131,10 +126,10 @@ class MainMenu extends Component {
                 }
             >
                 <Menu.Item key="9">
-                    <Link to={`/profile/${this.state.user.username}`}>Hồ sơ</Link>
+                    <Link to={`/profile`}>Hồ sơ</Link>
                 </Menu.Item>
                 <Menu.Item key="10">
-                    <Link to={`/account/${this.state.user.username}`}>Tài khoản</Link>
+                    <Link to={`/account`}>Tài khoản</Link>
                 </Menu.Item>
             </SubMenu>
         </Menu>

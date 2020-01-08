@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {updateAccountInfo} from "../../Account/action-account";
-import {getUserByUsername} from "../../Api/UserApi";
+import {getUserInfo} from "../../Api/UserApi";
 import UserProfile from "./UserProfile";
 
 class UserProfileContainer extends React.Component {
@@ -10,16 +10,12 @@ class UserProfileContainer extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
-        const username = this.props.match.params.username;
-        if (username)
-            this.getUserProfile(username)
+        this.getUserProfile()
     }
 
-    getUserProfile(username) {
-        return getUserByUsername(username)
+    getUserProfile() {
+        return getUserInfo()
             .then(res => {
-                console.log(res)
                 if (res && res.status === 200) {
                     this.props.updateAccount(res.data)
                 }

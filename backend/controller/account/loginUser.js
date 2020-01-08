@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 router.get("/info", (req, res)=>{
   let get = async () => {
     try {
-      let result = await accountRepo.getAccountByUsername(req.params.username);
+      let result = await accountRepo.getAccountByUsername(req.user.username);
       return res.json(result[0]);
     } catch (err) {
       return res.json({

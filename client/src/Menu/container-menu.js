@@ -18,6 +18,7 @@ class MenuContainer extends Component {
         if (account.username === null) {
             getUserInfo()
                 .then(res => {
+                    console.log("res", res)
                     if (res && res.status === 200) {
                         this.props.updateAccountInfo(res.data)
                     }

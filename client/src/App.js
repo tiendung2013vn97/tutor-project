@@ -20,6 +20,7 @@ import ContractDetailContainer from "./Contract/ContractDetail/ContractDetailCon
 import UserProfile from './Commons/UserInfo/UserProfileContainer'
 import {Col, Row} from "antd";
 import UserAccount from "./Commons/UserInfo/UserAccountContainer";
+import SkillContainer from "./Skill/skill-container";
 
 class App extends React.Component {
     render() {
@@ -56,11 +57,12 @@ class App extends React.Component {
                                         )
                                     }}
                                     />
-                                    <Route path="/profile/:username" component={UserProfile}/>
-                                    <Route path="/account/:username" component={UserAccount}/>
+                                    <Route path="/profile" component={UserProfile}/>
+                                    <Route path="/account" component={UserAccount}/>
+                                    <Route path="/skill" component={SkillContainer}/>
 
 
-                                    <Route path="/user/:username" component={UserInfo}/>
+                                    {/*<Route path="/user/:username" component={UserInfo}/>*/}
 
                                     <Route path="/">
                                         <div className="App">
