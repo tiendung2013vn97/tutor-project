@@ -157,5 +157,31 @@ module.exports = {
         }
       }
     });
+  },
+
+  getFinishedContractByTeacherId(teacherId, id) {
+    return contract.findAll({
+      include: [
+        {
+          model: db.skill,
+          as: "skill",
+          required: true,
+          include: [{ model: db.account, include: [{ model: db.location }] }],
+          where: {
+            teacherId
+          }
+        }
+      ],
+      where: {
+        startDt: {
+          [Op.ne]: null
+        },
+        status: {
+          [Op.in]: ["resolvedComplain", "finished"]
+        },
+        id,
+        isActived: true
+      }
+    });
   }
 };

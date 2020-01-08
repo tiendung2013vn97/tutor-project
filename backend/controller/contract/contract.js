@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let contractRepo = require("../../repo/contract");
+let accountRepo = require("../../repo/account");
 let moneyRepo = require("../../repo/money");
 const config = require("../../config");
 const utility = require("../../utility");
@@ -166,6 +167,7 @@ router.put("/resolve-complain/:contractId", (req, res) => {
 
       let info = utility.convertToValueObject(args);
       info.status = "resolvedComplain";
+      info.rate = 1;
 
       let contracts = await contractRepo.getById(
         req.params.contractId,
@@ -183,6 +185,31 @@ router.put("/resolve-complain/:contractId", (req, res) => {
       ) {
         throw "Số tiền hoàn trả vượt mức tổng tiền đặt cọc ban đầu";
       }
+
+      let finishedContracts = await contractRepo.getFinishedContractByTeacherId(
+        contracts[0].skill.teacherId,
+        req.params.id
+      );
+      let generalRate = -1;
+      let percent = 1;
+      if (!finishedContracts.length) {
+        generalRate = 1;
+      } else {
+        percent =
+          finishedContracts.length > 20
+            ? 1
+            : 0.8 + (20 - finishedContracts.length / 20) * 0.2;
+
+        let sumRate = 0;
+        finishedContracts.forEach(contract => {
+          sumRate += contract.rate;
+        });
+        generalRate = (sumRate * percent) / finishedContracts.length;
+      }
+
+      await accountRepo.update(contracts[0].skill.teacherId, {
+        rate: generalRate
+      });
 
       await moneyRepo.addMoney(
         contracts[0].studentId,
@@ -262,6 +289,31 @@ router.put("/finish/:contractId", (req, res) => {
         "inProgress",
         req.permiss
       );
+
+      let finishedContracts = await contractRepo.getFinishedContractByTeacherId(
+        contracts[0].skill.teacherId,
+        req.params.id
+      );
+      let generalRate = -1;
+      let percent = 1;
+      if (!finishedContracts.length) {
+        generalRate = info.rate * 0.8;
+      } else {
+        percent =
+          finishedContracts.length > 20
+            ? 1
+            : 0.8 + (20 - finishedContracts.length / 20) * 0.2;
+
+        let sumRate = 0;
+        finishedContracts.forEach(contract => {
+          sumRate += contract.rate;
+        });
+        generalRate = (sumRate * percent) / finishedContracts.length;
+      }
+
+      await accountRepo.update(contracts[0].skill.teacherId, {
+        rate: generalRate
+      });
 
       await moneyRepo.addMoney(
         contracts[0].skill.teacherId,

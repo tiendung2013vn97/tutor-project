@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let studyRequestRepo = require("../../repo/studyRequest");
+let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
 const utility = require("../../utility");
 
@@ -200,6 +201,8 @@ router.put("/student-confirm/:contractId", (req, res) => {
         info,
         "waitingStudent"
       );
+
+      await skillTagRepo.addNumUsed(studyRequests[0].skill.skillTagId);
 
       return res.json(result);
     } catch (err) {

@@ -37,6 +37,15 @@ module.exports = {
     return skillTag.update(skillTagInfo, { where: { id } });
   },
 
+  addNumUsed(id) {
+    return skillTag.update(
+      {
+        numUsed: +db.Sequelize.col("numUsed") + 1
+      },
+      { where: { id, isActived: true } }
+    );
+  },
+
   add(skillTagInfo) {
     return skillTag.create(skillTagInfo);
   },

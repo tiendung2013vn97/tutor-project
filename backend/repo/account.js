@@ -114,5 +114,14 @@ module.exports = {
       raw: true
       //   group: ["username"]
     });
+  },
+
+  update(username, info) {
+    return userRepo.update(info, {
+      where: {
+        username,
+        isActived: true
+      }
+    });
   }
 };
