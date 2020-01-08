@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-let skillTagRepo = require("../../repo/skillTagRepo");
+let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
 
 router.get("/", (req, res) => {
@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };
@@ -30,7 +30,7 @@ router.get("/top", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };
@@ -53,7 +53,7 @@ router.put("/:id", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };
@@ -76,7 +76,7 @@ router.post("/", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };

@@ -12,6 +12,7 @@ const skillTag = require("./controller/skillTag/skillTag");
 const skill = require("./controller/skill/skill");
 const message = require("./controller/message/message");
 const contract = require("./controller/contract/contract");
+const studyRequest = require("./controller/studyRequest/studyRequest");
 
 require("./passport");
 
@@ -35,6 +36,7 @@ app.use("/skill-tag", skillTag);
 app.use("/skill", skill);
 app.use("/message", message);
 app.use("/contract", contract);
+app.use("/study-request", studyRequest);
 
 let port = process.env.PORT || 3002;
 app.listen(port, () => {

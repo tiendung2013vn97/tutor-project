@@ -1,4 +1,4 @@
-const accountRepo = require("./repo/accountRepo");
+const accountRepo = require("./repo/account");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const passportJWT = require("passport-jwt");

@@ -1,7 +1,7 @@
 let express = require("express");
 let router = express.Router();
-let accountRepo = require("../../repo/accountRepo");
-let skillTagRepo = require("../../repo/skillTagRepo");
+let accountRepo = require("../../repo/account");
+let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
 
 router.get("/users", (req, res) => {

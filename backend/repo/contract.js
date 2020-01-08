@@ -1,8 +1,9 @@
 let contract = require("../db")["contract"];
 let db = require("../db");
+let Op=db.Sequelize.Op
 
 module.exports = {
-  getById(id, offset, limit) {
+  getById(id, permiss = false, offset, limit) {
     return contract.findAll({
       include: [
         {
@@ -13,7 +14,13 @@ module.exports = {
         }
       ],
       where: {
-        id
+        id,
+        isActived: {
+          [Op.in]: permiss ? [true, false] : [true]
+        },
+        startDt:{
+          [Op.ne]:null
+        }
       },
       offset,
       limit

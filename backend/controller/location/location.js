@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
       return res.json({
         status: "fail",
         code: "GET_LOCATION_FAIL",
-        msg: err + ""
+       msg: err.msg
       });
     });
 });

@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-const accountRepo = require("../../repo/accountRepo");
+const accountRepo = require("../../repo/account");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const mailService = require("../../mail-service");
@@ -121,7 +121,7 @@ router.get("/verify-email?", (req, res) => {
               return res.json({
                 status: "fail",
                 code: "VERIFY_EMAIL_FAIL",
-                msg: err + ""
+               msg: err.msg
               });
             });
         }
@@ -131,7 +131,7 @@ router.get("/verify-email?", (req, res) => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-        msg: err + ""
+       msg: err.msg
       });
     });
 });
@@ -155,7 +155,7 @@ router.get("/verify-changed-password?", (req, res) => {
       return res.json({
         status: "fail",
         code: "VERIFY_EMAIL_FAIL",
-        msg: err + ""
+       msg: err.msg
       });
     });
 });
@@ -182,7 +182,7 @@ router.post("/change-password", (req, res) => {
       return res.json({
         status: "fail",
         code: "CHANGE_PASSWORD_FAIL",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };
@@ -197,7 +197,7 @@ router.get("/user/:username", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };
@@ -233,7 +233,7 @@ router.get("/teacher", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err + ""
+       msg: err.msg
       });
     }
   };

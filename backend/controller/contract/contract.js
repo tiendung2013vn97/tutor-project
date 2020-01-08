@@ -24,6 +24,7 @@ router.get("/by-id/:id", (req, res) => {
     try {
       let result = await contractRepo.getById(
         req.params.id,
+        req.permiss,
         +req.query.offset || 0,
         +req.query.limit || config.maxCount
       );
