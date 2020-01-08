@@ -45,7 +45,7 @@ const Utility = {
           break;
         }
         default: {
-          schema = joi.string();
+          schema = joi.string().allow("");
           break;
         }
       }
