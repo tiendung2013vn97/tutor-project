@@ -6,6 +6,7 @@ const passport = require("passport");
 const mailService = require("../../mail-service");
 let SHA256 = require("crypto-js/sha256");
 const config = require("../../config");
+const utility=require("../../utility")
 
 router.post("/register", function(req, res, next) {
   let user = req.body;
@@ -236,4 +237,6 @@ router.get("/teacher", (req, res) => {
   };
   get();
 });
+
+
 module.exports = router;

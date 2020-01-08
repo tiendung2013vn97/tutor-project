@@ -57,7 +57,7 @@ class CreateSkill extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                addSkill({...values, note: ""}).then(res => {
+                addSkill(values).then(res => {
                     if (res && res.data.status !== "fail") {
                         message.success("Thêm kỹ năng thành công")
                     }
@@ -116,7 +116,6 @@ class CreateSkill extends React.Component {
                                     hasFeedback
                                 >
                                     {getFieldDecorator('costPerHour', {
-
                                         rules: [
                                             {
                                                 required: true, message: 'Vui lòng nhập giá trên giờ',
@@ -132,7 +131,10 @@ class CreateSkill extends React.Component {
                                     style={{marginBottom: '24px'}}
                                     hasFeedback
                                 >
-                                    {getFieldDecorator('note')(
+                                    {getFieldDecorator('note', {
+                                        initialValue: "",
+
+                                    })(
                                         <TextArea onChange={this.handleChangeNote} row={3}
                                                   placeholder='Mô tả'/>
                                     )}

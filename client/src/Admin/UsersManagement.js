@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux';
 import axios from 'axios'
-import {Table, Switch, Button, Pagination, Spin} from 'antd';
+import {Table, Switch, Button, Pagination, Spin, message} from 'antd';
 import {Link} from 'react-router-dom'
 import {URL} from "../config"
 import {getUserList} from "./action-admin";
@@ -45,7 +45,7 @@ class UsersManagement extends React.Component {
                 title: 'Họ tên',
                 dataIndex: 'fullname',
                 render: (text, row, index) => {
-                    return <Link to={`/manage/users/${row.username}`}>{text}</Link>
+                    return <Link to={`/user/${row.username}`}>{text}</Link>
                 }
             },
             {
@@ -77,7 +77,7 @@ class UsersManagement extends React.Component {
                         unCheckedChildren=""
                         checkedChildren=""
                         checked={text}
-                        onChange={() => this.handleChangeStatus(row)}
+                        onChange={() => this.handleChangeStatus(row, text)}
                         style={{marginTop: 16}}
                     />
                 }
@@ -95,19 +95,44 @@ class UsersManagement extends React.Component {
 
     }
 
-    handleChangeStatus(row) {
+    handleChangeStatus(row, checked) {
+        if (!row)
+            return null;
+        if (checked)
+            this.deActive(row);
+        if (!checked)
+            this.active(row);
+    }
+
+    deActive(row) {
         if (!row)
             return null;
 
-        // const api = axios.create({baseURL: URL});
-        return Axios.get("admin/users/change-status",
-            {
-                params: {
-                    username: row.username
+        return Axios.delete("admin/" + row.username)
+            .then(res => {
+                if (res && res.data.status !== "fail") {
+                    this.getUsers(this.state.current, 10);
+                } else {
+                    message.error(res.data.msg);
                 }
-            }).then(res => {
-            this.getUsers(this.state.current, 10);
-        })
+            }).catch(e => {
+                message.error("Lỗi");
+            })
+    }
+
+    active(row) {
+        if (!row)
+            return null;
+        return Axios.put("admin/active/" + row.username)
+            .then(res => {
+                if (res && res.data.status !== "fail") {
+                    this.getUsers(this.state.current, 10);
+                } else {
+                    message.error(res.data.msg);
+                }
+            }).catch(e => {
+                message.error("Lỗi");
+            })
     }
 
     handleCreateUser() {
@@ -124,11 +149,11 @@ class UsersManagement extends React.Component {
                         display: 'flex',
                         justifyContent: 'flex-start',
                     }}>
-                        <h1>Users management</h1>
-                        <Button style={{
-                            marginLeft: '5px',
-                            marginTop: '5px'
-                        }} type="primary" onClick={() => this.handleCreateUser()}>New</Button>
+                        <h1>Quản lý người dùng</h1>
+                        {/*<Button style={{*/}
+                        {/*    marginLeft: '5px',*/}
+                        {/*    marginTop: '5px'*/}
+                        {/*}} type="primary" onClick={() => this.handleCreateUser()}>New</Button>*/}
                     </div>
                     {this.renderTable(this.props.users)}
 

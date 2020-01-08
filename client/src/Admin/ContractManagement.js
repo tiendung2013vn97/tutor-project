@@ -106,20 +106,20 @@ class ContractManagement extends React.Component {
                     return text
                 }
             },
-
-            {
-                title: 'Actived',
-                dataIndex: 'isActived',
-                render: (text, row, index) => {
-                    return <Switch
-                        unCheckedChildren=""
-                        checkedChildren=""
-                        checked={text}
-                        onChange={() => this.handleChangeStatus(row)}
-                        style={{marginTop: 16}}
-                    />
-                }
-            },
+            //
+            // {
+            //     title: 'Actived',
+            //     dataIndex: 'isActived',
+            //     render: (text, row, index) => {
+            //         return <Switch
+            //             unCheckedChildren=""
+            //             checkedChildren=""
+            //             checked={text}
+            //             onChange={() => this.handleChangeStatus(row, text)}
+            //             style={{marginTop: 16}}
+            //         />
+            //     }
+            // },
             {
                 title: 'Tác vụ',
                 render: (text, row, index) => {
@@ -147,6 +147,43 @@ class ContractManagement extends React.Component {
         this.props.history.push(`/manage/contracts/${row.id}`);
     }
 
+    handleChangeStatus = (row, checked) => {
+        if (!row)
+            return null;
+        if (checked)
+            this.deActive(row);
+        if (!checked)
+            this.active(row);
+    }
+
+    active = (row) => {
+        if (!row)
+            return null;
+        return Axios.put("skill-tag/active/" + row.id).then(res => {
+            if (res && res.data.status !== "fail") {
+                this.getSkills(this.state.current, 10);
+            } else {
+                message.error(res.data.msg);
+            }
+        }).catch(e => {
+            message.error("Lỗi");
+        })
+    }
+
+    deActive = (row) => {
+        if (!row)
+            return null;
+        return Axios.delete("skill-tag/" + row.id).then(res => {
+            if (res && res.data.status !== "fail") {
+                this.getSkills(this.state.current, 10);
+            } else {
+                message.error(res.data.msg);
+            }
+        }).catch(e => {
+            message.error("Lỗi");
+        })
+    }
+
     render() {
         if (this.props.contracts)
             return (
@@ -157,7 +194,7 @@ class ContractManagement extends React.Component {
                         display: 'flex',
                         justifyContent: 'flex-start',
                     }}>
-                        <h1>Contracts management</h1>
+                        <h1>Quản lý hợp đồng</h1>
                     </div>
                     {this.renderTable(this.props.contracts)}
                 </div>

@@ -38,7 +38,6 @@ class UserProfile extends React.Component {
         this.getLocation();
     }
 
-
     getLocation() {
         getLocations().then(res => {
             this.setState({
@@ -142,10 +141,24 @@ class UserProfile extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                editUserInfo(values).then(res => {
-                    if (res && res.status === 200) {
+                let locationId=-1;
+                    locationId = this.state.locations.filter(
+                        lo =>
+                            lo.city === values.city &&
+                            lo.district === values.district
+                    )[0].id;
+                    if(locationId===-1)
+                        message.success("Thành phố và quận/huyện không hợp lệ")
+                let info = {
+                    ...values,
+                    locationId
+                }
+                editUserInfo(info).then(res => {
+                    if (res && res.data.status !== "fail") {
                         message.success("Chỉnh sửa thông tin thành công")
                     }
+                    else
+                        message.error("Lỗi")
                 }).catch(e => {
                     message.error("Lỗi")
                 })
@@ -221,7 +234,7 @@ class UserProfile extends React.Component {
                                     height: "200px",
                                     width: "200px"
                                 }}
-                                     src={require("../../assets/imgs/defaultAvatar.jpg")} alt="defaultavatar"/>
+                                     src={`${URL}public-user/image/${user.username}`} alt="defaultavatar"/>
                                 {this.renderUpload()}
                             </Col>
                             <Col span={2}/>
@@ -229,7 +242,7 @@ class UserProfile extends React.Component {
                                 <Form>
                                     <Row>
                                         <Col span={11}>
-                                            <Form.Item label="Tên tài khoản" hasFeedback>
+                                            <Form.Item label="Tên tài khoản" hasFeedback >
                                                 {getFieldDecorator('username', {
                                                     initialValue: `${user.username}`,
                                                     rules: [{
@@ -237,6 +250,7 @@ class UserProfile extends React.Component {
                                                     }],
                                                 })(
                                                     <Input
+                                                        disabled
                                                         onChange={this.handleChangeUsername}
                                                     />
                                                 )}
@@ -280,7 +294,7 @@ class UserProfile extends React.Component {
                                             </Form.Item>
                                         </Col>
                                         <Col span={2}/>
-                                        <Col span={3}>
+                                        <Col span={6}>
                                             <Form.Item label="Giới tính" hasFeedback>
                                                 {getFieldDecorator('gender', {
                                                     initialValue: `${user.gender}`,
@@ -288,7 +302,7 @@ class UserProfile extends React.Component {
                                                         required: true, message: 'Vui lòng chọn giới tính',
                                                     }],
                                                 })(
-                                                    <Select style={{width: 120}}
+                                                    <Select
                                                             onChange={this.handleChangeGender}>
                                                         <Option value="male">Male</Option>
                                                         <Option value="female">Female</Option>

@@ -64,9 +64,8 @@ class App extends React.Component {
                                     <Route exact path="/skill" component={SkillContainer}/>
                                     <Route path="/skill/create" component={CreateSkill}/>
                                     <Route path="/skill/edit/:skillId" component={EditSkill}/>
-
-
-                                    {/*<Route path="/user/:username" component={UserInfo}/>*/}
+                                    {/*<Route path="/contract/" component={EditSkill}/>*/}
+                                    <Route path="/user/:username" component={UserInfo}/>
 
                                     <Route path="/">
                                         <div className="App">

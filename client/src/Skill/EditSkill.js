@@ -131,7 +131,9 @@ class EditSkill extends React.Component {
                                     style={{marginBottom: '24px'}}
                                     hasFeedback
                                 >
-                                    {getFieldDecorator('note')(
+                                    {getFieldDecorator('note', {
+                                        initialValue: "",
+                                    })(
                                         <TextArea onChange={this.handleChangeNote} row={3}
                                                   placeholder='Mô tả'/>
                                     )}

@@ -1,5 +1,5 @@
 let accountRepo = require("../../repo/account");
-
+const utility=require("../../utility")
 
 let express = require("express");
 let router = express.Router();
@@ -16,16 +16,20 @@ let storage = multer.diskStorage({
 });
 let upload = multer({ storage: storage }).single("file");
 
-router.get("/info", (req, res)=>{
+router.get("/info", (req, res) => {
   let get = async () => {
     try {
       let result = await accountRepo.getAccountByUsername(req.user.username);
       return res.json(result[0]);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -46,10 +50,14 @@ router.get("/image", (req, res) => {
 
       res.sendFile("/asset/images/" + accounts[0].image, { root: "public" });
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -94,6 +102,7 @@ router.put("/", (req, res) => {
         dataType: "int"
       }
     };
+    console.log(req.body)
 
     try {
       utility.validateRequireParam(args);
@@ -107,10 +116,14 @@ router.put("/", (req, res) => {
 
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   update();
@@ -136,7 +149,7 @@ router.put("/password", (req, res) => {
 
       let info = utility.convertToValueObject(args);
       let result = await accountRepo.updatePassword(
-        req.params.username,
+        req.user.username,
         info.password
       );
       return res.json(result);

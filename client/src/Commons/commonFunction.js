@@ -15,6 +15,8 @@ export function translateContractStatus(e) {
             return contractStatus.FINISH
         case "canceled":
             return contractStatus.CANCEL
+        case "rejected":
+            return contractStatus.REJECTED
     }
     return "";
 }

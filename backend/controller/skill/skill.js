@@ -2,68 +2,80 @@ let express = require("express");
 let router = express.Router();
 let skillRepo = require("../../repo/skill");
 const config = require("../../config");
-const utility = require("../../utility")
+const utility = require("../../utility");
 
 router.get("/", (req, res) => {
-    //for public
-    let get = async () => {
-        try {
-            let result = await skillRepo.get(
-                +req.query.offset || 0,
-                +req.query.limit || config.maxCount
-            );
-            result.rows = result.rows.map(item => item.get({plain: true}));
-            return res.json(result);
-        } catch (err) {
-            return res.json({
-                status: "fail",
-                msg: err + ""
-            });
-        }
-    };
-    get();
+  //for public
+  let get = async () => {
+    try {
+      let result = await skillRepo.get(
+        +req.query.offset || 0,
+        +req.query.limit || config.maxCount
+      );
+      result.rows = result.rows.map(item => item.get({ plain: true }));
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  get();
 });
 
 router.get("/:id", (req, res) => {
-    //for public
-    let get = async () => {
-        try {
-            let result = await skillRepo.getByTeacher(
-                req.params.id,
-                +req.query.offset || 0,
-                +req.query.limit || config.maxCount
-            );
-            result.rows = result.rows.map(item => item.get({plain: true}));
-            return res.json(result);
-        } catch (err) {
-            return res.json({
-                status: "fail",
-                msg: err + ""
-            });
-        }
-    };
-    get();
+  //for public
+  let get = async () => {
+    try {
+      let result = await skillRepo.getByTeacher(
+        req.params.id,
+        +req.query.offset || 0,
+        +req.query.limit || config.maxCount
+      );
+      result.rows = result.rows.map(item => item.get({ plain: true }));
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  get();
 });
 
 router.get("/teacher/skill", (req, res) => {
-    let get = async () => {
-        try {
-            console.log("req.user", req.user)
-            let result = await skillRepo.getByTeacher(
-                req.user.username,
-                +req.query.offset || 0,
-                +req.query.limit || config.maxCount
-            );
-            result.rows = result.rows.map(item => item.get({plain: true}));
-            return res.json(result);
-        } catch (err) {
-            return res.json({
-                status: "fail",
-                msg: err + ""
-            });
-        }
-    };
-    get();
+  let get = async () => {
+    try {
+      console.log(req.user);
+      let result = await skillRepo.getByTeacher(
+        req.user.username,
+        +req.query.offset || 0,
+        +req.query.limit || config.maxCount
+      );
+      result.rows = result.rows.map(item => item.get({ plain: true }));
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  get();
 });
 
 router.post("/", (req, res) => {
@@ -92,18 +104,22 @@ router.post("/", (req, res) => {
             utility.validateTypeAndRegex(args);
             utility.validateMaxLength(args);
 
-            let info = utility.convertToValueObject(args);
-            info.teacherId = req.user.username;
-            let result = await skillRepo.create(info);
-            return res.json(result);
-        } catch (err) {
-            return res.json({
-                status: "fail",
-                msg: err + ""
-            });
-        }
-    };
-    create();
+      let info = utility.convertToValueObject(args);
+      info.teacherId = req.user.username;
+      let result = await skillRepo.create(info);
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  create();
 });
 
 router.put("/:skillId", (req, res) => {
@@ -133,18 +149,22 @@ router.put("/:skillId", (req, res) => {
                 throw "teacherId không hợp lệ hoặc skill không tồn tại";
             }
 
-            let info = utility.convertToValueObject(args);
-            info.teacherId = req.user.username;
-            let result = await skillRepo.update(req.params.skillId, info);
-            return res.json(result);
-        } catch (err) {
-            return res.json({
-                status: "fail",
-                msg: err + ""
-            });
-        }
-    };
-    update();
+      let info = utility.convertToValueObject(args);
+      info.teacherId = req.user.username;
+      let result = await skillRepo.update(req.params.skillId, info);
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  update();
 });
 
 router.delete("/:skillId", (req, res) => {
@@ -161,19 +181,23 @@ router.delete("/:skillId", (req, res) => {
                 throw "teacherId không hợp lệ hoặc skill không tồn tại";
             }
 
-            let info = {
-                isActived: false
-            };
-            let result = await skillRepo.update(req.params.skillId, info);
-            return res.json(result);
-        } catch (err) {
-            return res.json({
-                status: "fail",
-                msg: err + ""
-            });
-        }
-    };
-    update();
+      let info = {
+        isActived: false
+      };
+      let result = await skillRepo.update(req.params.skillId, info);
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  update();
 });
 
 module.exports = router;

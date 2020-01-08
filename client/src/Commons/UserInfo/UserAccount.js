@@ -1,5 +1,7 @@
 import React from 'react';
-import {Form, Input, Icon, Button, Modal, Card, Row, Col} from 'antd'
+import {Form, Input, Icon, Button, Modal, Card, Row, Col, message} from 'antd'
+import {editUserAccount} from "../../Account/api-account";
+import {logout} from "../../Account/action-account";
 
 const FormItem = Form.Item;
 
@@ -21,11 +23,15 @@ class UserAccount extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log("Change password")
-                // this.props.changePassword({
-                //     newPassword: values.password,
-                //     oldPassword: values.oldpassword
-                // })
+                editUserAccount(values.password).then(res => {
+                    if (res && res.data.status !== "fail") {
+                        message.success("Đổi mật khẩu thành công")
+                        this.props.logout(this.props.history);
+                    } else
+                        message.error("Lỗi")
+                }).catch(e => {
+                    message.error("Lỗi")
+                })
             }
         });
     }
@@ -63,20 +69,6 @@ class UserAccount extends React.Component {
                         <Col span={12} offset={6}>
 
                             <Form>
-                                <FormItem
-                                    label="Current password"
-                                    style={{marginBottom: '24px'}}
-                                    hasFeedback
-                                >
-                                    {getFieldDecorator('oldpassword', {
-                                        rules: [{
-                                            required: true, message: 'Please input current password',
-                                        },],
-                                    })(
-                                        <Input prefix={<Icon type="lock" style={{fontSize: 13}}/>} type="password"
-                                               placeholder='Current password'/>
-                                    )}
-                                </FormItem>
                                 <FormItem
                                     label='New password'
                                     style={{marginBottom: '24px'}}

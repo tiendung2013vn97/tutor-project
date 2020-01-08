@@ -79,7 +79,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         logout() {
-            localStorage.clear();
             return dispatch(logout());
         },
     };
