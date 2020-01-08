@@ -238,5 +238,38 @@ router.get("/teacher", (req, res) => {
   get();
 });
 
+router.get("/top-rate", (req, res) => {
+  let get = async () => {
+    try {
+      let users = await accountRepo.getTopRate();
 
+      return res.json(users);
+    } catch (err) {
+      return res.json({
+        status: "fail",
+        msg: err.msg
+      });
+    }
+  };
+  get();
+});
+
+router.get("/image/:image", (req, res) => {
+  //for login user
+  let get = async () => {
+    try {
+      res.sendFile("/asset/images/" + req.params.image, { root: "public" });
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  get();
+});
 module.exports = router;

@@ -11,11 +11,15 @@ import {
 import Home from "./Home";
 import config from "../config";
 import { updateLocation } from "../Location/action-location";
+import Axios from "../Api";
 
-class SignInContainer extends Component {
+class HomeContainer extends Component {
   //constructor
   constructor(props) {
     super(props);
+    this.state = {
+      remarkPersons: []
+    };
   }
 
   componentDidMount() {
@@ -24,11 +28,46 @@ class SignInContainer extends Component {
       this.props.storeAccountInfo(JSON.parse(user));
     }
     this.props.getLocation();
+    Axios.get("/public-user/top-rate")
+      .then(res => {
+        if (res.data.status === "fail") {
+          switch (res.data.code) {
+            case "WRONG_USERNAME_OR_PASSWORD": {
+              this.props.showFailNotify(
+                "Username hoặc password không hợp lệ! Vui lòng kiểm tra lại!"
+              );
+              break;
+            }
+            case "ACCOUNT_IS_BLOCKED": {
+              this.props.showAlertNotify(
+                "Tài khoản này hiện đang bị khóa, vui lòng quay lại sau, hoặc liên hệ admin!"
+              );
+              break;
+            }
+
+            default: {
+              this.props.showFailNotify(res.data.msg);
+              break;
+            }
+          }
+        }
+
+        this.setState({ ...this.state, remarkPersons: res.data });
+      })
+      .catch(err => {
+        this.props.showAlertNotify("" + err);
+      });
   }
 
   //render
   render() {
-    return <Home account={this.props.account} logout={this.props.logout} />;
+    return (
+      <Home
+        account={this.props.account}
+        logout={this.props.logout}
+        remarkPersons={this.state.remarkPersons}
+      />
+    );
   }
 }
 
@@ -76,4 +115,4 @@ function mapDispatchToProps(dispatch) {
     }
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(SignInContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

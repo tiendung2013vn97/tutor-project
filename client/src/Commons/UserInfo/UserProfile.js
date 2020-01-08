@@ -224,6 +224,7 @@ class UserProfile extends React.Component {
                     districtComboBox.push(<Option value={district}>{district}</Option>);
                 });
             }
+            console.log(`${URL}public-user/image/${user.image}`)
 
             return (
                 <div className="box-register-container">
@@ -234,8 +235,8 @@ class UserProfile extends React.Component {
                                     height: "200px",
                                     width: "200px"
                                 }}
-                                     src={`${URL}public-user/image/${user.username}`} alt="defaultavatar"/>
-                                {this.renderUpload()}
+                                     src={`${URL}public-user/image/${user.image}`} alt="defaultavatar"/>
+                                {/*{this.renderUpload()}*/}
                             </Col>
                             <Col span={2}/>
                             <Col span={18}>

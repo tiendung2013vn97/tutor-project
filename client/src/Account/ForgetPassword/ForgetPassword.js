@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import "./Login.scss";
+import "./ForgetPassword.scss";
 import { Link } from "react-router-dom";
 import { Button, Row, Col, Select } from "antd";
 const { Option } = Select;
 
-class SignIn extends Component {
+class ForgetPassword extends Component {
   //constructor
   constructor(props) {
     super(props);
@@ -66,4 +66,4 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+export default ForgetPassword;
