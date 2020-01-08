@@ -54,14 +54,12 @@ module.exports = {
           model: db.skill,
           as: "skill",
           required: true,
-          include: [{ model: db.account, include: [{ model: db.location }] }],
-          where: {
-            studentId
-          }
+          include: [{ model: db.account, include: [{ model: db.location }] }]
         }
       ],
       where: {
         startDt: null,
+        studentId,
         id,
         isActived: {
           [Op.in]: permiss ? [true, false] : [true]
@@ -70,13 +68,10 @@ module.exports = {
     });
   },
 
-  create(skillId, studentId) {
-    let createDt = new Date().getTime();
-    return contract.create({
-      skillId,
-      studentId,
-      createDt
-    });
+  create(contractInfo) {
+    contractInfo.createDt = new Date().getTime();
+    contractInfo.status = "waitingTeacher";
+    return contract.create(contractInfo);
   },
 
   update(id, contractInfo, preStatus) {

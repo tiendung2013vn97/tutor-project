@@ -2,26 +2,45 @@ let express = require("express");
 let router = express.Router();
 let contractRepo = require("../../repo/contract");
 const config = require("../../config");
+const utility=require('../../utility')
 
 router.get("/", (req, res) => {
+  //for login user
   let get = async () => {
     try {
-      let result = await contractRepo.get(
+      console.log(req.user)
+      let result = await contractRepo.get(req.user,
         +req.query.offset || 0,
         +req.query.limit || config.maxCount
       );
       // result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
 });
 
 router.get("/by-id/:id", (req, res) => {
+  //for login user
   let get = async () => {
     try {
+      if(req.user.type=='student'){
+        let contracts=await contractRepo.getByStudentId(req.user.username,req.params.id)
+        contracts=contracts.map(item=>item.get({plain:true}))
+        if(!contracts.length){throw 'Hợp đồng này đã bị xóa hoặc studentId không hợp lệ'}
+      }
+
+      if(req.user.type=='teacher'){
+        let contracts=await contractRepo.getByTeacherId(req.user.username,req.params.id)
+        contracts=contracts.map(item=>item.get({plain:true}))
+        if(!contracts.length){throw 'Hợp đồng này đã bị xóa hoặc teacherId không hợp lệ'}
+      }
+
       let result = await contractRepo.getById(
         req.params.id,
         req.permiss,
@@ -31,13 +50,17 @@ router.get("/by-id/:id", (req, res) => {
       // result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result[0]);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
 });
 
 router.get("/by-status/:status", (req, res) => {
+  //for admin
   let get = async () => {
     try {
       let result = await contractRepo.getByStatus(
@@ -48,14 +71,100 @@ router.get("/by-status/:status", (req, res) => {
       // result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
 });
 
 router.put("/student-complain/:contractId", (req, res) => {
-  //let get
+  //for student
+  let args = {
+    complainDetail: {
+      val: req.body.complainDetail,
+      require: true
+    }
+  };
+
+  let update = async () => {
+    try {
+      utility.validateRequireParam(args);
+      utility.validateEmpty(args);
+      utility.validateTypeAndRegex(args);
+      utility.validateMaxLength(args);
+
+      let contracts = await contractRepo.getByStudentId(
+        req.user.username,
+        req.params.contractId,
+        req.permiss
+      );
+      contracts = contracts.map(item => item.get({ plain: true }));
+        console.log("co",contracts)
+      if (!contracts.length) {
+        throw "studentId không hợp lệ";
+      }
+
+      info = utility.convertToValueObject(args);
+      info.status = "complaining";
+      let result = await contractRepo.update(
+        req.params.contractId,
+        info,
+        "inProgress"
+      );
+
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+  update();
 });
+
+router.put("/resolve-complain",(req,res)=>{
+  //for admin
+
+})
+
+router.put("/cancle/:contractId",(req,res)=>{
+  //for admin
+  let update = async () => {
+    try {
+      let info = {
+        status: "cancled"
+      };
+
+      let result = await contractRepo.update(
+        req.params.contractId,
+        info,
+        undefined,
+        req.permiss
+      );
+
+      return res.json(result);
+    } catch (err) {
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
+    }
+  };
+
+  update();
+  
+})
 
 module.exports = router;

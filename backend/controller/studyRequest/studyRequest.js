@@ -26,17 +26,17 @@ router.get("/", (req, res) => {
 
 router.post("/:skillId", (req, res) => {
   let get = async () => {
-    try {
+    try {console.log(req.params.skillId,req.user)
       let result = await studyRequestRepo.create(
-        req.params.skillId,
-        req.user.username
+       {skillId: req.params.skillId,
+        studentId: req.user.username}
       );
 
       return res.json(result);
     } catch (err) {
       return res.json({
         status: "fail",
-        msg: err.msg
+        msg: err
       });
     }
   };
@@ -47,8 +47,7 @@ router.put("/teacher-confirm/:contractId", (req, res) => {
   let args = {
     detail: {
       val: req.body.detail,
-      require: true,
-      allowEmpty: false
+      require: true
     },
     totalHours: {
       val: req.body.totalHours,
@@ -78,11 +77,10 @@ router.put("/teacher-confirm/:contractId", (req, res) => {
         req.user.username,
         req.params.contractId
       );
-      console.log(studyRequests);
       studyRequests = studyRequests.map(item => item.get({ plain: true }));
 
       if (!studyRequests.length) {
-        throw "techerId không hợp lệ";
+        throw "Hợp đồng này đã bị xóa hoặc techerId không hợp lệ";
       }
 
       info = utility.convertToValueObject(args);
@@ -114,6 +112,15 @@ router.put("/student-confirm/:contractId", (req, res) => {
       let info = {
         status: "inProgress"
       };
+
+      let studyRequests = await studyRequestRepo.getByStudentId(
+        req.user.username,
+        req.params.contractId
+      );
+      studyRequests = studyRequests.map(item => item.get({ plain: true }));
+      if (!studyRequests.length) {
+        throw "Hợp đồng này đã bị xóa hoặc studentId không hợp lệ";
+      }
 
       let result = await studyRequestRepo.update(
         req.params.contractId,

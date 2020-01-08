@@ -89,7 +89,10 @@ router.get("/top", (req, res) => {
       let result = await skillTagRepo.getTop(+req.query.limit || 10);
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
@@ -106,7 +109,10 @@ router.get("/by-id/:id", (req, res) => {
       // result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result[0]);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();

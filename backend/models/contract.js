@@ -75,7 +75,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       costPerHour: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         field: "costPerHour"
       },
       resolveDetail: {

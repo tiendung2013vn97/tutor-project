@@ -13,7 +13,10 @@ router.get("/", (req, res) => {
       result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();
@@ -30,7 +33,10 @@ router.get("/by-teacher/:id", (req, res) => {
       result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.status(400).send(err + "");
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
     }
   };
   get();

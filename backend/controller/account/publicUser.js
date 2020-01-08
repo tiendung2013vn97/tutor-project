@@ -67,7 +67,7 @@ router.post("/register", function(req, res, next) {
 router.post("/login", function(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
-      return res.status(200).json({
+      return res.json({
         status: "fail",
         code: "WRONG_USERNAME_OR_PASSWORD",
         msg: info ? info.message : "Đăng nhập thất bại."
@@ -75,7 +75,7 @@ router.post("/login", function(req, res, next) {
     }
 
     if (user.isActived === false) {
-      return res.status(200).json({
+      return res.json({
         status: "fail",
         code: "ACCOUNT_IS_BLOCKED",
         msg: "Tài khoản này hiện đang bị khóa"
