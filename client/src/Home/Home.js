@@ -14,6 +14,7 @@ import Profile5 from "../assets/imgs/profile5.jpg";
 import Student from "../Student/Student";
 import Teacher from "../Teacher/Teacher";
 import Admin from "../Admin/Admin";
+import config from "../config";
 import LoggedIcon from "../assets/imgs/loggedIcon.png";
 import {
   Row,
@@ -58,8 +59,15 @@ class Home extends Component {
         <h2 style={{ color: "white", fontStyle: "italic" }}>
           ---ADDODA---
           <br />
-          Nơi sẽ đáp ứng tất cả điều đó cho bạn, với cách thức dễ dàng, an toàn
-          hàng đầu.
+          <marquee
+            width="100%"
+            direction="right"
+            height="100px"
+            scrollamount="5"
+          >
+            Nơi sẽ đáp ứng tất cả điều đó cho bạn, với cách thức dễ dàng, an
+            toàn hàng đầu.
+          </marquee>
         </h2>
       </div>
     );
@@ -68,32 +76,148 @@ class Home extends Component {
     introPage.push();
 
     let remarkPerson = [];
-    remarkPerson.push(
-      <Row gutter={8}>
-        <Col span={8}>
-          <Card title={ <Rate disabled defaultValue={4} />} className='remark-person-card' bordered={false}>
-            Card content
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card title="Card title"className='remark-person-card' bordered={false}>
-            Card content
-          </Card>
-        </Col>
-        <Col span={8}>
-          <Card title="Card title"className='remark-person-card' bordered={false}>
-            Card content
-          </Card>
-        </Col>
+    if (this.props.remarkPersons.length) {
+      let users = this.props.remarkPersons;
+      remarkPerson.push(
+        <div>
+          <Row gutter={8}>
+            <Col span={8}>
+              <Card
+                title={<Rate disabled defaultValue={users[0].rate} />}
+                className="remark-person-card"
+                bordered={false}
+                height="400"
+                actions={[<Icon type="eye" key="detail" />]}
+              >
+                <Row className="min-title">
+                  <img
+                    src={`${config.URL}public-user/image/${users[0].image}`}
+                    className="remark-img"
+                  />
 
-      </Row>
-    );
+                  <div>{users[0].fullname}</div>
+                  <Divider className="intro-label">Giới thiệu</Divider>
+                  <div className="intro"> {users[0].intro}</div>
+                </Row>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card
+                title={<Rate disabled defaultValue={users[1].rate} />}
+                className="remark-person-card"
+                bordered={false}
+                height="400"
+                actions={[<Icon type="eye" key="detail" />]}
+              >
+                <Row className="min-title">
+                  <img
+                    src={`${config.URL}public-user/image/${users[1].image}`}
+                    className="remark-img"
+                  />
+
+                  <div>{users[1].fullname}</div>
+                  <Divider className="intro-label">Giới thiệu</Divider>
+                  <div className="intro"> {users[1].intro}</div>
+                </Row>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card
+                title={<Rate disabled defaultValue={users[2].rate} />}
+                className="remark-person-card"
+                bordered={false}
+                height="400"
+                actions={[<Icon type="eye" key="detail" />]}
+              >
+                <Row className="min-title">
+                  <img
+                    src={`${config.URL}public-user/image/${users[2].image}`}
+                    className="remark-img"
+                  />
+
+                  <div>{users[2].fullname}</div>
+                  <Divider className="intro-label">Giới thiệu</Divider>
+                  <div className="intro"> {users[2].intro}</div>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+
+          <br />
+          <br />
+          <div>
+            <Row gutter={8}>
+              <Col span={8}>
+                <Card
+                  title={<Rate disabled defaultValue={users[3].rate} />}
+                  className="remark-person-card"
+                  bordered={false}
+                  height="400"
+                  actions={[<Icon type="eye" key="detail" />]}
+                >
+                  <Row className="min-title">
+                    <img
+                      src={`${config.URL}public-user/image/${users[3].image}`}
+                      className="remark-img"
+                    />
+
+                    <div>{users[0].fullname}</div>
+                    <Divider className="intro-label">Giới thiệu</Divider>
+                    <div className="intro"> {users[3].intro}</div>
+                  </Row>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card
+                  title={<Rate disabled defaultValue={users[4].rate} />}
+                  className="remark-person-card"
+                  bordered={false}
+                  height="400"
+                  actions={[<Icon type="eye" key="detail" />]}
+                >
+                  <Row className="min-title">
+                    <img
+                      src={`${config.URL}public-user/image/${users[4].image}`}
+                      className="remark-img"
+                    />
+
+                    <div>{users[1].fullname}</div>
+                    <Divider className="intro-label">Giới thiệu</Divider>
+                    <div className="intro"> {users[4].intro}</div>
+                  </Row>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card
+                  title={<Rate disabled defaultValue={users[5].rate} />}
+                  className="remark-person-card"
+                  bordered={false}
+                  height="400"
+                  actions={[<Icon type="eye" key="detail" />]}
+                >
+                  <Row className="min-title">
+                    <img
+                      src={`${config.URL}public-user/image/${users[5].image}`}
+                      className="remark-img"
+                    />
+
+                    <div>{users[2].fullname}</div>
+                    <Divider className="intro-label">Giới thiệu</Divider>
+                    <div className="intro"> {users[5].intro}</div>
+                  </Row>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      );
+    }
 
     let pageNotLogin = [];
     pageNotLogin.push(
       <Row>
         <Row>
-          <Col span={17}>
+          <Col span={24}>
             <Carousel autoplay id="slide_banner">
               <div>
                 <img src={Bg} className="bg_home" />
@@ -105,107 +229,19 @@ class Home extends Component {
 
             <div className="main-title">{mainTitle}</div>
           </Col>
-          <Col span={1}></Col>
-          <Col span={6}>
-            <Tabs defaultActiveKey="2" className="tab-view">
-              <TabPane
-                tab={
-                  <span style={{ fontSize: "1.2rem" }}>
-                    <Icon type="user" />
-                    Sign In
-                  </span>
-                }
-                key="login"
-              >
-                <Login />
-              </TabPane>
-              <TabPane
-                tab={
-                  <span style={{ fontSize: "1.2rem" }}>
-                    <Icon type="user-add" />
-                    Sign up
-                  </span>
-                }
-                key="register"
-              >
-                <Register />
-              </TabPane>
-            </Tabs>
-          </Col>
         </Row>
         <br />
         <br />
         <Row>
           <Divider
+            className="intro-label"
             style={{ fontSize: "1.5rem", fontStyle: "italic" }}
             orientation="left"
           >
-            Người dạy tiêu biểu của tháng 12
+            Người dạy tiêu biểu
           </Divider>
         </Row>
         <Row className="list-profile">
-          <Col span={2}></Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={4} />
-                  <img src={Profile1} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={4} />
-                  <img src={Profile2} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={5} />
-                  <img src={Profile3} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={4} />
-                  <img src={Profile4} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={4}>
-            <Card
-              style={{ width: 300 }}
-              cover={
-                <div className="panel-item">
-                  <Rate disabled defaultValue={5} />
-                  <img src={Profile5} />
-                </div>
-              }
-              actions={[<div> See detail</div>]}
-            ></Card>
-          </Col>
-          <Col span={2}></Col>
           <Row>{remarkPerson}</Row>
         </Row>
       </Row>
@@ -223,9 +259,7 @@ class Home extends Component {
               {user && user.type === "teacher" && (
                 <Teacher account={this.props.account} />
               )}
-              {user && user.type === "admin" && (
-                  <Admin />
-              )}
+              {user && user.type === "admin" && <Admin />}
             </Content>
           </Layout>
         </div>

@@ -1,6 +1,8 @@
 .main-menu {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  width: 80%;
-  margin-left: 10%;
+  position: fixed;
+  width: 250px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }

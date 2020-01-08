@@ -171,5 +171,15 @@ module.exports = {
         }
       }
     );
+  },
+
+  getTopRate() {
+    return userRepo.findAll({
+      order: [["rate", "desc"]],
+      limit: 6,
+      where: {
+        type: "teacher"
+      }
+    });
   }
 };

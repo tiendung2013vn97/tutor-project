@@ -34,34 +34,6 @@ router.get("/info", (req, res) => {
   get();
 });
 
-router.get("/image", (req, res) => {
-  //for login user
-  let get = async () => {
-    try {
-      let accounts = await accountRepo.getAccountByUsername(req.user.username);
-      accounts = accounts.map(item => item.get({ plain: true }));
-      if (!accounts.length) {
-        return res.json({
-          status: "fail",
-          msg: err + ""
-        });
-      }
-
-      res.sendFile("/asset/images/" + accounts[0].image, { root: "public" });
-    } catch (err) {
-      if (err.code) {
-        return res.json(err);
-      } else {
-        return res.json({
-          status: "fail",
-          msg: err + ""
-        });
-      }
-    }
-  };
-  get();
-});
-
 router.post("/upload-image", function(req, res) {
   //for login
   upload(req, res, function(err) {

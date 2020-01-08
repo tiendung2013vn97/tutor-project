@@ -1,56 +1,61 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { changeStatus } from "../../Loading/action-loading";
 import {
   showAlertNotify,
   showSuccessNotify,
   showFailNotify
 } from "../../Notify/action-notify";
-import Register from "./Register";
+import ForgetPassword from "./ForgetPassword";
 import config from "../../config";
-import { updateLocation } from "../../Location/action-location";
+import { changeStatus } from "../../Loading/action-loading";
 
-class RegisterContainer extends Component {
+class ForgetPasswordContainer extends Component {
   //constructor
   constructor(props) {
     super(props);
-    this.signUp = this.signUp.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.getLocation();
+    this.submit = this.submit.bind(this);
   }
 
   //render
   render() {
-    return <Register signUp={this.signUp} location={this.props.location} />;
+    return <ForgetPassword submit={this.submit} />;
   }
-  signUp(userInformation) {
+
+  submit(userInformation) {
     this.props.changeLoadingStatus(true);
     const api = axios.create({ baseURL: config.URL });
     api
-      .post("/public-user/register", userInformation)
+      .post("/public-user/change-password", userInformation)
       .then(res => {
         if (res.data.status === "fail") {
           switch (res.data.code) {
-            case "USERNAME_EXISTED": {
-              this.props.showFailNotify(res.data.msg);
+            case "WRONG_USERNAME_OR_PASSWORD": {
+              this.props.showFailNotify(
+                "Username hoặc password không hợp lệ! Vui lòng kiểm tra lại!"
+              );
               break;
             }
-            case "EMAIL_EXISTED": {
-              this.props.showFailNotify(res.data.msg);
+            case "ACCOUNT_IS_BLOCKED": {
+              this.props.showAlertNotify(
+                "Tài khoản này hiện đang bị khóa, vui lòng quay lại sau, hoặc liên hệ admin!"
+              );
               break;
             }
+
             default: {
               this.props.showFailNotify(res.data.msg);
               break;
             }
           }
+
           return this.props.changeLoadingStatus(false);
         }
-        this.props.showSuccessNotify(res.data.msg);
+
         this.props.changeLoadingStatus(false);
+        return this.props.showSuccessNotify(
+          "Vui lòng đăng nhập email để kích hoạt mật khẩu mới"
+        );
       })
       .catch(err => {
         this.props.showAlertNotify("" + err);
@@ -61,9 +66,7 @@ class RegisterContainer extends Component {
 
 //map state to props
 function mapStateToProps(state) {
-  return {
-    location: state.location.location
-  };
+  return {};
 }
 
 //map dispatch to props
@@ -86,19 +89,10 @@ function mapDispatchToProps(dispatch) {
 
     changeLoadingStatus(status) {
       return dispatch(changeStatus(status));
-    },
-
-    getLocation() {
-      const api = axios.create({ baseURL: config.URL });
-      api
-        .get("/location")
-        .then(res => {
-          return dispatch(updateLocation(res.data.data));
-        })
-        .catch(err => {
-          return dispatch(showAlertNotify("" + err));
-        });
     }
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ForgetPasswordContainer);
