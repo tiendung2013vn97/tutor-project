@@ -12,6 +12,25 @@ const Utility = {
     return count;
   },
 
+  validateExpectedValues(args) {
+    let invalidFields = [];
+    Object.keys(args).forEach(param => {
+      if (
+        args[param].expected &&
+        !args[param].expected.includes(args[param].val)
+      ) {
+        invalidFields.push({
+          fieldName: param,
+          expected: args[param].expected
+        });
+      }
+    });
+
+    if (invalidFields.length) {
+      throw error.NOT_IN_EXPECTED_VALUES(invalidFields);
+    }
+  },
+
   checkType(args) {
     let invalidFields = [];
     Object.keys(args).forEach(param => {

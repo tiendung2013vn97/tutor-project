@@ -132,7 +132,26 @@ router.delete("/:id", (req, res) => {
       let info = {
         isActived: false
       };
-      let result = await skillTagRepo.update(req.params.skillId, info);
+      let result = await skillTagRepo.update(req.params.id, info);
+      return res.json(result);
+    } catch (err) {
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
+    }
+  };
+  update();
+});
+
+router.put("/active/:id", (req, res) => {
+  //for admin/root
+  let update = async () => {
+    try {
+      let info = {
+        isActived: true
+      };
+      let result = await skillTagRepo.update(req.params.id, info);
       return res.json(result);
     } catch (err) {
       return res.json({

@@ -55,7 +55,14 @@ module.exports = {
     });
   },
 
-  getUser(offset, limit) {
+  getUser(isRoot, offset, limit) {
+    let whereClause = {
+      type: {
+        [Op.in]: isRoot
+          ? ["admin", "student", "teacher"]
+          : ["student", "teacher"]
+      }
+    };
     return userRepo.findAndCountAll({
       include: [
         {
@@ -63,6 +70,7 @@ module.exports = {
           required: true
         }
       ],
+      where: whereClause,
       offset,
       limit
     });
@@ -123,5 +131,45 @@ module.exports = {
         isActived: true
       }
     });
+  },
+
+  active(username) {
+    return userRepo.update(
+      {
+        isActived: true
+      },
+      {
+        where: {
+          username
+        }
+      }
+    );
+  },
+
+  deactive(username) {
+    return userRepo.update(
+      {
+        isActived: false
+      },
+      {
+        where: {
+          username
+        }
+      }
+    );
+  },
+
+  updatePassword(username, password) {
+    return userRepo.update(
+      {
+        password: SHA256(password) + ""
+      },
+      {
+        where: {
+          username,
+          isActived: true
+        }
+      }
+    );
   }
 };

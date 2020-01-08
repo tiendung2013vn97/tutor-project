@@ -2,7 +2,11 @@ module.exports = (req, res, next) => {
   let login = [
     [/study-request\/?/, "GET"],
     [/contract\/?/, "GET"],
-    [/contract\/by-id\/[0-9]+/, "GET"]
+    [/contract\/by-id\/[0-9]+/, "GET"],
+    [/login-user\/image\/?/, "GET"],
+    [/login-user\/upload-image\/?/, "POST"],
+    [/login-user\/?/, "PUT"],
+    [/login-user\/password\/?/, "PUT"]
   ];
   let adminOrRoot = [
     ["study-request", "GET"],
@@ -10,7 +14,11 @@ module.exports = (req, res, next) => {
     [/contract\/[0-9]+/, "DELETE"],
     [/skill-tag\/[0-9]+/, "PUT"],
     [/skill-tag\/?/, "POST"],
-    [/skill-tag\/[0-9]+/, "DELETE"]
+    [/skill-tag\/[0-9]+/, "DELETE"],
+    [/skill-tag\/active\/[0-9]+/, "PUT"],
+    [/admin\/active\/[a-zA-Z0-9]+/, "PUT"],
+    [/admin\/[a-zA-Z0-9]+/, "DELETE"],
+    [/admin\/users+\/?/, "GET"]
   ];
   let root = [];
 
@@ -46,7 +54,8 @@ module.exports = (req, res, next) => {
   if (!allow) {
     return res.json({
       status: "fail",
-      code: "NOT_ALLOW"
+      code: "NOT_ALLOW",
+      msg: "Bạn không có quyền thực hiện thao tác này"
     });
   }
 

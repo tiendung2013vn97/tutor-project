@@ -368,24 +368,24 @@ router.put("/cancle/:contractId", (req, res) => {
   update();
 });
 
-router.delete("/:contractId", (req, res) => {
-  //for admin/root
+// router.delete("/:contractId", (req, res) => {
+//   //for admin/root
 
-  let update = async () => {
-    try {
-      let info = {
-        isActived: false
-      };
-      let result = await contractRepo.update(req.params.contractId, info);
-      return res.json(result);
-    } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
-    }
-  };
-  update();
-});
+//   let update = async () => {
+//     try {
+//       let info = {
+//         isActived: false
+//       };
+//       let result = await contractRepo.update(req.params.contractId, info);
+//       return res.json(result);
+//     } catch (err) {
+//       return res.json({
+//         status: "fail",
+//         msg: err + ""
+//       });
+//     }
+//   };
+//   update();
+// });
 
 module.exports = router;
