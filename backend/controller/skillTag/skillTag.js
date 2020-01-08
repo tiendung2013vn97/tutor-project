@@ -2,11 +2,14 @@ let express = require("express");
 let router = express.Router();
 let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
+const utility = require("../../utility");
 
 router.get("/", (req, res) => {
+  //for public
   let get = async () => {
     try {
       let result = await skillTagRepo.get(
+        req.permiss,
         +req.query.offset || 0,
         +req.query.limit || config.maxCount
       );
@@ -23,6 +26,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/top", (req, res) => {
+  //for public
   let get = async () => {
     try {
       let result = await skillTagRepo.getTop(+req.query.limit || 10);
@@ -38,17 +42,25 @@ router.get("/top", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  let get = async () => {
-    try {
-      if (!req.params.id) {
-        return res.json({
-          status: "fail",
-          code: "MISSING_PARAM",
-          msg: "Thiếu tham số id"
-        });
-      }
+  //for admin/root
+  let args = {
+    name: {
+      val: req.body.name,
+      require: true,
+      allowEmpty: false
+    }
+  };
 
-      let result = await skillTagRepo.update(req.params.id, req.body);
+  let update = async () => {
+    try {
+      utility.validateRequireParam(args);
+      utility.validateEmpty(args);
+      utility.validateTypeAndRegex(args);
+      utility.validateMaxLength(args);
+
+      let info = utility.convertToValueObject(args);
+
+      let result = await skillTagRepo.update(req.params.id, info);
       return res.json(result);
     } catch (err) {
       return res.json({
@@ -57,21 +69,29 @@ router.put("/:id", (req, res) => {
       });
     }
   };
-  get();
+  update();
 });
 
 router.post("/", (req, res) => {
-  if (!req.body.name) {
-    return res.json({
-      status: "fail",
-      code: "MISSING_PARAM",
-      msg: "Thiếu tham số name"
-    });
-  }
+  //for teacher and admin/root
+  let args = {
+    name: {
+      val: req.body.name,
+      require: true,
+      allowEmpty: false
+    }
+  };
 
-  let get = async () => {
+  let update = async () => {
     try {
-      let result = await skillTagRepo.add(req.body);
+      utility.validateRequireParam(args);
+      utility.validateEmpty(args);
+      utility.validateTypeAndRegex(args);
+      utility.validateMaxLength(args);
+
+      let info = utility.convertToValueObject(args);
+
+      let result = await skillTagRepo.add(info);
       return res.json(result);
     } catch (err) {
       return res.json({
@@ -80,38 +100,21 @@ router.post("/", (req, res) => {
       });
     }
   };
-  get();
+  update();
 });
 
-router.get("/top", (req, res) => {
-  let get = async () => {
-    try {
-      let result = await skillTagRepo.getTop(+req.query.limit || 10);
-      return res.json(result);
-    } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
-    }
-  };
-  get();
-});
-
-router.get("/by-id/:id", (req, res) => {
+router.get("/:id", (req, res) => {
+  //for public
   let get = async () => {
     try {
       let result = await skillTagRepo.getById(req.params.id, req.permiss);
-      result.rows = result.rows.map(item => item.get({ plain: true }));
+      result = result.map(item => item.get({ plain: true }));
 
       if (result.length) {
         return res.json(result[0]);
       }
 
-      return {
-        status: "fail",
-        code: "NO_SKILL_TAG"
-      };
+      return res.json();
     } catch (err) {
       return res.json({
         status: "fail",
@@ -120,6 +123,25 @@ router.get("/by-id/:id", (req, res) => {
     }
   };
   get();
+});
+
+router.delete("/:id", (req, res) => {
+  //for admin/root
+  let update = async () => {
+    try {
+      let info = {
+        isActived: false
+      };
+      let result = await skillTagRepo.update(req.params.skillId, info);
+      return res.json(result);
+    } catch (err) {
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
+    }
+  };
+  update();
 });
 
 module.exports = router;

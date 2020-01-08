@@ -9,7 +9,6 @@ router.get("/", (req, res) => {
   //for login user
   let get = async () => {
     try {
-      console.log(req.user);
       let result = await contractRepo.get(
         req.user,
         +req.query.offset || 0,
@@ -75,7 +74,7 @@ router.get("/by-id/:id", (req, res) => {
 });
 
 router.get("/by-status/:status", (req, res) => {
-  //for admin
+  //for admin/root
   let get = async () => {
     try {
       let result = await contractRepo.getByStatus(
@@ -117,12 +116,11 @@ router.put("/student-complain/:contractId", (req, res) => {
         req.permiss
       );
       contracts = contracts.map(item => item.get({ plain: true }));
-      console.log("co", contracts);
       if (!contracts.length) {
         throw "studentId không hợp lệ";
       }
 
-      info = utility.convertToValueObject(args);
+      let info = utility.convertToValueObject(args);
       info.status = "complaining";
       let result = await contractRepo.update(
         req.params.contractId,
@@ -315,6 +313,26 @@ router.put("/cancle/:contractId", (req, res) => {
     }
   };
 
+  update();
+});
+
+router.delete("/:contractId", (req, res) => {
+  //for admin/root
+
+  let update = async () => {
+    try {
+      let info = {
+        isActived: false
+      };
+      let result = await contractRepo.update(req.params.contractId, info);
+      return res.json(result);
+    } catch (err) {
+      return res.json({
+        status: "fail",
+        msg: err + ""
+      });
+    }
+  };
   update();
 });
 

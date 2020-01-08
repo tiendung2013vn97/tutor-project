@@ -1,5 +1,6 @@
 let skillTag = require("../db")["skill_tag"];
 let db = require("../db");
+const Op = db.Sequelize.Op;
 
 module.exports = {
   adminGet(offset, limit) {
@@ -10,9 +11,13 @@ module.exports = {
     });
   },
 
-  get(offset, limit) {
+  get(permiss = false, offset, limit) {
     return skillTag.findAndCountAll({
-      where: { isActived: true },
+      where: {
+        isActived: {
+          [Op.in]: permiss ? [true, false] : [true]
+        }
+      },
       offset,
       limit,
       raw: true

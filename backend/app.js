@@ -22,7 +22,7 @@ app.use(bodyParser());
 app.use(cors());
 
 app.use(require("./middle-ware/authen-login-user"));
-
+app.use(require("./middle-ware/decentralization"));
 app.get("/", (req, res) => {
   return res.send("hello");
 });
