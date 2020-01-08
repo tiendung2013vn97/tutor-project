@@ -2,6 +2,7 @@ let express = require("express");
 let router = express.Router();
 let skillRepo = require("../../repo/skill");
 const config = require("../../config");
+const utility = require("../../utility");
 
 router.get("/", (req, res) => {
   //for public
@@ -14,10 +15,14 @@ router.get("/", (req, res) => {
       result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -35,31 +40,39 @@ router.get("/:id", (req, res) => {
       result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
 });
 
-router.get("/me", (req, res) => {
+router.get("/teacher/skill", (req, res) => {
   let get = async () => {
     try {
-      console.log(req.user)
+      console.log(req.user);
       let result = await skillRepo.getByTeacher(
-          req.user.username,
-          +req.query.offset || 0,
-          +req.query.limit || config.maxCount
+        req.user.username,
+        +req.query.offset || 0,
+        +req.query.limit || config.maxCount
       );
       result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -96,10 +109,14 @@ router.post("/", (req, res) => {
       let result = await skillRepo.create(info);
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   create();
@@ -137,10 +154,14 @@ router.put("/:skillId", (req, res) => {
       let result = await skillRepo.update(req.params.skillId, info);
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   update();
@@ -166,10 +187,14 @@ router.delete("/:skillId", (req, res) => {
       let result = await skillRepo.update(req.params.skillId, info);
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   update();

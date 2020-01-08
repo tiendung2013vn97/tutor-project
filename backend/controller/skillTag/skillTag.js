@@ -116,10 +116,14 @@ router.get("/:id", (req, res) => {
 
       return res.json();
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -135,10 +139,14 @@ router.delete("/:id", (req, res) => {
       let result = await skillTagRepo.update(req.params.id, info);
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   update();
@@ -154,10 +162,14 @@ router.put("/active/:id", (req, res) => {
       let result = await skillTagRepo.update(req.params.id, info);
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   update();

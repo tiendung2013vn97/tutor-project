@@ -18,10 +18,14 @@ router.get("/", (req, res) => {
       // result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -65,10 +69,14 @@ router.get("/by-id/:id", (req, res) => {
         code: "NO_CONTRACT"
       };
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
@@ -86,10 +94,14 @@ router.get("/by-status/:status", (req, res) => {
       // result.rows = result.rows.map(item => item.get({ plain: true }));
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();

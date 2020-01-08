@@ -20,10 +20,14 @@ router.get("/users", (req, res) => {
       });
       return res.json(result);
     } catch (err) {
-      return res.json({
-        status: "fail",
-        msg: err + ""
-      });
+      if (err.code) {
+        return res.json(err);
+      } else {
+        return res.json({
+          status: "fail",
+          msg: err + ""
+        });
+      }
     }
   };
   get();
