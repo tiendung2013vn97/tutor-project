@@ -3,7 +3,7 @@ let db = require("../db");
 let Op = db.Sequelize.Op;
 
 module.exports = {
-  getById(id, permiss = false, offset, limit) {
+  getById(id, permiss = false) {
     return contract.findAll({
       include: [
         {
@@ -21,9 +21,7 @@ module.exports = {
         startDt: {
           [Op.ne]: null
         }
-      },
-      offset,
-      limit
+      }
     });
   },
 
@@ -69,7 +67,8 @@ module.exports = {
           }
         ],
         where: {
-          studentId: user.username
+          studentId: user.username,
+          isActived: true
         },
         offset,
         limit
@@ -89,6 +88,9 @@ module.exports = {
             }
           }
         ],
+        where: {
+          isActived: true
+        },
         distinct: true,
         offset,
         limit

@@ -36,13 +36,14 @@ module.exports = {
     return skillTag.create(skillTagInfo);
   },
 
-  getById(id, offset, limit) {
+  getById(id, permiss) {
     return skillTag.findAll({
       where: {
-        id
-      },
-      offset,
-      limit
+        id,
+        isActived: {
+          [Op.in]: permiss ? [true, false] : [true]
+        }
+      }
     });
-  },
+  }
 };

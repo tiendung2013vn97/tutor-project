@@ -3,8 +3,8 @@ let db = require("../db");
 let Op = db.Sequelize.Op;
 
 module.exports = {
-  get(permiss = false, offset, limit) {
-    return contract.findAndCountAll({
+  get(user, offset, limit) {
+    let opt = {
       include: [
         {
           model: db.skill,
@@ -14,14 +14,55 @@ module.exports = {
         }
       ],
       where: {
-        startDt: null,
-        isActived: {
-          [Op.in]: permiss ? [true, false] : [true]
-        }
+        startDt: null
       },
       offset,
       limit
-    });
+    };
+    if (user.type === "student") {
+      opt = {
+        include: [
+          {
+            model: db.skill,
+            as: "skill",
+            required: true,
+            include: [{ model: db.account, include: [{ model: db.location }] }]
+          }
+        ],
+        where: {
+          startDt: null,
+          studentId: user.username,
+          isActived: true
+        },
+        offset,
+        limit
+      };
+    }
+
+    if (user.type === "teacher") {
+      opt = {
+        include: [
+          {
+            model: db.skill,
+            as: "skill",
+            required: true,
+            include: [{ model: db.account, include: [{ model: db.location }] }],
+            where: {
+              teacherId: user.username,
+              startDt: null
+            }
+          }
+        ],
+        where: {
+          isActived: true
+        },
+        distinct: true,
+        offset,
+        limit
+      };
+    }
+
+    return contract.findAndCountAll(opt);
   },
 
   getByTeacherId(teacherId, id, permiss = false) {
@@ -75,8 +116,13 @@ module.exports = {
   },
 
   update(id, contractInfo, preStatus) {
+    if (preStatus) {
+      let whereClause = { id, status: preStatus, isActived: true };
+    } else {
+      let whereClause = { id, isActived: true };
+    }
     return contract.update(contractInfo, {
-      where: { id, status: preStatus, isActived: true }
+      where: whereClause
     });
   },
 

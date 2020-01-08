@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -30,7 +30,7 @@ router.get("/top", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -53,7 +53,7 @@ router.put("/:id", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -76,7 +76,7 @@ router.post("/", (req, res) => {
     } catch (err) {
       return res.json({
         status: "fail",
-       msg: err.msg
+        msg: err.msg
       });
     }
   };
@@ -101,13 +101,17 @@ router.get("/top", (req, res) => {
 router.get("/by-id/:id", (req, res) => {
   let get = async () => {
     try {
-      let result = await skillTagRepo.getById(
-          req.params.id,
-          +req.query.offset || 0,
-          +req.query.limit || 1000000000
-      );
-      // result.rows = result.rows.map(item => item.get({ plain: true }));
-      return res.json(result[0]);
+      let result = await skillTagRepo.getById(req.params.id, req.permiss);
+      result.rows = result.rows.map(item => item.get({ plain: true }));
+
+      if (result.length) {
+        return res.json(result[0]);
+      }
+
+      return {
+        status: "fail",
+        code: "NO_SKILL_TAG"
+      };
     } catch (err) {
       return res.json({
         status: "fail",
