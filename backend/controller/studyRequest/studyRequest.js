@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let studyRequestRepo = require("../../repo/studyRequest");
+let skillTagRepo = require("../../repo/skillTag");
 const config = require("../../config");
 const utility = require("../../utility");
 
@@ -29,7 +30,6 @@ router.post("/:skillId", (req, res) => {
   //for student
   let get = async () => {
     try {
-      console.log(req.params.skillId, req.user);
       let result = await studyRequestRepo.create({
         skillId: req.params.skillId,
         studentId: req.user.username
@@ -92,7 +92,7 @@ router.put("/teacher-confirm/:contractId", (req, res) => {
         throw "Hợp đồng này đã bị xóa hoặc techerId không hợp lệ";
       }
 
-      info = utility.convertToValueObject(args);
+      let info = utility.convertToValueObject(args);
       info.status = "waitingStudent";
       let result = await studyRequestRepo.update(
         req.params.contractId,
@@ -156,7 +156,7 @@ router.put("/teacher-update/:contractId", (req, res) => {
         throw "Hợp đồng này đã bị xóa hoặc techerId không hợp lệ";
       }
 
-      info = utility.convertToValueObject(args);
+      let info = utility.convertToValueObject(args);
       info.status = "waitingStudent";
       let result = await studyRequestRepo.update(
         req.params.contractId,
@@ -201,6 +201,8 @@ router.put("/student-confirm/:contractId", (req, res) => {
         info,
         "waitingStudent"
       );
+
+      await skillTagRepo.addNumUsed(studyRequests[0].skill.skillTagId);
 
       return res.json(result);
     } catch (err) {

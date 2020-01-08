@@ -22,14 +22,14 @@ app.use(bodyParser());
 app.use(cors());
 
 app.use(require("./middle-ware/authen-login-user"));
-
+app.use(require("./middle-ware/decentralization"));
 app.get("/", (req, res) => {
   return res.send("hello");
 });
 
 app.use("/location", location);
 app.use("/public-user", publicUser);
-app.use("/login-user", authenLoginUser, loginUser);
+app.use("/login-user", loginUser);
 app.use("/admin", authenAdmin, admin);
 app.use("/skill-tag", skillTag);
 app.use("/skill", skill);

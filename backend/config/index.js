@@ -2,7 +2,7 @@ module.exports = {
   db: {
     database: process.env.DB_NAME || "tutor",
     username: process.env.DB_USERNAME || "dung",
-    password: process.env.DB_PASSWORD || "",
+    password: process.env.DB_PASSWORD || "dung",
     port: process.env.DB_PORT || 3307,
     host: process.env.DB_HOST || "localhost",
     dialect: process.env.DB_DIALECT || "mysql",

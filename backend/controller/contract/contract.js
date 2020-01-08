@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let contractRepo = require("../../repo/contract");
+let accountRepo = require("../../repo/account");
 let moneyRepo = require("../../repo/money");
 const config = require("../../config");
 const utility = require("../../utility");
@@ -9,7 +10,6 @@ router.get("/", (req, res) => {
   //for login user
   let get = async () => {
     try {
-      console.log(req.user);
       let result = await contractRepo.get(
         req.user,
         +req.query.offset || 0,
@@ -75,7 +75,7 @@ router.get("/by-id/:id", (req, res) => {
 });
 
 router.get("/by-status/:status", (req, res) => {
-  //for admin
+  //for admin/root
   let get = async () => {
     try {
       let result = await contractRepo.getByStatus(
@@ -117,12 +117,11 @@ router.put("/student-complain/:contractId", (req, res) => {
         req.permiss
       );
       contracts = contracts.map(item => item.get({ plain: true }));
-      console.log("co", contracts);
       if (!contracts.length) {
         throw "studentId không hợp lệ";
       }
 
-      info = utility.convertToValueObject(args);
+      let info = utility.convertToValueObject(args);
       info.status = "complaining";
       let result = await contractRepo.update(
         req.params.contractId,
@@ -168,6 +167,7 @@ router.put("/resolve-complain/:contractId", (req, res) => {
 
       let info = utility.convertToValueObject(args);
       info.status = "resolvedComplain";
+      info.rate = 1;
 
       let contracts = await contractRepo.getById(
         req.params.contractId,
@@ -185,6 +185,31 @@ router.put("/resolve-complain/:contractId", (req, res) => {
       ) {
         throw "Số tiền hoàn trả vượt mức tổng tiền đặt cọc ban đầu";
       }
+
+      let finishedContracts = await contractRepo.getFinishedContractByTeacherId(
+        contracts[0].skill.teacherId,
+        req.params.id
+      );
+      let generalRate = -1;
+      let percent = 1;
+      if (!finishedContracts.length) {
+        generalRate = 1;
+      } else {
+        percent =
+          finishedContracts.length > 20
+            ? 1
+            : 0.8 + (20 - finishedContracts.length / 20) * 0.2;
+
+        let sumRate = 0;
+        finishedContracts.forEach(contract => {
+          sumRate += contract.rate;
+        });
+        generalRate = (sumRate * percent) / finishedContracts.length;
+      }
+
+      await accountRepo.update(contracts[0].skill.teacherId, {
+        rate: generalRate
+      });
 
       await moneyRepo.addMoney(
         contracts[0].studentId,
@@ -265,6 +290,31 @@ router.put("/finish/:contractId", (req, res) => {
         req.permiss
       );
 
+      let finishedContracts = await contractRepo.getFinishedContractByTeacherId(
+        contracts[0].skill.teacherId,
+        req.params.id
+      );
+      let generalRate = -1;
+      let percent = 1;
+      if (!finishedContracts.length) {
+        generalRate = info.rate * 0.8;
+      } else {
+        percent =
+          finishedContracts.length > 20
+            ? 1
+            : 0.8 + (20 - finishedContracts.length / 20) * 0.2;
+
+        let sumRate = 0;
+        finishedContracts.forEach(contract => {
+          sumRate += contract.rate;
+        });
+        generalRate = (sumRate * percent) / finishedContracts.length;
+      }
+
+      await accountRepo.update(contracts[0].skill.teacherId, {
+        rate: generalRate
+      });
+
       await moneyRepo.addMoney(
         contracts[0].skill.teacherId,
         contracts[0].totalHours * contracts[0].costPerHour,
@@ -317,5 +367,25 @@ router.put("/cancle/:contractId", (req, res) => {
 
   update();
 });
+
+// router.delete("/:contractId", (req, res) => {
+//   //for admin/root
+
+//   let update = async () => {
+//     try {
+//       let info = {
+//         isActived: false
+//       };
+//       let result = await contractRepo.update(req.params.contractId, info);
+//       return res.json(result);
+//     } catch (err) {
+//       return res.json({
+//         status: "fail",
+//         msg: err + ""
+//       });
+//     }
+//   };
+//   update();
+// });
 
 module.exports = router;
