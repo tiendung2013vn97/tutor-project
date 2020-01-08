@@ -17,7 +17,9 @@ import SkillsManagement from "./Admin/SkillsManagement";
 import ContractManagement from "./Admin/ContractManagement";
 import StudentReport from "./Admin/StudentReport";
 import ContractDetailContainer from "./Contract/ContractDetail/ContractDetailContainer";
-import {Col} from "antd";
+import UserProfile from './Commons/UserInfo/UserProfileContainer'
+import {Col, Row} from "antd";
+import UserAccount from "./Commons/UserInfo/UserAccountContainer";
 
 class App extends React.Component {
     render() {
@@ -26,37 +28,52 @@ class App extends React.Component {
                 <div className="App">
                     <BackgroundProcess/>
                     <Header/>
-                    <MainMenu/>
-                    <Switch>
-                        <Route path="/manage" component={() => {
-                            return (
-                                <Admin>
-                                    <Switch>
-                                        <Route path="/manage/users/:username" component={UserInfo}/>
-                                        <Route path="/manage/users" component={UsersManagement}/>
-                                        <Route path="/manage/skill-tags" component={SkillsManagement}/>
-                                        <Route path="/manage/contracts/:id" component={ContractDetailContainer}/>
-                                        <Route path="/manage/contracts" component={ContractManagement}/>
-                                        <Route path="/manage/student-report" component={StudentReport}/>
-                                        <Route path="/manage/create-user" component={AdminCreateUser}/>
+                    <div style={{}}>
+                        <Row>
+                            {
+                                <Col span={4}>
+                                    <MainMenu/>
+                                </Col>
+                            }
+                            <Col span={1}/>
+                            <Col span={18}>
+
+                                <Switch>
+                                    <Route path="/manage" component={() => {
+                                        return (
+                                            <Admin>
+                                                <Switch>
+
+                                                    <Route path="/manage/users" component={UsersManagement}/>
+                                                    <Route path="/manage/skill-tags" component={SkillsManagement}/>
+                                                    <Route path="/manage/contracts/:id"
+                                                           component={ContractDetailContainer}/>
+                                                    <Route path="/manage/contracts" component={ContractManagement}/>
+                                                    <Route path="/manage/student-report" component={StudentReport}/>
+                                                    <Route path="/manage/create-user" component={AdminCreateUser}/>
+                                                </Switch>
+                                            </Admin>
+                                        )
+                                    }}
+                                    />
+                                    <Route path="/profile/:username" component={UserProfile}/>
+                                    <Route path="/account/:username" component={UserAccount}/>
 
 
-                                    </Switch>
-                                </Admin>
-                            )
-                        }}
-                        />
+                                    <Route path="/user/:username" component={UserInfo}/>
 
-                        <Route path="/user/:username" component={UserInfo}/>
+                                    <Route path="/">
+                                        <div className="App">
+                                            <Notify/>
+                                            <LoadingScreen/>
+                                            <Home/>
+                                        </div>
+                                    </Route>
+                                </Switch>
 
-                        <Route path="/">
-                            <div className="App">
-                                <Notify/>
-                                <LoadingScreen/>
-                                <Home/>
-                            </div>
-                        </Route>
-                    </Switch>
+                            </Col>
+                        </Row>
+                    </div>
 
                     {/*<Footer/>*/}
                 </div>

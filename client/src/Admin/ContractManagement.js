@@ -108,12 +108,12 @@ class ContractManagement extends React.Component {
             },
 
             {
-                title: 'Active',
+                title: 'Actived',
                 dataIndex: 'isActived',
                 render: (text, row, index) => {
                     return <Switch
-                        unCheckedChildren="Deactived"
-                        checkedChildren="Actived"
+                        unCheckedChildren=""
+                        checkedChildren=""
                         checked={text}
                         onChange={() => this.handleChangeStatus(row)}
                         style={{marginTop: 16}}

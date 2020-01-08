@@ -70,12 +70,12 @@ class UsersManagement extends React.Component {
                 key: 'gender',
             },
             {
-                title: 'Active',
+                title: 'Actived',
                 dataIndex: 'isActived',
                 render: (text, row, index) => {
                     return <Switch
-                        unCheckedChildren="disabled"
-                        checkedChildren="anabled"
+                        unCheckedChildren=""
+                        checkedChildren=""
                         checked={text}
                         onChange={() => this.handleChangeStatus(row)}
                         style={{marginTop: 16}}

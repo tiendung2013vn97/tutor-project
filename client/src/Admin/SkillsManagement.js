@@ -71,12 +71,12 @@ class SkillsManagement extends React.Component {
                 key: 'numUsed',
             },
             {
-                title: 'Active',
+                title: 'Actived',
                 dataIndex: 'isActived',
                 render: (text, row, index) => {
                     return <Switch
-                        unCheckedChildren="disabled"
-                        checkedChildren="anabled"
+                        unCheckedChildren=""
+                        checkedChildren=""
                         checked={text}
                         onChange={() => this.handleChangeStatus(row)}
                         style={{marginTop: 16}}
