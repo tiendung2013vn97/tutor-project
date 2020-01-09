@@ -13,7 +13,7 @@ export function translateContractStatus(e) {
             return contractStatus.COMPLAINING
         case "finished":
             return contractStatus.FINISH
-        case "canceled":
+        case "cancled":
             return contractStatus.CANCEL
         case "rejected":
             return contractStatus.REJECTED

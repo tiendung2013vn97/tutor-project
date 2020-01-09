@@ -56,7 +56,6 @@ router.get("/:id", (req, res) => {
 router.get("/teacher/skill", (req, res) => {
   let get = async () => {
     try {
-      console.log(req.user);
       let result = await skillRepo.getByTeacher(
         req.user.username,
         +req.query.offset || 0,

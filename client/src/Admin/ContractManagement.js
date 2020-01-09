@@ -20,13 +20,24 @@ class ContractManagement extends React.Component {
                 offset: (pageNo - 1) * 10,
                 limit: pageSize
             },
+            headers:{
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            }
         }).then(res => {
-            this.props.getContract(res.data)
+            console.log(res)
+            if (res && res.data.status !== "fail")
+                this.props.getContract(res.data)
         })
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getContracts(1, 10)
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.contracts === null) {
+            this.getContracts(1, 10)
+        }
     }
 
     onChange = (e) => {
@@ -36,17 +47,6 @@ class ContractManagement extends React.Component {
         this.getContracts(e, 10)
     }
 
-    handleChangeStatus = (row) => {
-        if (!row)
-            return null;
-        return Axios.post("/change-status", {
-            params: {
-                id: row.id
-            }
-        }).then(res => {
-            this.props.getSkill(res.data)
-        })
-    }
 
     renderStatus(e) {
         return translateContractStatus(e)
@@ -106,20 +106,6 @@ class ContractManagement extends React.Component {
                     return text
                 }
             },
-            //
-            // {
-            //     title: 'Actived',
-            //     dataIndex: 'isActived',
-            //     render: (text, row, index) => {
-            //         return <Switch
-            //             unCheckedChildren=""
-            //             checkedChildren=""
-            //             checked={text}
-            //             onChange={() => this.handleChangeStatus(row, text)}
-            //             style={{marginTop: 16}}
-            //         />
-            //     }
-            // },
             {
                 title: 'Tác vụ',
                 render: (text, row, index) => {
@@ -147,44 +133,8 @@ class ContractManagement extends React.Component {
         this.props.history.push(`/manage/contracts/${row.id}`);
     }
 
-    handleChangeStatus = (row, checked) => {
-        if (!row)
-            return null;
-        if (checked)
-            this.deActive(row);
-        if (!checked)
-            this.active(row);
-    }
-
-    active = (row) => {
-        if (!row)
-            return null;
-        return Axios.put("skill-tag/active/" + row.id).then(res => {
-            if (res && res.data.status !== "fail") {
-                this.getSkills(this.state.current, 10);
-            } else {
-                message.error(res.data.msg);
-            }
-        }).catch(e => {
-            message.error("Lỗi");
-        })
-    }
-
-    deActive = (row) => {
-        if (!row)
-            return null;
-        return Axios.delete("skill-tag/" + row.id).then(res => {
-            if (res && res.data.status !== "fail") {
-                this.getSkills(this.state.current, 10);
-            } else {
-                message.error(res.data.msg);
-            }
-        }).catch(e => {
-            message.error("Lỗi");
-        })
-    }
-
     render() {
+        console.log(this.props)
         if (this.props.contracts)
             return (
                 <div style={{

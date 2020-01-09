@@ -8,6 +8,7 @@ const utility = require("../../utility");
 router.get("/", (req, res) => {
   //for login user
   let get = async () => {
+    console.log(req.user)
     try {
       let result = await studyRequestRepo.get(
         req.user,

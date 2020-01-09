@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
         req.permiss = false;
       }
     } else {
-      console.log("user", user);
       req.permiss = false;
     }
     next();

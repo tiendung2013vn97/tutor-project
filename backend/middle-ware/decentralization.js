@@ -93,18 +93,15 @@ module.exports = (req, res, next) => {
     }
 
     teacher.forEach(regex => {
-      console.log(regex[0], req.originalUrl, RegExp(regex[0]).test(req.originalUrl))
         if (
             RegExp(regex[0], 'g').test(req.originalUrl) &&
             req.method === regex[1] &&
             (!req.user || !["teacher"].includes(req.user.type))
         ) {
-          console.log(req.originalUrl)
             return (allow = false);
         }
     });
     if (!allow) {
-        console.log("asdas")
         return res.json({
             status: "fail",
             code: "NOT_ALLOW"

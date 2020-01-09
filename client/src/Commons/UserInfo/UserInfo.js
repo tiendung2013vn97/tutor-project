@@ -14,7 +14,7 @@ class UserInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            previewImage: ""
+            previewImage: "",
         };
     }
 
@@ -67,72 +67,39 @@ class UserInfo extends React.Component {
                                 height: "200px",
                                 width: "200px"
                             }}
-                                 src={require("../../assets/imgs/defaultAvatar.jpg")} alt="defaultavatar"/>
-                            {user && userDetail && user.username === userDetail.username && this.renderUpload()}
+                                 src={`${URL}public-user/image/${userDetail.image}`} alt="defaultavatar"/>
                         </Col>
 
                         <Col offset={3} span={8} md={18} sm={18} xs={24}>
                             <Tabs defaultActiveKey="1" onChange={this.callback} style={{
                                 padding: '8px'
                             }}>
-                                {
-                                    user && userDetail && user.username !== userDetail.username &&
-                                    <TabPane
-                                        tab={
-                                            <span>
+                                <TabPane
+                                    tab={
+                                        <span>
                                             <Icon type="pie-chart"/>
                                             Information
                                         </span>
-                                        }
-                                        key="1"
-                                    >
-                                        <UserDetail {...this.props} />
-                                    </TabPane>
-                                }
-                                {
-                                    user && userDetail && user.username === userDetail.username &&
-                                    <TabPane
-                                        tab={
-                                            <span>
+                                    }
+                                    key="1"
+                                >
+                                    <UserDetail {...this.props} />
+                                </TabPane>
+                                <TabPane
+                                    tab={
+                                        <span>
                                             <Icon type="pie-chart"/>
-                                            Profile
+                                            Gửi yêu cầu học
                                         </span>
-                                        }
-                                        key="2"
-                                    >
-                                        <UserProfile {...this.props} />
-                                    </TabPane>
-                                }
-                                {
-                                    user && userDetail && user.username === userDetail.username &&
-                                    <TabPane
-                                        tab={
-                                            <span>
-                                            <Icon type="desktop"/>
-                                            Account
-                                        </span>
-                                        }
-                                        key="3"
-                                    >
-                                        <UserAccount {...this.props} />
-                                    </TabPane>
-                                }
-                                {
-                                    user && userDetail && user.username === userDetail.username && userDetail.type === accountType.TEACHER &&
-                                    <TabPane
-                                        tab={
-                                            <span>
-                                            <Icon type="audit"/>
-                                            Skill Tag
-                                        </span>
-                                        }
-                                        key="4"
-                                    >
-                                        <UserSkillTag {...this.props} />
-                                    </TabPane>
-                                }
+                                    }
+                                    key="2"
+                                >
+                                    <UserSkillTag {...this.props} />
+                                </TabPane>
                             </Tabs>
                         </Col>
+                    </Row>
+                    <Row>
                     </Row>
                 </div>
             </div>

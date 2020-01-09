@@ -1,7 +1,8 @@
 import React from 'react';
-import {Card, Col, Row, Button} from "antd";
+import {Card, Col, Row, Button, message, Popconfirm} from "antd";
 import {Link} from "react-router-dom";
 import {milisecondToDateString, translateContractStatus} from "../../Commons/commonFunction";
+import Axios from "../../Api";
 
 class ContractDetail extends React.Component {
 
@@ -27,9 +28,7 @@ class ContractDetail extends React.Component {
                 </Row>
                 <br/>
                 <h2>Giải quyết khiếu nạy</h2>
-                <Row>
 
-                </Row>
 
             </Card>
         )
@@ -140,10 +139,33 @@ class ContractDetail extends React.Component {
                 </Row>
                 <br/>
                 <Row>
-                    <Button onClick={this.cancel}>Hủy hợp đồng</Button>
+                    <Popconfirm
+                        title="Bạn có chắc muốn hủy hợp đồng"
+                        onConfirm={() => this.confirm(data.id)}
+                        okText="Xóa"
+                        cancelText="Không"
+                    >
+                        <Button>Hủy hợp đồng</Button>
+                    </Popconfirm>
                 </Row>
             </Card>
         )
+    }
+
+    confirm(id) {
+        this.cancel(id)
+    }
+
+    cancel = (id) => {
+        return Axios.put("contract/cancle/" + id)
+            .then(res => {
+                if (res && res.data.status !== "fail") {
+                    message.success("Đã hủy hợp đồng")
+                } else
+                    message.error("Lỗi")
+            }).catch(e => {
+                message.error("Lỗi")
+            })
     }
 
     render() {

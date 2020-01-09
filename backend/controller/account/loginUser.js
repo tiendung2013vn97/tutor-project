@@ -10,7 +10,6 @@ let storage = multer.diskStorage({
     cb(null, "public/asset/images");
   },
   filename: function(req, file, cb) {
-    console.log(file);
     cb(null, file.originalname);
   }
 });
@@ -74,7 +73,6 @@ router.put("/", (req, res) => {
         dataType: "int"
       }
     };
-    console.log(req.body)
 
     try {
       utility.validateRequireParam(args);

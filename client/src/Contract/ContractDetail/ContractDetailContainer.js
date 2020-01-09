@@ -2,8 +2,9 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Spin} from 'antd'
 import ContractDetail from './ContractDetail'
-import Axios from "../../Api";
+import axios from "axios";
 import {getSkillTagById} from "../../SkillTag/api-skilltag";
+import config from "../../config";
 
 class ContractDetailContainer extends React.Component {
     constructor(props) {
@@ -18,15 +19,17 @@ class ContractDetailContainer extends React.Component {
     componentDidMount() {
         console.log(this.props)
         const id = this.props.match.params.id
-        if (id)
-            this.getDetail(id)
-    }
-
-    getDetail(id) {
-        return Axios.get(`contract/by-id/${id}`
+        console.log("id", id)
+        // this.getDetail(id)
+        const api = axios.create({ baseURL: config.URL });
+        api.get("contract/by-id/" + id, {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem("token")
+                }
+            }
         ).then(res => {
             console.log("contract", res)
-            if (res && res.data.status !=="fail") {
+            if (res && res.data.status !== "fail") {
                 this.setState({
                     contract: res.data
                 })
@@ -37,9 +40,13 @@ class ContractDetailContainer extends React.Component {
         })
     }
 
+    getDetail(id) {
+
+    }
+
     getSkillTag(id) {
         return getSkillTagById(id).then(res => {
-            if(res && res.status===200)
+            if (res && res.status === 200)
                 this.setState({
                     skillTagName: res.data.name
                 })

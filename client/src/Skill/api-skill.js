@@ -1,5 +1,20 @@
 import Axios from "../Api";
 
+
+export function getSkillByTeacherId(id){
+    return Axios.get("skill/"+id, {
+        params:{
+            offset: 0,
+            limit: 1000
+        }
+    })
+        .catch(e=>{
+            if(e && e.response){
+                return e.response;
+            }
+        })
+}
+
 export function getSkills(pageNo, pageSize){
     return Axios.get("skill/teacher/skill", {
         params:{

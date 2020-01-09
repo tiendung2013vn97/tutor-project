@@ -56,6 +56,7 @@ class SignInContainer extends Component {
         localStorage.setItem("token", res.data.token);
         this.props.storeAccountInfo(user);
         this.props.changeLoadingStatus(false);
+        this.props.history.push("/")
       })
       .catch(err => {
         this.props.showAlertNotify("" + err);

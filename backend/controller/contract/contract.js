@@ -33,6 +33,7 @@ router.get("/", (req, res) => {
 
 router.get("/by-id/:id", (req, res) => {
   //for login user
+  console.log(req.user, req.params)
   let get = async () => {
     try {
       if (req.user.type == "student") {
@@ -57,17 +58,18 @@ router.get("/by-id/:id", (req, res) => {
         }
       }
 
-      let result = await contractRepo.getById(req.params.id, req.permiss);
+      let result = await contractRepo.getById(1006, req.permiss);
       result = result.map(item => item.get({ plain: true }));
+      console.log(result)
 
       if (result.length) {
         return res.json(result[0]);
       }
 
-      return {
+      return res.json({
         status: "fail",
         code: "NO_CONTRACT"
-      };
+      });
     } catch (err) {
       if (err.code) {
         return res.json(err);

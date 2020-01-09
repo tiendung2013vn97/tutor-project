@@ -17,19 +17,10 @@ class Header extends React.Component {
             return (
                 <Menu>
                     <Menu.Item>
-                        <Link to="/">
-                            Dashboard
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Link to={`/user/${user.username}`}>Profile</Link>
-                    </Menu.Item>
-                    <Menu.Item>
                         <Link onClick={this.props.logout} to="/">
                             Logout
                         </Link>
                     </Menu.Item>
-
                 </Menu>
             )
         }

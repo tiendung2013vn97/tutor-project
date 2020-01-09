@@ -86,7 +86,6 @@ router.delete("/:username", (req, res) => {
   //for admin/root
   let update = async () => {
     try {
-      console.log(req.params.username)
       let accounts = await accountRepo.getAccountByUsername(
         req.params.username
       );
