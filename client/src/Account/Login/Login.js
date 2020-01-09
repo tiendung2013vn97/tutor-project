@@ -30,7 +30,7 @@ class SignIn extends Component {
             </div>
           </div>
           <div className="btn-login" onClick={this.handleLogin}>
-            Log in
+            Đăng nhập
           </div>
           <br />
           <br />

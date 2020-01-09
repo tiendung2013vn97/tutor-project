@@ -37,7 +37,7 @@ module.exports = {
   },
 
   updatePassword(username, password) {
-    return userRepo.update({ password }, { where: { username } });
+    return userRepo.update({ password: password }, { where: { username } });
   },
 
   getAccountByUsernameAndPassword(username, password) {

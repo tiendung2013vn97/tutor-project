@@ -2,3 +2,10 @@
   /*background-color: #F6F6F6 !important;*/
   background-color: #fff !important;
 }
+.right-container {
+  -webkit-box-shadow: -7px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -7px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: -7px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 2px;
+  background-color: rgb(250, 246, 246);
+}

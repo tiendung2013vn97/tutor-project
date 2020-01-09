@@ -6,7 +6,7 @@ const passport = require("passport");
 const mailService = require("../../mail-service");
 let SHA256 = require("crypto-js/sha256");
 const config = require("../../config");
-const utility=require("../../utility")
+const utility = require("../../utility");
 
 router.post("/register", function(req, res, next) {
   let user = req.body;
@@ -141,7 +141,10 @@ router.get("/verify-changed-password?", (req, res) => {
     .verifyEmailToken(req.query.emailToken)
     .then(user => {
       user.password = SHA256(user.password) + "";
-      accountRepo.updatePassword(user.username, user.password);
+
+      let t = user.password;
+      console.log("aa", t);
+      return accountRepo.updatePassword(user.username, t);
     })
     .then(val => {
       return res.json({
@@ -164,7 +167,7 @@ router.post("/change-password", (req, res) => {
       if (!req.body.newPassword) throw "missing newPassword";
       let users = await accountRepo.getAccountByUsername(req.body.username);
       users = users.map(account => account.get({ plain: true }));
-
+      console.log(req.body);
       if (users.length) {
         let user = users[0];
         user.password = req.body.newPassword;

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         field: "username"
       },
       password: {
-        type: DataTypes.STRING(45),
+        type: DataTypes.STRING(200),
         allowNull: false,
         field: "password"
       },

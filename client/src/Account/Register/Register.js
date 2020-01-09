@@ -151,7 +151,7 @@ class Register extends Component {
           </div>
 
           <div className="btn-signup" onClick={this.handleSignUp}>
-            Sign up
+            Đăng kí
           </div>
         </div>
       </div>

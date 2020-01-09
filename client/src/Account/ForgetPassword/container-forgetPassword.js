@@ -19,7 +19,14 @@ class ForgetPasswordContainer extends Component {
 
   //render
   render() {
-    return <ForgetPassword submit={this.submit} />;
+    return (
+      <ForgetPassword
+        submit={this.submit}
+        showAlertNotify={this.props.showAlertNotify}
+        showFailNotify={this.props.showFailNotify}
+        showSuccessNotify={this.props.showSuccessNotify}
+      />
+    );
   }
 
   submit(userInformation) {

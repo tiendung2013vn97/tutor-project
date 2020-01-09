@@ -8,7 +8,7 @@ class ForgetPassword extends Component {
   //constructor
   constructor(props) {
     super(props);
-    this.handleLogin = this.handleLogin.bind(this);
+    this.submit = this.submit.bind(this);
     this.state = {
       type: "teacher"
     };
@@ -25,40 +25,50 @@ class ForgetPassword extends Component {
               <input type="text" id="username_val" placeholder="Username" />
             </div>
             <div className="row-input required">
-              <span className="label"> Password: </span>
-              <input type="password" id="password_val" placeholder="Password" />
+              <span className="label"> Mật khẩu mới:</span>
+              <input type="password" id="password_val" placeholder="password" />
+            </div>
+            <div className="row-input required">
+              <span className="label"> Nhập lại:</span>
+              <input
+                type="password"
+                id="password_val2"
+                placeholder="password"
+              />
             </div>
           </div>
-          <div className="btn-login" onClick={this.handleLogin}>
-            Log in
+          <div className="btn-login" onClick={this.submit}>
+            Xác nhận
           </div>
           <br />
           <br />
-          <div className="extra-row">
-            <Link to={"/register"} className="extra-link">
-              <span>Đăng kí</span>
-            </Link>
-            <Link to={"/forget-password"} className="extra-link">
-              <span>Quên mật khẩu</span>
-            </Link>
-          </div>
         </div>
       </div>
     );
   }
 
-  /** handleLogin
+  /** submit
     handle user click button send
   */
-  handleLogin() {
+  submit() {
     let username = document.getElementById("username_val").value;
     let password = document.getElementById("password_val").value;
+    let password2 = document.getElementById("password_val2").value;
+    if (password === "") {
+      return this.props.showAlertNotify("Vui lòng nhập mật khẩu");
+    }
+
+    if (password !== password2) {
+      return this.props.showAlertNotify(
+        "Mật khẩu nhập lại không giống nhau! Vui lòng nhập lại"
+      );
+    }
 
     let userInformation = {
       username: username,
-      password: password
+      newPassword: password
     };
-    this.props.login(userInformation);
+    this.props.submit(userInformation);
   }
 
   handleTypeChange(type) {
