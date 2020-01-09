@@ -46,6 +46,12 @@ class MainMenu extends Component {
             <span>Trang chủ</span>
           </Link>
         </Menu.Item>
+        <Menu.Item key="find-teacher">
+          <Link to={`/find-teacher`}>
+            <Icon type="monitor" />
+            <span>Tìm người dạy</span>
+          </Link>
+        </Menu.Item>
         <Menu.Item key="user">
           <Link to={"/manage/users"}>
             <Icon type="user" />
@@ -103,6 +109,12 @@ class MainMenu extends Component {
           <Link to={"/"}>
             <Icon type="home" />
             <span>Trang chủ</span>
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="find-teacher">
+          <Link to={`/find-teacher`}>
+            <Icon type="monitor" />
+            <span>Tìm người dạy</span>
           </Link>
         </Menu.Item>
         <Menu.Item key="skill">

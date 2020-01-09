@@ -32,19 +32,21 @@ class SignInContainer extends Component {
         if (res.data.status === "fail") {
           switch (res.data.code) {
             case "WRONG_USERNAME_OR_PASSWORD": {
-               this.props.showFailNotify(
+              this.props.showFailNotify(
                 "Username hoặc password không hợp lệ! Vui lòng kiểm tra lại!"
               );
               break;
             }
             case "ACCOUNT_IS_BLOCKED": {
-               this.props.showAlertNotify(
+              this.props.showAlertNotify(
                 "Tài khoản này hiện đang bị khóa, vui lòng quay lại sau, hoặc liên hệ admin!"
-              );break;
+              );
+              break;
             }
 
             default: {
-               this.props.showFailNotify(res.data.msg);break
+              this.props.showFailNotify(res.data.msg);
+              break;
             }
           }
 
@@ -56,6 +58,7 @@ class SignInContainer extends Component {
         localStorage.setItem("token", res.data.token);
         this.props.storeAccountInfo(user);
         this.props.changeLoadingStatus(false);
+        this.props.history.push("/");
       })
       .catch(err => {
         this.props.showAlertNotify("" + err);

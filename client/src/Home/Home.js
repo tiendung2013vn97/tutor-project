@@ -249,7 +249,7 @@ class Home extends Component {
     return (
       <div className="home-container">
         <br />
-        {!user && pageNotLogin}
+        {pageNotLogin}
         <div className="middle-layout">
           <Layout>
             <Content>

@@ -1,0 +1,24 @@
+@import "../all.scss";
+
+.skill-tag-page {
+  input {
+    width: 250px !important;
+    height: 30px !important;
+    border-radius: 5px;
+    border: 1px solid #1890ff;
+    padding-left: 10px;
+  }
+  min-height: 500px;
+}
+
+.ant-select-selection {
+  height: 30px !important;
+  border: 1px solid #1890ff;
+}
+
+.edit {
+  &:hover {
+    color: #1890ff;
+    cursor: pointer;
+  }
+}

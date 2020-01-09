@@ -24,6 +24,7 @@ import SkillContainer from "./Skill/skill-container";
 import CreateSkill from "./Skill/CreateSkill";
 import EditSkill from "./Skill/EditSkill";
 import Login from "./Account/Login/container-login";
+import FilterSkill from "./FilterSkill/container-filterSkill";
 import Register from "./Account/Register/container-register";
 import ForgetPassword from "./Account/ForgetPassword/container-forgetPassword";
 
@@ -44,7 +45,7 @@ class App extends React.Component {
                 </Col>
               }
               <Col span={1} />
-              <Col span={18}>
+              <Col span={18} className="right-container">
                 <Switch>
                   <Route
                     path="/manage"
@@ -89,6 +90,7 @@ class App extends React.Component {
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
                   <Route path="/forget-password" component={ForgetPassword} />
+                  <Route path="/find-teacher" component={FilterSkill} />
                   {/*<Route path="/contract/" component={EditSkill}/>*/}
                   <Route path="/user/:username" component={UserInfo} />
                   <Route path="/">
